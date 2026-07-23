@@ -1,0 +1,57 @@
+---
+/**
+ * Upcoming masterclasses — three poster cards.
+ * Figma desktop 184:2663 · mobile 184:3792.
+ */
+import SectionHead from '../../SectionHead.astro';
+import DarkCard from '../../DarkCard.astro';
+
+const upcoming = [
+  {
+    title: 'Harnessing Revenue From Retention Masterclass',
+    image: '/images/pgc-proof/soon-retention.png',
+    imageAlt:
+      'Harnessing Revenue From Retention Masterclass — live with Kelly Smith, CEO & Founder of Projected Growth Consulting',
+  },
+  {
+    title: 'Secret Social Media Strategies For MedSpas',
+    image: '/images/pgc-proof/soon-social.png',
+    imageAlt:
+      'Secret Social Media Strategies For Med Spas — live with Kelly Smith, CEO & Founder of Projected Growth Consulting',
+  },
+  {
+    title: 'Expert Financial & Tax Strategies for Aesthetics',
+    image: '/images/pgc-proof/soon-finance.png',
+    imageAlt:
+      'Expert Financial & Tax Strategies For Aesthetics — live with Kelly Smith, CEO & Founder of Projected Growth Consulting',
+  },
+];
+---
+
+<section data-node-id="184:2663" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-12 lg:gap-16">
+    <SectionHead
+      eyebrow="COMING SOON"
+      title="More One-Hour Solutions Are On The Way"
+      body="We're continuously expanding the Growth Hub with new implementation lessons, AI-powered strategies, and business tools designed to help elective medical practices solve today's biggest challenges."
+      cta={{ label: 'Schedule A Call', href: '/book-a-call' }}
+    />
+
+    <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        upcoming.map((item) => (
+          <li class="md:last:col-span-2 lg:last:col-span-1">
+            <DarkCard
+              image={item.image}
+              alt={item.imageAlt}
+              width="411"
+              height="215"
+              imgClass="h-[168px] w-full rounded-sm object-cover lg:h-[215px]"
+              title={item.title}
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

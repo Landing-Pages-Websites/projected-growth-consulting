@@ -1,0 +1,30 @@
+---
+/** "The Real Issue" — Figma desktop 159:8327 / mobile 159:19714. */
+import ChecklistSplit from './ChecklistSplit.astro';
+
+const items = [
+  'Every month starts with the same question: "What should we promote next?"',
+  "Without clear KPIs, it's impossible to know what's driving profit—or what's holding it back.",
+  "Memberships and retention aren't generating the predictable income your practice needs.",
+  "Opportunities are walking out the door because conversations aren't consistent.",
+  'Finding, training, and retaining the right people feels like starting over every few months.',
+  'Every important decision, approval, and problem lands on your desk.',
+  "Growth creates more chaos instead of more freedom because processes aren't documented.",
+  "You're putting in the hours but still don't have the systems to step back and lead strategically.",
+];
+---
+
+<ChecklistSplit
+  nodeId="159:8327"
+  eyebrow="THE REAL ISSUE"
+  title="You're Not Short On Ideas. You're Short On Time."
+  body="You've bought the courses, attended the webinars, and downloaded the templates. But when you're running a busy elective medical practice, finding time to implement everything is the real challenge. The Growth Hub helps you solve one problem at a time with practical, one-hour solutions your team can put into action immediately."
+  listTitle="Are any of these slowing your practice down?"
+  items={items}
+  image="/images/growth-hub/issues.jpg"
+  imageAlt="Practice owner reviewing paperwork at a desk in a busy elective medical practice"
+  imageWidth={1066}
+  imageHeight={1600}
+  imageSide="right"
+  cta={{ label: 'Join The Growth Hub', href: '#membership' }}
+/>

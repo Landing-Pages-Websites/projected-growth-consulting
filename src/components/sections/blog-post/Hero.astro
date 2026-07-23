@@ -1,0 +1,176 @@
+---
+/**
+ * Blog-post hero — Figma 184:5330 (desktop 1440x1203) / 184:4778 (mobile 393x851).
+ * Cream band behind the transparent Header: breadcrumb, centred title, 32:15
+ * cover image, then the author / date / read-time row with share icons.
+ *
+ * Not PageHero: that component is the photo-backed inner-page hero and its own
+ * header says it excludes this page.
+ */
+import { site } from '../../../lib/site';
+
+interface Props {
+  title: string;
+  category: string;
+  published: { label: string; iso: string };
+  readTime: string;
+  author: { name: string; avatar: string };
+  image: string;
+  imageAlt: string;
+}
+
+const { title, category, published, readTime, author, image, imageAlt } =
+  Astro.props;
+
+const url = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+
+const meta = [
+  { label: 'Published On', value: published.label },
+  { label: 'Read Time', value: readTime },
+];
+
+/* 16px remix glyphs exported flat from Figma; each keeps its own aspect ratio
+   inside the 16px dashed circle rather than being stretched to a square.
+   The circle is 7px pad + 16px icon + 1px border = Figma's 32px button. */
+const shares = [
+  {
+    label: `Share “${title}” on LinkedIn`,
+    href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+    icon: '/icons/linkedin-fill.svg',
+    size: 'h-3 w-[12.71px]',
+  },
+  {
+    label: 'Follow Projected Growth Consulting on Instagram',
+    href: site.social.instagram,
+    icon: '/icons/instagram-line.svg',
+    size: 'size-[13.33px]',
+  },
+  {
+    label: `Share “${title}” on X`,
+    href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
+    icon: '/icons/twitter-x-line.svg',
+    size: 'h-[10.67px] w-3',
+  },
+];
+---
+
+<section data-node-id="184:5330" class="bg-[#f6f3ec] pt-[168px] pb-12 lg:pb-20">
+  <div class="rail flex flex-col gap-12">
+    <div class="flex flex-col items-center gap-[13px]">
+      <nav aria-label="Breadcrumb" class="w-full">
+        <ol class="flex items-center justify-center gap-2 text-base leading-6">
+          <li>
+            <a
+              href="/blog"
+              class="text-[#6b7280] transition-colors hover:text-[#111827]">Blog</a
+            >
+          </li>
+          <li aria-hidden="true" class="flex items-center">
+            <img
+              src="/icons/chevron-right.svg"
+              alt=""
+              width="16"
+              height="16"
+              class="size-4"
+            />
+          </li>
+          <li class="text-[#111827]" aria-current="page">{category}</li>
+        </ol>
+      </nav>
+
+      <h1
+        class="text-center text-5xl leading-[1.2] tracking-[-0.042em] text-balance text-[#111827] lg:text-[72px]"
+      >
+        {title}
+      </h1>
+    </div>
+
+    <div class="flex flex-col gap-12">
+      <img
+        src={image}
+        alt={imageAlt}
+        width="1280"
+        height="600"
+        decoding="async"
+        fetchpriority="high"
+        class="aspect-[345/248] w-full rounded-lg object-cover lg:aspect-[1280/600]"
+      />
+
+      <!-- Figma centres the share group against the 48px author row on desktop
+           (184:5330) but top-aligns it on mobile (184:4814 y=0). -->
+      <div class="flex items-start justify-between gap-6 lg:items-center">
+        <div class="flex flex-col gap-10 lg:flex-row lg:items-center">
+          <div class="flex items-center gap-3">
+            <img
+              src={author.avatar}
+              alt=""
+              width="48"
+              height="48"
+              loading="lazy"
+              class="size-12 shrink-0 rounded-full border border-[#e0e3de] object-cover"
+            />
+            <div class="flex flex-col">
+              <span
+                class="text-sm leading-4 font-medium tracking-[-1px] text-[#6b7280]"
+                >Written By</span
+              >
+              <span
+                class="text-base leading-6 font-semibold tracking-[-1px] text-[#111827]"
+                >{author.name}</span
+              >
+            </div>
+          </div>
+
+          {
+            meta.map((item) => (
+              <div class="flex flex-col">
+                <span class="text-sm leading-4 font-medium tracking-[-1px] text-[#6b7280]">
+                  {item.label}
+                </span>
+                <span class="text-base leading-6 font-semibold tracking-[-1px] text-[#111827]">
+                  {item.value}
+                </span>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="flex shrink-0 items-center gap-2">
+          {
+            shares.map((share) => (
+              <a
+                href={share.href}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={share.label}
+                class="flex items-center justify-center rounded-full border border-dashed border-[#6b7280] p-1.75 transition-colors hover:border-[#111827] hover:bg-white"
+              >
+                <span class="flex size-4 items-center justify-center">
+                  <img src={share.icon} alt="" width="16" height="16" class={`block ${share.size}`} />
+                </span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  /* Header.astro is cream-on-dark because every other hero is a darkened photo.
+     This hero is cream, so the shared header would render invisible on it.
+     ponytail: page-scoped repaint — the real fix is a `theme` prop on Header,
+     which is out of scope here (that file is locked). */
+  body:has(section[data-node-id='184:5330']) > header {
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+  }
+  body:has(section[data-node-id='184:5330'])
+    > header
+    nav[aria-label='Primary']
+    > a:not([aria-current='page']),
+  body:has(section[data-node-id='184:5330']) > header nav[aria-label='Primary'] > div > a,
+  body:has(section[data-node-id='184:5330']) > header button[data-menu-toggle] {
+    color: #6b7280;
+  }
+</style>

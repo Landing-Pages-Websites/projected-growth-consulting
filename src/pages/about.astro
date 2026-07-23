@@ -1,0 +1,76 @@
+---
+/** /about — Figma desktop 159:5662 · mobile 159:22602. */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import StatsBar from '../components/StatsBar.astro';
+import FAQ, { type FaqItem } from '../components/FAQ.astro';
+import AboutKelly from '../components/sections/about/AboutKelly.astro';
+import WhatWeBelieve from '../components/sections/about/WhatWeBelieve.astro';
+import WhoWeServe from '../components/sections/about/WhoWeServe.astro';
+import FeaturedBook from '../components/sections/about/FeaturedBook.astro';
+
+/** 159:5701 */
+const stats = [
+  { value: '6,000+', label: 'Practice Owners Supported' },
+  { value: '$250M+', label: 'Client Revenue Generated' },
+  { value: '15+', label: 'Years of Industry Experience' },
+  { value: '92%', label: 'Members Renew Annually' },
+];
+
+/* 159:8113. Figma only writes out the answer for the open item; the four
+   collapsed questions ship with copy written from the facts stated elsewhere on
+   this page. Replace with client-approved answers before launch. */
+const faqs: FaqItem[] = [
+  {
+    q: 'Who is Projected Growth Consulting for?',
+    a: 'We work with ambitious practice owners looking to improve profitability, streamline operations, strengthen leadership, and achieve sustainable growth. Our clients include med spas, plastic surgery practices, functional medicine clinics, biohacking businesses, and other elective healthcare providers.',
+  },
+  {
+    q: 'What’s the difference between Coaching and Consulting?',
+    a: 'Coaching is recurring guidance: you and your leadership team work through our frameworks on a regular cadence, with accountability between sessions. Consulting is hands-on engagement where our team works inside your practice on a defined problem — pricing, operations, team structure, or a growth plan — and leaves you with the systems to run it.',
+  },
+  {
+    q: 'What is included in the Growth Hub?',
+    a: 'The Growth Hub is our membership: the courses, KPI tools, templates, and operating frameworks behind our consulting work, plus ongoing coaching sessions and a community of practice owners. It is the same playbook that has supported more than 6,000 practices, and 92% of members renew each year.',
+  },
+  {
+    q: 'Are the courses self-paced?',
+    a: 'Yes. Every course is on-demand, so you and your team can work through the modules on your own schedule and revisit them whenever you need to onboard someone new or roll out a change.',
+  },
+  {
+    q: 'How quickly can I expect results?',
+    a: 'It depends on where your practice is starting from and how quickly the systems get implemented. Owners typically see early wins in operations and lead conversion within the first quarter, with profitability improvements compounding as the frameworks take hold across the team.',
+  },
+];
+---
+
+<Base
+  title="About Kelly Smith"
+  description="For more than two decades, Kelly Smith and the Projected Growth Consulting team have helped med spas, plastic surgery practices, functional medicine clinics, and wellness businesses increase revenue, improve profitability, and build stronger organizations."
+  ogImage="/images/heroes/about.png"
+>
+  <PageHero
+    nodeId="159:5663"
+    title="Helping Practices Grow With Confidence"
+    body="For more than two decades, Kelly Smith and the Projected Growth Consulting team have helped med spas, plastic surgery practices, functional medicine clinics, and wellness businesses increase revenue, improve profitability, and build stronger organizations."
+    image="/images/heroes/about.png"
+    primaryCta={{ label: 'Book A MedSpa Consulting Call', href: '/book-a-call' }}
+    secondaryCta={{ label: 'Browse Courses', href: '/courses' }}
+  />
+
+  <StatsBar
+    nodeId="159:5701"
+    lead="Built for practices that want more than incremental growth."
+    leadAccent="Designed to create predictable revenue, stronger teams, and scalable operations."
+    intro="Helping elective medical practices grow with proven systems, coaching, and accountability."
+    stats={stats}
+    spread
+  />
+
+  <AboutKelly />
+  <WhatWeBelieve />
+  <WhoWeServe />
+  <FeaturedBook />
+
+  <FAQ nodeId="159:8113" items={faqs} />
+</Base>

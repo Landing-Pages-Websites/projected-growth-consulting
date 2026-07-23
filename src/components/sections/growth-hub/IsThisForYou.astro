@@ -1,0 +1,30 @@
+---
+/** "Who It's For" — Figma desktop 159:9636 / mobile 159:21023. */
+import ChecklistSplit from './ChecklistSplit.astro';
+
+const items = [
+  'You own an elective medical, aesthetic, or wellness practice.',
+  "You're spending too much time solving the same problems every week.",
+  'You want to delegate more without sacrificing quality.',
+  'Your team needs practical training they can implement immediately.',
+  "You're ready to improve profitability, KPIs, and operational performance.",
+  'You want stronger recurring revenue and more predictable growth.',
+  "You're building a practice that's scalable, valuable, and less dependent on you.",
+  "You want proven systems developed by someone who's already helped thousands of practices succeed.",
+];
+---
+
+<ChecklistSplit
+  nodeId="159:9636"
+  eyebrow="WHO IT'S FOR"
+  title="Built For Owners Ready To Grow Smarter"
+  body="The Growth Hub is designed for elective medical practice owners who want practical solutions, stronger teams, and proven systems—not more theory."
+  listTitle="The Growth Hub Is Right For You If..."
+  items={items}
+  image="/images/growth-hub/who-its-for.png"
+  imageAlt="A practice owner standing in her clinic, hands in pockets, looking off camera"
+  imageWidth={364}
+  imageHeight={589}
+  imageSide="left"
+  cta={{ label: 'Join The Growth Hub', href: '#membership' }}
+/>

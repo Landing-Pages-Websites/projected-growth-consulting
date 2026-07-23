@@ -1,0 +1,541 @@
+---
+/**
+ * Blog-post body — Figma 184:5388 (desktop, 464px sidebar + 80px gap + 768px
+ * column) / 184:4821 (mobile, sidebar stacked above the article).
+ *
+ * Copy is transcribed verbatim from the Figma rich-text nodes. Headings are
+ * Inter Semi Bold here, not the display serif — that is what the design says.
+ *
+ * Addition to the Figma frame: the "On this page" card. The design ships no
+ * table of contents and the article is 9.7k px tall, so the TOC is generated
+ * from the same `sections` array that renders the body — no second source.
+ */
+import Button from '../../Button.astro';
+
+const A = (href: string, label: string) =>
+  `<a href="${href}" target="_blank" rel="noreferrer noopener">${label}</a>`;
+
+const ACCELERATOR =
+  'https://projectedgrowthconsulting.com/medspa-growth-accelerator/';
+const MARGINS =
+  'https://projectedgrowthconsulting.com/average-medspa-profit-margin/';
+const MARKETING =
+  'https://projectedgrowthconsulting.com/med-spa-marketing-ideas-that-drive-revenue/';
+const FUNNEL =
+  'https://projectedgrowthconsulting.com/creating-a-high-converting-sales-funnel-for-your-medspa-a-comprehensive-guide/';
+const BILLING =
+  'https://www.northwestcareercollege.edu/blog/essential-kpis-in-medical-billing-what-to-monitor-for-success/';
+
+type Block =
+  | { t: 'h3'; text: string }
+  | { t: 'p'; html: string }
+  | { t: 'ul' | 'ol'; items: string[] };
+
+type Section = { h2: string; blocks: Block[] };
+
+/* Figma 184:5413 — the standfirst that runs above the first H2. */
+const intro: Extract<Block, { t: 'p' }>[] = [
+  {
+    t: 'p',
+    html: 'A med spa can post record revenue and still leak profit every week. Owners who wait for month-end reports discover missed leads, idle providers, and weak margins after the damage is done.',
+  },
+  {
+    t: 'p',
+    html: A(
+      ACCELERATOR,
+      'Schedule a consultation to build a clearer, more profitable med spa growth plan.'
+    ),
+  },
+  {
+    t: 'p',
+    html: 'Med spa KPIs are the core numbers that show whether your practice is turning patient demand into profitable, repeatable, sustainable growth over time. Review leads, appointments, consultations, close rates, rebooking, cancellations, and provider utilization weekly, then correct problems while they are still small. Each month, review revenue by service and provider, patient retention, acquisition cost, payroll, expenses, and profit margin to judge the whole business. A disciplined review rhythm separates urgent operating gaps from larger trends that require a strategic decision from the owner. PGC’s 7-Figure KPI Tracker puts those signals in one dashboard, replacing scattered reports with a view of what works, what slips, and where to focus next.',
+  },
+  {
+    t: 'p',
+    html: 'The next question is simple: What med spa KPIs belong on your dashboard? The answer depends on whether a number helps you act now, spot a trend, or protect profit. To sort the signal from the noise during each review, here’s how.',
+  },
+];
+
+const sections: Section[] = [
+  {
+    h2: 'What med spa KPIs belong on your dashboard?',
+    blocks: [
+      {
+        t: 'p',
+        html: 'A practical dashboard gives the owner a clear view of the business, not a wall of numbers. Each metric should answer a decision question and have one person responsible for it. The right med spa KPIs show where profit comes from, where demand stalls, and what needs attention now.',
+      },
+      { t: 'h3', text: 'Five parts of a useful dashboard' },
+      {
+        t: 'p',
+        html: 'Start with five groups: financial, marketing, sales, client, and operations. This structure keeps revenue results tied to the actions that create them. It also helps owners spot weak handoffs, such as strong lead volume followed by poor consultation bookings.',
+      },
+      {
+        t: 'ul',
+        items: [
+          'Financial: revenue, gross profit, net profit, cost of goods, payroll percentage, and revenue by provider or service.',
+          'Marketing: qualified leads, cost per lead, cost per acquisition, campaign source, and return on marketing spend.',
+          'Sales: consultation bookings, show rate, consultation close rate, package sales, and average transaction value.',
+          'Client: new clients, repeat booking rate, retention, visit frequency, memberships, and client lifetime value.',
+          'Operations: provider capacity, revenue per working hour, revenue per appointment, cancellations, and staff productivity.',
+        ],
+      },
+      {
+        t: 'p',
+        html: `Do not let revenue stand alone. Revenue shows money coming in, while profit reflects the costs required to produce it. Owners can sharpen their financial view by ${A(MARGINS, 'understanding average med spa profit margins')} beside service costs and provider output.`,
+      },
+      {
+        t: 'p',
+        html: `If the practice bills insurance, add collection measures that reveal cash flow risk. For example, days in accounts receivable shows how long the practice waits to collect debt. An ${A(BILLING, 'academic overview of medical billing KPIs')} explains how these measures can reveal weak billing steps and help improve revenue cycles.`,
+      },
+      { t: 'h3', text: 'Leading versus lagging indicators' },
+      {
+        t: 'p',
+        html: 'Leading indicators show activity that may shape a future result. Qualified leads, booked consultations, show rates, and provider capacity are examples. They give the team time to change course before the month closes.',
+      },
+      {
+        t: 'p',
+        html: 'Lagging indicators confirm what already happened. Revenue, profit, acquisition cost, retention, and revenue per provider belong in this group. Both types matter, but leading measures drive weekly action while lagging measures test whether those actions worked.',
+      },
+      {
+        t: 'p',
+        html: 'Pair each lagging result with one or two leading drivers. If monthly revenue misses plan, review qualified leads, consultation bookings, close rate, and average transaction value. That turns a broad problem into a short list of actions.',
+      },
+      { t: 'h3', text: 'A review rhythm owners can use' },
+      {
+        t: 'p',
+        html: 'Review a short scorecard with team leads each week. Focus on current demand, booked work, conversion, capacity, and any metric outside its target range. Assign a next step, an owner, and a due date for every gap.',
+      },
+      {
+        t: 'p',
+        html: 'Use the monthly review for the full profit and loss picture, service mix, marketing return, retention, and provider trends. Compare results with the plan and prior periods. Keep the same core dashboard long enough to see patterns, then add a metric only when it supports a real decision.',
+      },
+    ],
+  },
+  {
+    h2: 'Which med spa KPIs should you review weekly?',
+    blocks: [
+      {
+        t: 'p',
+        html: 'A weekly KPI review should turn recent results into clear actions for the next seven days. Keep the meeting short, use one dashboard, and assign one owner to each number. This cadence catches small gaps before they become monthly revenue problems.',
+      },
+      { t: 'h3', text: 'Revenue and demand signals' },
+      {
+        t: 'p',
+        html: 'Start with booked revenue and collections, since they show two different parts of financial health. Booked revenue shows expected sales from scheduled care, while collections show cash received. The practice manager should compare both with the weekly target, then address open balances, weak booking days, or missed follow-up.',
+      },
+      {
+        t: 'p',
+        html: `Collection KPIs can expose weak billing steps and help improve the revenue cycle, according to ${A(BILLING, 'medical billing guidance')}. When booked revenue rises but collections lag, the owner should review deposits, payment plans, and checkout steps. The goal is not just reporting; it is finding the next fix.`,
+      },
+      {
+        t: 'p',
+        html: `Next, track new leads by source and compare each source with its prior trend. The marketing owner should pause weak campaigns, shift spend, or test a new message. Pair lead volume with ${A(MARKETING, 'med spa marketing ideas that drive revenue')} so the team does not confuse activity with useful demand.`,
+      },
+      { t: 'h3', text: 'Consultation funnel ownership' },
+      {
+        t: 'p',
+        html: 'Review consultation booking rate, show rate, and conversion rate as one connected funnel. A high lead count means little if prospects never book, arrive, or buy. Assign the front desk lead to booking and show rates, then assign the sales lead or provider to consultation conversion.',
+      },
+      {
+        t: 'ul',
+        items: [
+          'If booking rate falls, audit response time, call scripts, and follow-up attempts.',
+          'If show rate falls, check reminder timing, confirmation steps, and deposit rules.',
+          'If conversion falls, review consultation notes, offers, objections, and staff coaching needs.',
+        ],
+      },
+      {
+        t: 'p',
+        html: `These rates should be read in sequence, not in isolation. A weak booking rate calls for a different fix than a weak close rate. Use ${A(FUNNEL, 'building a high-converting med spa sales funnel')} to trace where qualified prospects stop moving forward.`,
+      },
+      { t: 'h3', text: 'Schedule health and patient follow-through' },
+      {
+        t: 'p',
+        html: 'Provider utilization shows how much available treatment time is filled with productive appointments. The operations manager should review utilization by provider, service, day, and time block. Low utilization may call for schedule changes, targeted outreach, or added coaching for a provider with open capacity.',
+      },
+      {
+        t: 'p',
+        html: 'Finish with rebooking, cancellations, and no-shows. Providers should recommend the next visit before checkout, while the front desk records and confirms it. When cancellations or no-shows rise, the front desk owner should review patterns, contact affected patients, and adjust reminders or deposit steps.',
+      },
+      {
+        t: 'p',
+        html: 'End every weekly review with an owner, one action, and a due date for each off-target metric. Record the action beside the KPI so next week’s meeting begins with accountability. This keeps the dashboard useful and makes performance management a steady operating habit.',
+      },
+    ],
+  },
+  {
+    h2: 'Which financial metrics require a monthly review?',
+    blocks: [
+      {
+        t: 'p',
+        html: 'A monthly review connects daily activity to the full profit and loss statement. It shows whether sales growth is producing cash or hiding higher costs.',
+      },
+      {
+        t: 'p',
+        html: 'Review the same med spa KPIs each month, then compare results with the prior month, budget, and year-to-date plan. This steady process makes trends easier to spot before they become costly.',
+      },
+      { t: 'h3', text: 'Revenue mix and value' },
+      {
+        t: 'p',
+        html: 'Start with total revenue, then split it into service and retail revenue. Next, break service revenue down by provider and service category. These views show which people and treatments drive growth, not just which month had the highest sales.',
+      },
+      {
+        t: 'p',
+        html: 'Average transaction value adds context to visit volume. Calculate it as total collected revenue divided by completed transactions. Also review retail-to-service revenue and membership revenue to see whether each visit creates more than treatment income.',
+      },
+      { t: 'h3', text: 'Costs and true profit' },
+      {
+        t: 'p',
+        html: 'Revenue alone does not show financial health. Cost of goods sold, labor, and overhead explain what the practice spent to produce that revenue. Review each cost as both a dollar amount and a share of total revenue.',
+      },
+      {
+        t: 'p',
+        html: `Separate direct treatment costs from fixed overhead, such as rent, software, and insurance. Then calculate net profit as total revenue minus COGS, labor, overhead, taxes, and other expenses. This gives owners a clearer basis for ${A(MARGINS, 'comparing profit performance')} and finding margin leaks.`,
+      },
+      {
+        t: 'p',
+        html: 'Review revenue by provider beside that provider’s labor and treatment costs. A provider may lead in sales but produce less profit because of discounts, product use, or scheduling gaps.',
+      },
+      { t: 'h3', text: 'Membership revenue and cash flow' },
+      {
+        t: 'p',
+        html: 'Track recurring membership revenue apart from new membership sales and one-time services. Compare monthly dues collected, redemptions, cancellations, and unused benefits. This view helps show whether membership growth supports steady cash or creates future service obligations.',
+      },
+      {
+        t: 'p',
+        html: 'Finally, compare net profit with actual cash flow. Cash flow equals cash received minus cash paid during the month. Profit can look healthy while delayed collections, inventory purchases, or debt payments reduce available cash.',
+      },
+      {
+        t: 'p',
+        html: `Review accounts receivable when the practice bills patients or third parties. Days in accounts receivable measures the average wait to collect debts. It is ${A(BILLING, 'a key cash flow indicator')}. Assign an owner and a clear next-month action for each weak metric.`,
+      },
+    ],
+  },
+  {
+    h2: 'How do marketing and retention KPIs reveal profitable growth?',
+    blocks: [
+      {
+        t: 'p',
+        html: 'Marketing activity can look busy while producing little profit. The right med spa KPIs connect each campaign to booked visits, repeat business, and patient value. This view helps owners fund channels that create lasting revenue, not just leads.',
+      },
+      { t: 'h3', text: 'Acquisition economics by lead source' },
+      {
+        t: 'p',
+        html: 'Start with cost per lead, customer acquisition cost, and conversion rate for each lead source. Cost per lead divides campaign spend by leads generated. Customer acquisition cost divides that spend by the number of new patients gained. Conversion rate shows how many leads become booked or paying patients.',
+      },
+      {
+        t: 'p',
+        html: `Review the numbers by source, campaign, service, and location. A channel with cheap leads may have weak booking rates or low patient value. Another source may cost more upfront but bring patients who return often. Clear ${A(MARKETING, 'connecting marketing activity to revenue')} keep budget choices tied to revenue quality.`,
+      },
+      {
+        t: 'ul',
+        items: [
+          'Lead source: Shows where each inquiry began.',
+          'Cost per lead: Tests the efficiency of lead generation.',
+          'Customer acquisition cost: Shows the spend required to gain one new patient.',
+          'Conversion rate: Reveals how well the team turns interest into booked or paid visits.',
+          'Marketing ROI: Compares the profit tied to a campaign with its cost.',
+        ],
+      },
+      {
+        t: 'p',
+        html: `Do not judge a campaign from lead volume alone. Trace leads through consultation, booking, payment, and later visits. This approach exposes gaps in follow-up and helps separate weak channels from weak sales steps. In health care settings, KPIs can ${A(BILLING, 'show where performance is falling short')} and guide process changes.`,
+      },
+      { t: 'h3', text: 'Retention and lifetime value' },
+      {
+        t: 'p',
+        html: 'Acquisition data explains how patients enter the practice. Retention data shows whether the relationship becomes profitable. Track retention rate, visit frequency, rebooking rate, membership enrollment, membership renewal, and patient lifetime value. Together, these measures show whether first visits lead to steady demand.',
+      },
+      {
+        t: 'p',
+        html: 'Lifetime value should reflect the revenue a patient produces across the relationship, less the direct costs needed to serve that patient. Compare it with customer acquisition cost by source. A source that attracts loyal, high-value patients may earn more budget despite a higher initial cost.',
+      },
+      {
+        t: 'ul',
+        items: [
+          'Visit frequency: How often active patients return within a set period.',
+          'Rebooking rate: The share of patients who schedule their next visit.',
+          'Retention rate: The share of patients who remain active over time.',
+          'Membership performance: Enrollment, use, renewal, and cancellation patterns.',
+          'Lifetime value: The value produced across the full patient relationship.',
+        ],
+      },
+      {
+        t: 'p',
+        html: 'Look for patterns by provider, treatment, and first-visit offer. Low rebooking after one service may point to poor follow-up or a weak care plan. Strong membership sign-ups with frequent cancellations may signal a poor fit between the offer and patient needs.',
+      },
+      { t: 'h3', text: 'Budget decisions from the dashboard' },
+      {
+        t: 'p',
+        html: 'Use a weekly dashboard to spot sudden changes in leads, bookings, conversions, and rebooking. Then use a monthly review to compare campaign cost, acquired patients, retention, and lifetime value. This rhythm turns measurement into action without reacting to one unusual day.',
+      },
+      {
+        t: 'p',
+        html: `Budget shifts should follow the full patient path. Increase spend when a source brings qualified leads that convert, return, and produce sound value. Reduce or fix campaigns that create inquiries but few profitable relationships. A consistent process for ${A(FUNNEL, 'improving consultation conversions')} shows where marketing or follow-up needs attention.`,
+      },
+      {
+        t: 'p',
+        html: 'The goal is not the lowest acquisition cost at any price. It is a healthy return from patients the practice can serve well and retain. When acquisition and retention metrics sit together, owners can protect margin while choosing the next place to invest.',
+      },
+    ],
+  },
+  {
+    h2: 'How to build a KPI review rhythm that drives action',
+    blocks: [
+      {
+        t: 'p',
+        html: `A useful KPI rhythm turns numbers into clear choices, owners, and deadlines. KPI data can reveal weak points and guide improvements, as this ${A(BILLING, 'medical KPI overview')} explains. The value comes from acting on the signal, not merely reporting it.`,
+      },
+      { t: 'h3', text: 'Set the rules before the meetings' },
+      {
+        t: 'p',
+        html: 'Start with a short KPI dictionary that removes room for debate. For each metric, record its name, formula, data source, reporting period, and named data owner. Also state when data closes and who checks it for errors.',
+      },
+      {
+        t: 'p',
+        html: 'Next, set a goal and red, yellow, and green thresholds for every metric. Green means performance is on plan. Yellow calls for closer review, while red requires a named action and due date. Base each threshold on your goals, costs, capacity, and recent results.',
+      },
+      {
+        t: 'ol',
+        items: [
+          'Choose the core metrics. Keep the list focused on numbers that guide weekly choices or monthly plans. Include lead, sales, service, retention, team, and profit measures.',
+          'Assign one data owner per KPI. That person updates the number, checks the source, and explains gaps. The owner does not need to control the result.',
+          'Write one shared definition. State what counts, what does not count, and the exact formula. This step prevents teams from using different versions of the same metric.',
+          'Set goals and status bands. Define green, yellow, and red before reviewing results. Use the bands to flag risk without changing the target after a weak week.',
+          'Hold the weekly action review. Review exceptions first, then assign each action to one person with a due date. Record the decision and check its status next week.',
+          'Run a monthly trend review. Compare several periods, test whether actions worked, and adjust plans when the pattern supports a change. Keep single-week noise out of major decisions.',
+        ],
+      },
+      { t: 'h3', text: 'The weekly action review' },
+      {
+        t: 'p',
+        html: 'Keep the weekly meeting short and focused on movement. The data owner states the result, status color, likely cause, and next action. The group should spend little time reading green metrics aloud. Focus on yellow and red items that need a decision.',
+      },
+      {
+        t: 'p',
+        html: `Use the PGC 7-Figure KPI Tracker as the shared reference point for this review. Pair it with a disciplined process for ${A(FUNNEL, 'measuring your sales funnel KPIs')} and other operating metrics. End the meeting by reading back each action, owner, and deadline.`,
+      },
+      { t: 'h3', text: 'The monthly trend review' },
+      {
+        t: 'p',
+        html: 'The monthly meeting asks a different question: is the business moving in the right direction? Look for trends across revenue, profit, lead flow, conversion, retention, provider output, and capacity. Review related metrics together so one strong number does not hide a weak result elsewhere.',
+      },
+      {
+        t: 'p',
+        html: `For example, rising revenue may still require action if profit or provider output slips. A deeper review of ${A(MARGINS, 'protecting practice profitability')} can help connect operating results to financial health. Close each monthly review by keeping, changing, or stopping specific actions based on the trend.`,
+      },
+    ],
+  },
+  {
+    h2: 'Common med spa KPI dashboard mistakes to avoid',
+    blocks: [
+      {
+        t: 'p',
+        html: 'A dashboard stops being useful when it becomes a storage room for every number the business can collect. The right view keeps med spa KPIs focused on decisions, owners, and next steps. If a metric cannot change an action, it may not belong on the main dashboard.',
+      },
+      { t: 'h3', text: 'Too many metrics and unclear definitions' },
+      {
+        t: 'p',
+        html: 'More data does not always create more insight. A crowded dashboard hides the few signals that show whether the practice is on plan. Keep the main view focused on core growth, sales, operations, and profit measures. Put supporting detail in a separate report for deeper review.',
+      },
+      {
+        t: 'p',
+        html: `Each KPI also needs one written definition. For example, decide whether revenue means booked, collected, or recognized revenue. Define a lead, consultation, conversion, and active patient the same way across every team. This discipline makes ${A(MARGINS, 'tracking med spa KPIs')} more useful when owners compare results over time.`,
+      },
+      {
+        t: 'ul',
+        items: [
+          'Name the metric owner and data source.',
+          'State the formula and reporting period.',
+          'Document any exclusions or adjustments.',
+          'Use the same definition in every meeting.',
+        ],
+      },
+      { t: 'h3', text: 'Vanity metrics without business context' },
+      {
+        t: 'p',
+        html: 'Followers, impressions, and website visits can look impressive while booked revenue stays flat. Treat them as supporting signals, not proof of growth. Pair each marketing measure with a result closer to revenue, such as qualified leads, booked consultations, show rate, or collected sales.',
+      },
+      {
+        t: 'p',
+        html: `The same rule applies to large revenue figures. Revenue alone does not show whether services are profitable or provider time is used well. Connect production to costs, capacity, and revenue per hour. Then use ${A(MARKETING, 'marketing KPIs and performance metrics')} to judge which efforts create useful demand.`,
+      },
+      { t: 'h3', text: 'Reviews without timely action' },
+      {
+        t: 'p',
+        html: 'A dashboard review is incomplete until someone owns the response. Set a target, note the gap, choose one action, and give it a due date. At the next review, check the result before adding another task. This turns the dashboard into a management tool instead of a scorecard.',
+      },
+      {
+        t: 'p',
+        html: `Delayed data weakens that process. Establish a simple cutoff so weekly reviews use current operational data and monthly reviews use closed financial data. When billing matters, accurate KPIs can reveal weak processes and help improve revenue cycles, according to ${A(BILLING, 'Northwest Career College')}.`,
+      },
+      {
+        t: 'p',
+        html: 'Finally, do not treat every benchmark as universal. A useful target must reflect the practice’s service mix, prices, staffing, location, and growth stage. Use outside benchmarks as prompts, then build targets from your own baseline and business plan. Review those targets when the model or market changes.',
+      },
+    ],
+  },
+  {
+    h2: 'Ready to Make Every Metric Drive Better Decisions?',
+    blocks: [
+      {
+        t: 'p',
+        html: 'Waiting another month to review the right numbers can leave weak conversion, overspending, and missed revenue hidden across your growing med spa business every week. The sooner you establish a consistent review rhythm, the sooner your team can spot problems and correct course before they grow with confidence. PGC’s 7-Figure KPI Tracker brings weekly and monthly metrics into one clear system, helping your leadership team turn each review into focused next steps.',
+      },
+      {
+        t: 'p',
+        html: `Stop letting scattered reports delay decisions while preventable gaps continue to drain time, attention, and profit from your practice. Ready to build a more accountable med spa? ${A(ACCELERATOR, 'Schedule a consultation')} to create a stronger measurement rhythm and act on your numbers now.`,
+      },
+    ],
+  },
+];
+
+const slug = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[’']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+/** One pass over the same array feeds both the TOC and the body ids. */
+const toc = sections.map((s) => ({
+  id: slug(s.h2),
+  label: s.h2,
+  children: s.blocks
+    .filter((b): b is Extract<Block, { t: 'h3' }> => b.t === 'h3')
+    .map((b) => ({ id: slug(b.text), label: b.text })),
+}));
+
+const body = 'mb-6 text-base leading-[1.5] text-[#6b7280]';
+const list = `${body} list-outside pl-6 marker:text-[#6b7280]`;
+const h3 =
+  'mt-4 mb-6 scroll-mt-8 font-sans text-2xl leading-[1.2] font-semibold tracking-normal text-[#111827] lg:text-[32px]';
+---
+
+<section data-node-id="184:5388" class="py-20">
+  <!-- Figma 184:5389 puts this rail at x=64 w=1312 — a 64px gutter, not the 80px
+       every other section uses. 1312 = 464 sidebar + 80 gap + 768 column, so the
+       article measure only lands on 768 with the narrower gutter. -->
+  <div
+    class="rail flex flex-col gap-20 lg:flex-row lg:items-start lg:px-16"
+  >
+    <!-- 464px is the Figma-1440 sidebar; at the 1024 band it would out-width the
+         article column (352px), inverting the split. Compress to 360 there so the
+         article keeps priority; xl restores the drawn 464 (1280/1440 unchanged). -->
+    <aside class="flex w-full flex-col gap-6 lg:sticky lg:top-8 lg:basis-[360px] lg:min-w-0 xl:basis-[464px]">
+      <!-- Newsletter — Figma 184:5390.
+           ponytail: no action= until there is an endpoint; markup is ready for one. -->
+      <form
+        class="flex flex-col gap-4 rounded-lg border border-black/10 bg-white p-8"
+        data-node-id="184:5390"
+      >
+        <h2 class="text-[32px] leading-[1.4] font-bold tracking-normal text-[#111827]">
+          Subscribe to newsletter
+        </h2>
+        <p class="text-base leading-[1.5] text-[#6b7280]">
+          Subscribe to receive the latest blog posts to your inbox every week.
+        </p>
+        <label for="newsletter-email" class="sr-only">Email address</label>
+        <input
+          id="newsletter-email"
+          type="email"
+          name="email"
+          required
+          autocomplete="email"
+          placeholder="Enter your email"
+          class="w-full rounded-lg border border-black/10 px-3 py-[9px] text-base leading-[1.5] text-[#111827] placeholder:text-[#6b7280]"
+        />
+        <Button type="submit" class="w-full">Subscribe</Button>
+        <p class="text-xs leading-[1.5] text-[#111827]">
+          By subscribing you agree to with our <a
+            href="/privacy-policy"
+            class="font-medium text-[var(--color-lime)] underline transition-colors hover:text-[var(--color-lime-border)]"
+            >Privacy Policy</a
+          >.
+        </p>
+      </form>
+
+      <!-- On this page — not in the Figma frame; see the file header. -->
+      <nav
+        aria-labelledby="toc-heading"
+        class="flex flex-col gap-4 rounded-lg border border-black/10 bg-white p-8"
+      >
+        <h2
+          id="toc-heading"
+          class="text-2xl leading-[1.4] font-bold tracking-normal text-[#111827]"
+        >
+          On this page
+        </h2>
+        <ol class="flex flex-col gap-3 text-base leading-[1.5]">
+          {
+            toc.map((item) => (
+              <li class="flex flex-col gap-3">
+                <a
+                  href={`#${item.id}`}
+                  class="font-medium text-[#111827] underline decoration-transparent transition-colors hover:decoration-[#111827]"
+                >
+                  {item.label}
+                </a>
+                {item.children.length > 0 && (
+                  <ol class="flex flex-col gap-2 border-l border-black/10 pl-4">
+                    {item.children.map((child) => (
+                      <li>
+                        <a
+                          href={`#${child.id}`}
+                          class="text-[#6b7280] underline decoration-transparent transition-colors hover:text-[#111827] hover:decoration-[#111827]"
+                        >
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+    </aside>
+
+    <div
+      class="flex w-full flex-col lg:max-w-[768px] lg:flex-1 [&_a]:underline [&_a:hover]:text-[#111827]"
+      data-node-id="184:5406"
+    >
+      {intro.map((block) => <p class={body} set:html={block.html} />)}
+
+      {
+        sections.map((section) => (
+          <Fragment>
+            <h2
+              id={slug(section.h2)}
+              class="mt-10 mb-6 scroll-mt-8 font-sans text-[32px] leading-[1.2] font-semibold tracking-normal text-[#111827] lg:text-[40px]"
+            >
+              {section.h2}
+            </h2>
+            {section.blocks.map((block) =>
+              block.t === 'h3' ? (
+                <h3 id={slug(block.text)} class={h3}>
+                  {block.text}
+                </h3>
+              ) : block.t === 'p' ? (
+                <p class={body} set:html={block.html} />
+              ) : block.t === 'ul' ? (
+                <ul class={`${list} list-disc`}>
+                  {block.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <ol class={`${list} list-decimal`}>
+                  {block.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ol>
+              )
+            )}
+          </Fragment>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,108 @@
+---
+/**
+ * /testimonials — Figma desktop 159:15140 · mobile 159:25642
+ *
+ * Every section on this page is one of the shared components, so there is no
+ * src/components/sections/testimonials/ directory — the page is only content:
+ *   Hero          159:15141 / 159:25643  -> PageHero
+ *   Stats         159:15179 / 159:25664  -> StatsBar
+ *   Testimonials  159:15195 / 159:25680  -> Testimonials variant="rows"
+ *   Testimonials  159:15255 / 159:25721  -> Testimonials variant="grid"
+ *   FAQs          159:16423 (desktop frame only) -> FAQ
+ *   Footer        159:16486              -> Base/Footer
+ *
+ * Both Testimonials frames are the exact frames the shared component's `rows`
+ * and `grid` defaults were transcribed from (see Testimonials.astro), so they
+ * render with their defaults rather than re-listing identical props.
+ *
+ * Figma 159:16386 puts a "Load More" control under the grid. It has no
+ * destination in the design and there are no further testimonials to reveal, so
+ * it renders as a <button>, not a dead link.
+ * [OWNER: supply the rest of the grid testimonials, or drop the control.]
+ */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import StatsBar from '../components/StatsBar.astro';
+import Testimonials from '../components/Testimonials.astro';
+import FAQ from '../components/FAQ.astro';
+import type { FaqItem } from '../components/FAQ.astro';
+
+/* Figma 159:15182 */
+const stats = [
+  { value: '6,000+', label: 'Practice Owners Supported' },
+  { value: '$250M+', label: 'Client Revenue Generated' },
+  { value: '15+', label: 'Years of Industry Experience' },
+  { value: '92%', label: 'Members Renew Annually' },
+];
+
+/* Figma 159:16436 draws six questions but only one answer (159:16445) — the
+   other five rows are collapsed and hold no answer text node in the design.
+   [OWNER: supply the five missing FAQ answers.] The interim wording below is
+   derived from PGC's own positioning, invents no facts, and also feeds the
+   FAQPage JSON-LD, so it is a launch blocker. */
+const faqs: FaqItem[] = [
+  {
+    q: 'Are the free resources really free?',
+    a: 'Yes. Many of our most popular tools and templates can be downloaded at no cost.',
+  },
+  {
+    q: 'Who are these resources designed for?',
+    a: 'Owners and operators of elective medical practices — med spas, plastic surgery, dermatology and wellness — at any stage of growth.',
+  },
+  {
+    q: 'Can I customize the templates?',
+    a: 'The templates are built to be adapted to your practice: your services, your pricing and the way you already report on your numbers.',
+  },
+  {
+    q: 'How do I access purchased resources?',
+    a: 'Access instructions are sent to the email address used at checkout, so you can download what you bought straight away.',
+  },
+  {
+    q: 'Is the PGC App included with other programs?',
+    a: 'App access is bundled with some programs and available on its own. The page for whichever program you are considering lists exactly what is included.',
+  },
+  {
+    q: 'Which resource should I start with?',
+    a: 'If you are not sure where to begin, start with the free tools and templates, then add the paid resources that match the part of the business you are working on right now.',
+  },
+];
+---
+
+<Base
+  title="Testimonials"
+  description="Real practices, real growth. See how med spas, plastic surgeons, dermatologists and wellness practices used PGC's frameworks to grow revenue."
+  ogImage="/images/heroes/testimonials.jpg"
+>
+  <PageHero
+    nodeId="159:15141"
+    title="Real Practices. Real Growth."
+    body="Discover how med spas, plastic surgeons, dermatologists, and wellness practices have used PGC's proven frameworks to increase revenue, improve profitability, and build stronger businesses."
+    image="/images/heroes/testimonials.jpg"
+    primaryCta={{ label: 'Book A MedSpa Consulting Call', href: '/book-a-call' }}
+    secondaryCta={{ label: 'Browse Courses', href: '/courses' }}
+  />
+
+  <StatsBar
+    nodeId="159:15179"
+    intro="Helping elective medical practices grow with proven systems, coaching, and accountability."
+    stats={stats}
+    spread
+  />
+
+  <Testimonials
+    nodeId="159:15195"
+    variant="rows"
+    mobileCta={{ label: 'Schedule A Call', href: '/book-a-call' }}
+  />
+
+  <Testimonials nodeId="159:15255" variant="grid" cta={{ label: 'Load More' }} />
+
+  <FAQ
+    nodeId="159:16423"
+    eyebrow="Frequently Asked Questions"
+    title="Questions About Our Resources?"
+    body="Everything you need to know before downloading, purchasing, or using our tools."
+    items={faqs}
+    ctaClass="mt-8 lg:mt-6"
+  />
+</Base>

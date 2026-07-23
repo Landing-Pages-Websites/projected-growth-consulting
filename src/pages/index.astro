@@ -1,0 +1,65 @@
+---
+/** Home — Figma 159:3978 (desktop) / 159:19170 (mobile). */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/sections/index/Hero.astro';
+import WhatYouGet from '../components/sections/index/WhatYouGet.astro';
+import HowItWorks from '../components/sections/index/HowItWorks.astro';
+import Blogs from '../components/sections/index/Blogs.astro';
+import Testimonials from '../components/Testimonials.astro';
+import FAQ, { type FaqItem } from '../components/FAQ.astro';
+
+/**
+ * Figma 159:5432 ships all eight questions but only paints the first answer —
+ * the rest of the accordion is drawn collapsed. Answers 2-8 below are written
+ * from copy that already exists elsewhere in this design (the What You Get
+ * cards, the hero subhead, the How It Works caption); no figures, dates or
+ * claims are introduced. Replace with the client's own answers when supplied.
+ */
+const faqs: FaqItem[] = [
+  {
+    q: 'Who is Projected Growth Consulting for?',
+    a: 'We work with ambitious practice owners looking to improve profitability, streamline operations, strengthen leadership, and achieve sustainable growth. Our clients include med spas, plastic surgery practices, functional medicine clinics, biohacking businesses, and other elective healthcare providers.',
+  },
+  {
+    q: "What's the difference between Coaching and Consulting?",
+    a: 'Coaching means working alongside experienced advisors to solve challenges faster, improve accountability, and accelerate growth. Consulting is a hands-on engagement built around a specific outcome in your practice. Schedule a call and we will point you to the path that matches your current stage.',
+  },
+  {
+    q: 'What is included in the Growth Hub?',
+    a: 'The Growth Hub is your complete growth system: proven tools, scorecards, implementation guides, and business frameworks designed to help you make better decisions and grow with confidence.',
+  },
+  {
+    q: 'Are the courses self-paced?',
+    a: 'Yes. Our courses are step-by-step programs covering marketing, leadership, operations, financial performance, and patient acquisition, built for operators to work through at their own pace.',
+  },
+  {
+    q: 'How quickly can I expect results?',
+    a: 'It depends on where you start and how quickly you implement. The systems behind The Growth Hub have helped thousands of elective medical practices improve profitability, increase conversions, and scale with greater confidence.',
+  },
+  {
+    q: 'Which program is right for me?',
+    a: 'Choose the path that matches your current stage — Growth Hub, Courses, Coaching, or Consulting. If you are not sure, schedule a call and we will help you find your starting point.',
+  },
+  {
+    q: 'Do you only work with Med Spas?',
+    a: 'No. We work with med spa, biohacking, plastic surgery, and functional medicine owners, along with other elective healthcare providers ready to scale profitably.',
+  },
+  {
+    q: 'Can my team access the training and resources?',
+    a: 'Yes. The courses, frameworks, and implementation guides are built to be assigned across your team so proven systems get put into action, not just read by the owner.',
+  },
+];
+---
+
+<Base
+  title="The Business OS for Elective Medical Practices"
+  description="Courses, coaching, and a membership built by Kelly Smith — for med spa, biohacking, plastic surgery, and functional medicine owners ready to scale profitably."
+>
+  <Hero />
+  <WhatYouGet />
+  <HowItWorks />
+  <Testimonials nodeId="159:5366" cta={{ label: 'View All Testimonials', href: '/testimonials' }} />
+  {/* Figma 159:5439 — the CTA sits 48px under the body here, not the 64 other pages use. */}
+  <FAQ nodeId="159:5432" items={faqs} ctaClass="mt-8 lg:mt-12" />
+  <Blogs />
+</Base>

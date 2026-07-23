@@ -1,0 +1,115 @@
+---
+/**
+ * The two mirrored program deep-dives:
+ *   Business Startup Program    — Figma 159:13272 (desktop) / 159:23789 (mobile)
+ *   Aesthetic Medical Coaching  — Figma 159:13340 (desktop) / 159:23857 (mobile)
+ * Identical layout, sides swapped on desktop — one component, `reverse` flips it.
+ * Mobile always puts the photo on top, so the photo stays first in the DOM.
+ *
+ * The "What's Included" rows use an inset ring, not a border: Figma (159:13287)
+ * draws the hairline inside the 620px card, so the row keeps its full 540px of
+ * text. A real 1px border ate 2px and wrapped the first item onto a second line.
+ */
+import Button from '../../Button.astro';
+
+export interface IncludedItem {
+  /** Bold lead-in, e.g. "Business Planning :" */
+  term: string;
+  text: string;
+}
+
+interface Props {
+  id: string;
+  nodeId: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  includedLabel: string;
+  items: IncludedItem[];
+  image: string;
+  imageAlt: string;
+  imageWidth: number;
+  imageHeight: number;
+  cta: { label: string; href: string };
+  /** Desktop only: put the photo on the right (Aesthetic Medical Coaching). */
+  reverse?: boolean;
+}
+
+const {
+  id,
+  nodeId,
+  eyebrow,
+  title,
+  body,
+  includedLabel,
+  items,
+  image,
+  imageAlt,
+  imageWidth,
+  imageHeight,
+  cta,
+  reverse = false,
+} = Astro.props;
+---
+
+<section id={id} data-node-id={nodeId} class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-10 lg:flex-row lg:items-center">
+    <div
+      class:list={[
+        'relative w-full lg:flex-1 lg:self-stretch',
+        reverse && 'lg:order-2',
+      ]}
+    >
+      <img
+        src={image}
+        alt={imageAlt}
+        width={imageWidth}
+        height={imageHeight}
+        loading="lazy"
+        decoding="async"
+        class="h-[350px] w-full rounded-2xl object-cover lg:absolute lg:inset-0 lg:h-full"
+      />
+    </div>
+
+    <div class="flex w-full flex-col gap-6 lg:flex-1">
+      <div class="flex flex-col gap-3">
+        <p class="eyebrow text-base tracking-[-1px] text-[#111827]">{eyebrow}</p>
+        <h2 class="text-[2.5rem] text-[#111827] lg:text-[4rem]">{title}</h2>
+        <p class="text-sm leading-6 tracking-[-1px] text-[#6b7280] lg:text-base">
+          {body}
+        </p>
+      </div>
+
+      <p
+        class="text-center text-xl leading-6 font-semibold tracking-[-0.04em] text-[#111] lg:text-left"
+      >
+        {includedLabel}
+      </p>
+
+      <ul class="flex flex-col gap-4">
+        {
+          items.map((item) => (
+            <li class="flex items-center gap-2 rounded-[4px] bg-white p-6 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)]">
+              <img
+                src="/icons/check-circle-24-lime.svg"
+                alt=""
+                aria-hidden="true"
+                width="24"
+                height="24"
+                loading="lazy"
+                class="size-6 shrink-0"
+              />
+              <p class="text-base leading-6 tracking-[-0.04em] text-[#6b7280]">
+                <span class="font-medium">{item.term}</span>{' '}{item.text}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="flex justify-center lg:justify-start">
+        <Button href={cta.href} size="lg">{cta.label}</Button>
+      </div>
+    </div>
+  </div>
+</section>

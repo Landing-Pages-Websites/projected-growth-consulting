@@ -1,0 +1,55 @@
+---
+/** "What You'll Learn" — Figma desktop 159:9601 / mobile 159:20988. */
+import SectionHead from '../../SectionHead.astro';
+import DarkCard from '../../DarkCard.astro';
+import Button from '../../Button.astro';
+
+const cards = [
+  {
+    image: '/images/growth-hub/learn-revenue-sales.jpg',
+    alt: 'Consultation room where a treatment plan is being presented to a patient',
+    title: 'Revenue & Sales',
+    body: 'Memberships, consultations, sales events, AI sales tools.',
+  },
+  {
+    image: '/images/growth-hub/learn-marketing-growth.jpg',
+    alt: 'Marketing plan and social content being mapped out for a practice',
+    title: 'Marketing & Growth',
+    body: 'Marketing plans, social media, branding, AI marketing.',
+  },
+  {
+    image: '/images/growth-hub/learn-numbers-profitability.jpg',
+    alt: 'Practice KPI figures and financial reports under review',
+    title: 'Numbers & Profitability',
+    body: 'KPIs, capacity planning, valuation, business planning.',
+  },
+  {
+    image: '/images/growth-hub/learn-leadership-operations.png',
+    alt: 'Practice leader running a team huddle',
+    title: 'Leadership & Operations',
+    body: 'Hiring, delegation, SOPs, team management, AI leadership.',
+  },
+];
+---
+
+<section data-node-id="159:9601" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col items-center gap-16">
+    <SectionHead
+      eyebrow="THE IMPLEMENTATION LIBRARY"
+      title="24+ One-Hour Solutions For Your Biggest Business Challenges"
+      body="No long-winded courses or theory. Every lesson helps you solve one specific problem in about an hour, so you or your team can implement it immediately and get back to running the business."
+    />
+
+    <ul class="grid w-full gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+      {
+        cards.map((card) => (
+          <li>
+            <DarkCard {...card} width="900" height="600" class="justify-center" />
+          </li>
+        ))
+      }
+    </ul>
+
+    <Button href="#membership" size="lg">Join for $97/mo</Button>
+  </div>
+</section>

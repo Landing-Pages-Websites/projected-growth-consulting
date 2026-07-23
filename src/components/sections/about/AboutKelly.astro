@@ -1,0 +1,84 @@
+---
+/**
+ * "About Kelly" — Figma 159:5718 (desktop 1440x1222) / 159:22641 (mobile 393x1940).
+ *
+ * Desktop: left-aligned header over a lime-framed portrait beside a grey bio
+ * card, bottoms aligned (413 + 24 + 843 = the 1280 rail).
+ * Mobile centres the header, adds a "Schedule A Call" button the desktop frame
+ * omits, and drops the card background.
+ */
+import Button from '../../Button.astro';
+
+/** 159:6852 — the two-line role line above the bio. */
+const roleLines = [
+  'Founder & CEO, Projected Growth Consulting',
+  'International Speaker • Author of 5 Books • MedSpa Growth Strategist',
+];
+
+/** 159:6853 */
+const bio = [
+  'Kelly Smith didn’t build Projected Growth Consulting around theory. She built it around what actually works inside elective medical practices.',
+  'After spending more than two decades working with practice owners across the country, Kelly recognized that most businesses weren’t failing because of a lack of effort—they were failing because they lacked systems, accountability, and clear performance metrics.',
+  'What began as consulting evolved into a proven growth platform that has now supported more than 6,000 practices across med spas, plastic surgery, functional medicine, and wellness.',
+  'Today, Kelly continues to work directly with owners and leadership teams, helping them implement practical frameworks that improve profitability, operations, leadership, and long-term business value.',
+];
+---
+
+<section data-node-id="159:5718" class="bg-[var(--color-cream)] py-20">
+  <div class="rail flex flex-col gap-16 lg:gap-10">
+    <div
+      class="flex flex-col items-center gap-3 text-center lg:max-w-[865px] lg:items-start lg:text-left"
+    >
+      <p class="eyebrow text-base tracking-[-1px] text-[#111827]">Meet Kelly Smith</p>
+      <h2 class="text-[2.5rem] text-[#111827] lg:text-[4rem]">
+        An Operator First.<br />A Consultant Second.
+      </h2>
+      <p class="text-base leading-6 tracking-[-1px] text-[#6b7280]">
+        Whether you’re just getting started or leading a multi-location practice, the PGC ecosystem
+        helps you identify what’s holding growth back, implement proven systems, and scale with
+        confidence.
+      </p>
+      {/* 159:22801 — mobile-only CTA; the desktop frame has no button here. */}
+      <Button href="/book-a-call" size="lg" class="mt-5 md:hidden">Schedule A Call</Button>
+    </div>
+
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-stretch">
+      <div class="rounded-lg bg-[var(--color-lime)] p-5 lg:basis-[413px] lg:min-w-0" data-node-id="159:6858">
+        <img
+          src="/images/about/kelly-smith.png"
+          alt="Kelly Smith, Founder and CEO of Projected Growth Consulting"
+          width="746"
+          height="1472"
+          loading="lazy"
+          decoding="async"
+          class="aspect-373/736 w-full rounded-xl object-cover"
+        />
+      </div>
+
+      <div
+        data-node-id="159:6849"
+        class="flex flex-1 flex-col gap-10 rounded-lg md:bg-[var(--color-surface)] md:p-9"
+      >
+        <p
+          class="font-[family-name:var(--font-display)] text-2xl leading-[1.4] font-medium tracking-[-1px] text-[#111827] md:text-4xl md:leading-[1.6]"
+        >
+          {roleLines[0]}<br />{roleLines[1]}
+        </p>
+
+        {/* 159:22660 sets 16px/20 with a blank 20px line between paragraphs; 159:6853 opens it to 20px/28. */}
+        <div
+          class="flex flex-col gap-5 text-base leading-5 tracking-[-1px] text-[#6b7280] md:gap-7 md:text-xl md:leading-7"
+        >
+          {bio.map((para) => <p>{para}</p>)}
+        </div>
+
+        <div class="mt-auto flex flex-col leading-[1.6] tracking-[-1px]">
+          <p class="text-lg font-medium text-[#1c1d1f] md:text-xl">Kelly Smith</p>
+          <p class="text-base text-[#6b7280]">
+            Founder &amp; CEO of Projected Growth Consulting (PGC)
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,436 @@
+---
+/**
+ * Testimonials — the proof section shared by /, /growth-hub, /book-a-call,
+ * /contact-us, /pgc-proof and /testimonials.
+ *
+ * Two Figma treatments, one component:
+ *   variant="rows" (default)  desktop 159:5366 · mobile 159:19410
+ *     Video poster beside a dark quote card with a pull-out stat panel.
+ *     Stacked on desktop, scroll-snap carousel with prev/next on mobile.
+ *   variant="grid"            desktop 159:15255 · mobile 159:25721
+ *     Two-up cards: poster on top, dark quote card with a round headshot below.
+ */
+import Button from './Button.astro';
+
+export interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  /** Video poster. 16:9, lives in /images/testimonials/. */
+  image?: string;
+  imageAlt?: string;
+  /** Video URL. Present → the poster becomes a link; absent → the play badge is decoration. */
+  video?: string;
+  /** "rows" only — the pull-out metric beside the quote, e.g. "255%". */
+  stat?: string;
+  statLabel?: string;
+  /** "grid" only — round headshot next to the name. */
+  avatar?: string;
+  /** 1–5. Not in any Figma frame; renders only when a page passes it. */
+  rating?: number;
+}
+
+interface Props {
+  items?: Testimonial[];
+  title?: string;
+  eyebrow?: string;
+  body?: string;
+  variant?: 'rows' | 'grid';
+  /**
+   * Bottom-centred CTA. Omit for the sections that end without one.
+   * `href` is optional: Figma's /testimonials grid (159:16386) draws a "Load More"
+   * control with no destination, which Button renders as a <button>.
+   */
+  cta?: { label: string; href?: string };
+  /**
+   * Mobile-only CTA that sits under the intro copy instead of at the foot of the
+   * section — Figma /book-a-call mobile 159:23048 ("Schedule A Call", centred at
+   * x=94.5 of 345) where the desktop frame has no header CTA at all. Setting it
+   * also drops `cta` below md, which is what that frame shows. Unset everywhere
+   * else, so every other page keeps the single bottom CTA it renders today.
+   */
+  mobileCta?: { label: string; href?: string };
+  id?: string;
+  /** Figma node of the calling page's Testimonials section, kept for design traceability. */
+  nodeId?: string;
+  class?: string;
+}
+
+const rowItems: Testimonial[] = [
+  {
+    quote:
+      "Working with PGC has beyond met my expectations. My revenue growth increased by 255% since I started working with them. They've helped me host three marketing events netting over $200k combined sales, and assisted in setting up a successful membership structure utilizing different aesthetic modalities. PGC has been one of the best choices I've made on my path through entrepreneurship.",
+    name: 'Jessica Tingwald',
+    role: 'Med Spa Owner',
+    image: '/images/testimonials/jessica-tingwald.jpg',
+    imageAlt: 'Jessica Tingwald of The Peaceful Poppy Med Spa — “Kelly Smith gave me back my life!”',
+    stat: '255%',
+    statLabel: 'Revenue Growth',
+  },
+  {
+    quote:
+      'PGC coached us to double our revenue and gave us the structure to keep growing with clearer numbers, stronger execution, and better team focus.',
+    name: 'Dana Negoi, MD & Ethna Hinrichsen',
+    role: 'Ithaca Medical Aesthetics',
+    image: '/images/testimonials/dana-negoi.jpg',
+    imageAlt: 'Dana Negoi, MD of Ithaca Medical Aesthetics — “PGC coached us to double our revenue!”',
+    stat: '2x',
+    statLabel: 'Revenue',
+  },
+  {
+    quote:
+      'Their Executive Coaching Calls are the best resource you can get in the industry to grow your business, operate better, and implement better strategies all year around. The magic behind their powerful offering is the expertise of each of their team members. Nothing is better than partnering with a group of talented and passionate professionals who want to see you succeed.',
+    name: 'Roberto Rivera',
+    role: 'Founder, Lëbor Advanced Skincare',
+    image: '/images/testimonials/roberto-rivera.jpg',
+    imageAlt:
+      'Roberto Rivera of Lëbor Advanced Skincare — “Kelly Smith changed the trajectory of my business.”',
+    stat: '98%',
+    statLabel: 'Growth',
+  },
+];
+
+const gridItems: Testimonial[] = [
+  {
+    quote:
+      '“The Sales Event System gave us a clear process to follow and helped us generate results far beyond what we thought was possible. The structure, coaching, and implementation support made all the difference.”',
+    name: 'Krystal Gilman',
+    role: 'CPA, CFO & Owner — Upward Regenerative Medicine',
+    image: '/images/testimonials/krystal-gilman.jpg',
+    imageAlt: 'Krystal Gilman of Upward Regenerative Medicine — “PGC Sales Event System success!”',
+    avatar: '/images/testimonials/avatar-krystal.png',
+  },
+  {
+    quote:
+      '“The KPI tools and tracking systems transformed how we measure success. We finally had visibility into our numbers and the confidence to make smarter business decisions.”',
+    name: 'Luciana Boneti',
+    role: 'Spa Director & Co-Owner — The MedSpa',
+    image: '/images/testimonials/luciana-boneti.jpg',
+    imageAlt: "Luciana Boneti of The MedSpa — “PGC tracking tools & KPI's made all the difference!”",
+    avatar: '/images/testimonials/avatar-luciana.png',
+  },
+];
+
+const defaults = {
+  rows: {
+    items: rowItems,
+    eyebrow: 'Proof',
+    title: 'Results From Real Practice Owners',
+    body: 'The systems behind The Growth Hub have helped thousands of elective medical practices improve profitability, increase conversions, and scale with greater confidence.',
+  },
+  grid: {
+    items: gridItems,
+    eyebrow: 'What Clients Say',
+    title: 'Trusted By Practice Owners Nationwide',
+    body: 'Read feedback from practice owners, medical directors, and leadership teams who have partnered with PGC.',
+  },
+} as const;
+
+const { variant = 'rows', cta, mobileCta, id, nodeId, class: className = '' } = Astro.props;
+const d = defaults[variant];
+const {
+  items = [...d.items],
+  eyebrow = d.eyebrow,
+  title = d.title,
+  body = d.body,
+} = Astro.props;
+
+/* ponytail: the play badge repeats Button's primary chrome on purpose — it is
+   decoration inside a link, not a control, so it must not be a <button>. */
+const playChrome =
+  'rounded-lg border-2 border-[var(--color-lime-border)] bg-[var(--color-lime)] shadow-[inset_0_1px_1px_3px_var(--color-lime-glow)]';
+
+const node = nodeId ?? (variant === 'grid' ? '159:15255' : '159:5366');
+const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+---
+
+<section id={id} data-node-id={node} class:list={['bg-[#f6f3ec] py-20', className]}>
+  <div class="rail flex flex-col gap-16">
+    <div
+      class:list={[
+        'flex flex-col items-center gap-3 text-center',
+        variant === 'grid'
+          ? 'md:max-w-[557px] md:items-start md:text-left'
+          : 'lg:flex-row lg:items-end lg:justify-between lg:gap-10 lg:text-left',
+      ]}
+    >
+      <div class:list={['flex flex-col gap-3', variant === 'rows' && 'lg:basis-[532px] lg:min-w-0']}>
+        {/* Figma 159:5370 — the eyebrow is 16px/20 Inter Regular at -1px, not 12px. */}
+        <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">
+          {eyebrow}
+        </p>
+        {/* Type steps at lg: not md: — BREAKPOINTS.md forbids a 4rem->2.5rem drop at 768. */}
+        <h2 class="text-[2.5rem] text-[#111827] lg:text-[4rem]">{title}</h2>
+      </div>
+      {
+        body && (
+          <p
+            class:list={[
+              'text-sm leading-6 tracking-[-1px] text-[#6b7280] lg:text-base',
+              variant === 'grid' ? 'md:text-left' : 'lg:max-w-[561px] lg:text-right',
+            ]}
+          >
+            {body}
+          </p>
+        )
+      }
+      {
+        mobileCta && (
+          /* mt-5 on top of the container's gap-3 = Figma's 32px body -> button. */
+          <Button href={mobileCta.href} size="lg" class="mt-5 md:hidden">
+            {mobileCta.label}
+          </Button>
+        )
+      }
+    </div>
+
+    {
+      variant === 'rows' ? (
+        <div data-testimonial-carousel class="relative flex flex-col gap-16 md:gap-8">
+          <ul
+            data-scroller
+            tabindex="0"
+            aria-label={`${title} — swipe or use the previous and next buttons`}
+            class="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth [scrollbar-width:none] md:snap-none md:flex-col md:overflow-visible [&::-webkit-scrollbar]:hidden"
+          >
+            {items.map((t) => {
+              const Media = t.video ? 'a' : 'div';
+              return (
+                <li class="flex w-full shrink-0 snap-start flex-col gap-5 lg:flex-row lg:items-stretch">
+                  <Media
+                    href={t.video}
+                    rel={t.video ? 'noreferrer noopener' : undefined}
+                    target={t.video ? '_blank' : undefined}
+                    class="group relative block aspect-video w-full shrink-0 overflow-hidden rounded-lg focus-visible:outline-offset-4 lg:aspect-auto lg:h-[380px] lg:w-auto lg:shrink lg:basis-[656px] lg:min-w-0"
+                  >
+                    <img
+                      src={t.image}
+                      alt={t.imageAlt ?? `Video testimonial from ${t.name}`}
+                      width="1280"
+                      height="720"
+                      loading="lazy"
+                      decoding="async"
+                      class="absolute inset-0 size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                    />
+                    <span class="absolute inset-0 bg-black/20" aria-hidden="true" />
+                    <span
+                      aria-hidden="true"
+                      class:list={[
+                        playChrome,
+                        'absolute top-5 right-5 grid place-items-center p-4 transition-transform duration-150 ease-out group-hover:scale-105',
+                      ]}
+                    >
+                      <img src="/icons/play.svg" alt="" width="32" height="32" class="size-8" />
+                    </span>
+                    {t.video && <span class="sr-only">Watch {t.name}’s video testimonial</span>}
+                  </Media>
+
+                  <div class="flex flex-1 flex-col overflow-hidden rounded-lg border border-[#d4d4d8] lg:min-w-0 xl:flex-row">
+                    {/* Mobile: Figma pins this panel to 442px (159:19442 / 159:25712),
+                        which bottom-anchors the name/role. min-h so a longer quote grows. */}
+                    <div
+                      class="flex flex-1 flex-col justify-between gap-10 bg-[#111827] p-6 max-md:min-h-[442px] md:gap-6"
+                    >
+                      {/* Figma 159:5384 — 396px wide, 168px tall = 7 lines. At -0.02em
+                          this ran to 8 and "Revenue Growth" wrapped in the stat panel. */}
+                      <p class="text-base leading-6 font-medium tracking-[-1px] text-[var(--color-cream)]">
+                        {t.quote}
+                      </p>
+                      <div class="flex flex-col">
+                        {t.rating ? (
+                          <p
+                            class="text-sm leading-6 text-[var(--color-lime)]"
+                            aria-label={`Rated ${t.rating} out of 5`}
+                          >
+                            <span aria-hidden="true">{stars(t.rating)}</span>
+                          </p>
+                        ) : null}
+                        <p class="text-xl leading-9 tracking-[-1px] text-[var(--color-cream)]">
+                          {t.name}
+                        </p>
+                        <p class="text-base leading-7 tracking-[-1px] text-[#6b7280]">{t.role}</p>
+                      </div>
+                    </div>
+                    {t.stat ? (
+                      <div class="flex flex-col justify-end border-t border-[#d4d4d8] bg-[var(--color-cream)] p-6 xl:w-40 xl:shrink-0 xl:border-t-0 xl:border-l">
+                        <p class="font-display text-[2.5rem] leading-12 font-medium tracking-[-0.015em] text-[#111827]">
+                          {t.stat}
+                        </p>
+                        <p class="text-base leading-7 tracking-[-1px] text-[#6b7280]">
+                          {t.statLabel}
+                        </p>
+                      </div>
+                    ) : null}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          <p data-status aria-live="polite" class="sr-only" />
+
+          {items.length > 1 && (
+            <div class="flex items-center justify-center gap-4 md:hidden">
+              <Button
+                size="lg"
+                arrow={false}
+                class="js-prev disabled:pointer-events-none disabled:opacity-40"
+              >
+                <img
+                  src="/icons/arrow-left.svg"
+                  alt=""
+                  aria-hidden="true"
+                  width="24"
+                  height="24"
+                  class="size-6"
+                />
+                <span class="sr-only">Previous testimonial</span>
+              </Button>
+              <Button
+                size="lg"
+                arrow={false}
+                class="js-next disabled:pointer-events-none disabled:opacity-40"
+              >
+                <img
+                  src="/icons/arrow-left.svg"
+                  alt=""
+                  aria-hidden="true"
+                  width="24"
+                  height="24"
+                  class="size-6 rotate-180"
+                />
+                <span class="sr-only">Next testimonial</span>
+              </Button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <ul class="grid gap-6 md:grid-cols-2">
+          {items.map((t) => {
+            const Media = t.video ? 'a' : 'div';
+            return (
+              <li class="flex h-full flex-col gap-2">
+                <Media
+                  href={t.video}
+                  rel={t.video ? 'noreferrer noopener' : undefined}
+                  target={t.video ? '_blank' : undefined}
+                  class="group relative block aspect-628/380 w-full overflow-hidden rounded-lg focus-visible:outline-offset-4"
+                >
+                  <img
+                    src={t.image}
+                    alt={t.imageAlt ?? `Video testimonial from ${t.name}`}
+                    width="1280"
+                    height="720"
+                    loading="lazy"
+                    decoding="async"
+                    class="absolute inset-0 size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                  />
+                  <span
+                    aria-hidden="true"
+                    class:list={[
+                      playChrome,
+                      'absolute top-5 right-5 grid place-items-center p-4 transition-transform duration-150 ease-out group-hover:scale-105',
+                    ]}
+                  >
+                    <img src="/icons/play.svg" alt="" width="32" height="32" class="size-8" />
+                  </span>
+                  {t.video && <span class="sr-only">Watch {t.name}’s video testimonial</span>}
+                </Media>
+
+                <div class="flex grow flex-col gap-6 rounded-lg bg-[#111827] p-6">
+                  <p class="text-base leading-6 tracking-[-1px] text-[var(--color-cream)]">
+                    {t.quote}
+                  </p>
+                  <div class="mt-auto flex items-center gap-3">
+                    {t.avatar && (
+                      <img
+                        src={t.avatar}
+                        alt=""
+                        aria-hidden="true"
+                        width="144"
+                        height="144"
+                        loading="lazy"
+                        decoding="async"
+                        class="size-[72px] shrink-0 rounded-full object-cover"
+                      />
+                    )}
+                    <div class="flex min-w-0 flex-col">
+                      {t.rating ? (
+                        <p
+                          class="text-sm leading-6 text-[var(--color-lime)]"
+                          aria-label={`Rated ${t.rating} out of 5`}
+                        >
+                          <span aria-hidden="true">{stars(t.rating)}</span>
+                        </p>
+                      ) : null}
+                      <p class="text-xl leading-9 font-semibold tracking-[-1px] text-[var(--color-cream)]">
+                        {t.name}
+                      </p>
+                      <p class="text-base leading-7 tracking-[-1px] text-[#6b7280]">{t.role}</p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )
+    }
+
+    {
+      cta && (
+        <div class:list={['flex justify-center', mobileCta && 'max-md:hidden']}>
+          <Button href={cta.href} size="lg">
+            {cta.label}
+          </Button>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-testimonial-carousel]').forEach((root) => {
+    const scroller = root.querySelector<HTMLElement>('[data-scroller]');
+    const prev = root.querySelector<HTMLButtonElement>('.js-prev');
+    const next = root.querySelector<HTMLButtonElement>('.js-next');
+    const status = root.querySelector<HTMLElement>('[data-status]');
+    if (!scroller || !prev || !next) return;
+
+    const slides = Array.from(scroller.children) as HTMLElement[];
+    if (slides.length < 2) return;
+
+    /** Index of the slide closest to the current scroll offset. */
+    const current = () => {
+      const origin = slides[0].offsetLeft + scroller.scrollLeft;
+      return slides.reduce(
+        (best, s, i) =>
+          Math.abs(s.offsetLeft - origin) < Math.abs(slides[best].offsetLeft - origin) ? i : best,
+        0
+      );
+    };
+
+    const goTo = (i: number) => {
+      const target = slides[Math.max(0, Math.min(slides.length - 1, i))];
+      scroller.scrollTo({ left: target.offsetLeft - slides[0].offsetLeft, behavior: 'smooth' });
+    };
+
+    const sync = () => {
+      const i = current();
+      prev.disabled = i === 0;
+      next.disabled = i === slides.length - 1;
+      if (status) status.textContent = `Testimonial ${i + 1} of ${slides.length}`;
+    };
+
+    prev.addEventListener('click', () => goTo(current() - 1));
+    next.addEventListener('click', () => goTo(current() + 1));
+
+    let settle: ReturnType<typeof setTimeout>;
+    scroller.addEventListener('scroll', () => {
+      clearTimeout(settle);
+      settle = setTimeout(sync, 80);
+    });
+
+    sync();
+  });
+</script>

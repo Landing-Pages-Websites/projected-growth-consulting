@@ -1,0 +1,64 @@
+---
+/**
+ * The two button styles used site-wide.
+ * Figma: primary #b5be3f / border #9ba334 / inset glow #cad44c
+ *        secondary #252c3a / border #0f1623 / inset glow #353c4c
+ */
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'lg';
+  arrow?: boolean;
+  class?: string;
+  type?: 'button' | 'submit';
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'sm',
+  arrow = variant === 'primary',
+  class: className = '',
+  type = 'button',
+} = Astro.props;
+
+// Figma button labels are Inter Medium at a flat -1px, and the 2px stroke is drawn
+// inside the frame — so total height = line box + padding + border must equal Figma's
+// 40 (sm) / 52 (lg). py-3/p-4 overshot by 4px; padding is tuned to hit them exactly.
+const base =
+  'group relative inline-flex items-center justify-center gap-1 rounded-lg border-2 text-center tracking-[-1px] font-medium whitespace-nowrap transition-transform duration-150 ease-out active:translate-y-px';
+
+const variants = {
+  primary:
+    'border-[var(--color-lime-border)] bg-[var(--color-lime)] text-[var(--color-navy)] shadow-[inset_0_1px_1px_3px_var(--color-lime-glow)] hover:bg-[#c1cb46]',
+  secondary:
+    'border-[var(--color-navy-border)] bg-[var(--color-navy)] text-[var(--color-cream)] shadow-[inset_0_1px_1px_3px_var(--color-navy-glow)] hover:bg-[#2e3648]',
+};
+
+const sizes = {
+  sm: 'px-4 py-[10px] text-sm leading-4', // 16 + 20 + 4 border = 40
+  lg: 'px-4 py-[14px] text-base leading-5', // 20 + 28 + 4 border = 52
+};
+
+const cls = [base, variants[variant], sizes[size], className].join(' ');
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  class={cls}
+  {...href ? { href } : { type }}
+>
+  <slot />
+  {
+    arrow && (
+      <img
+        src="/icons/arrow-up-right.svg"
+        alt=""
+        aria-hidden="true"
+        width="12"
+        height="12"
+        class="size-3 shrink-0 transition-transform duration-150 group-hover:translate-x-px group-hover:-translate-y-px"
+      />
+    )
+  }
+</Tag>

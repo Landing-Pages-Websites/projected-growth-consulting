@@ -1,0 +1,49 @@
+---
+/**
+ * "Featured Insights" — Figma desktop 184:3050 / mobile 184:4453.
+ * Desktop: one tall stacked card (628px) beside a column of two split cards,
+ * the short column vertically centred against the tall one. Mobile: all three
+ * stack.
+ *
+ * ponytail: the eyebrow/heading/body header is byte-for-byte the /growth-hub
+ * SectionHead (same 633-vs-561 split, same mobile behaviour) — reused, not
+ * re-cut.
+ */
+import SectionHead from '../../SectionHead.astro';
+import ArticleCard from './ArticleCard.astro';
+import { featuredPosts } from '../../../lib/posts';
+
+const [lead, ...rest] = featuredPosts;
+---
+
+
+<section data-node-id="184:3050" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-12 lg:gap-16">
+    <SectionHead
+      eyebrow="FEATURED INSIGHTS"
+      title="Stop Guessing. Start Building A More Profitable Practice."
+      body="Discover practical strategies, proven systems, and real-world lessons Kelly Smith has used to help over 6,000 elective medical practices improve profitability, strengthen leadership, and create predictable growth."
+    />
+
+    {/* The tall card claims both rows of column one; the two split cards flow
+        into column two. Auto-placement does the rest — no nested lists. */}
+    {/* lg:py-[61px]: Figma's card container (184:3057) is a fixed 760px box with
+        638px of cards centred in it — 61px of deliberate air above and below the
+        grid. The mobile frame (184:4461) has none, so it is lg-only. */}
+    <ul
+      data-node-id="184:3058"
+      class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:grid-rows-2 lg:py-[61px]"
+    >
+      <li class="lg:row-span-2">
+        <ArticleCard post={lead} arrow eager />
+      </li>
+      {
+        rest.map((post) => (
+          <li>
+            <ArticleCard post={post} layout="split" arrow eager />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Design tokens — extracted from Figma "Mega Projected Growth Consultancy — CF"
+   https://www.figma.com/design/m9rsqbLlGpyArT5B7oHqUh
+   --------------------------------------------------------------------------- */
+@theme {
+  /* Brand */
+  --color-lime: #b5be3f; /* primary button fill */
+  --color-lime-border: #9ba334; /* primary button border */
+  --color-lime-glow: #cad44c; /* primary button inset highlight */
+
+  --color-navy: #252c3a; /* secondary button fill / dark text */
+  --color-navy-border: #0f1623;
+  --color-navy-glow: #353c4c;
+
+  --color-cream: #faf8f4; /* light text on dark, page bg */
+
+  /* Neutrals */
+  --color-ink-800: #333333;
+  --color-ink-100: #e6e6e6;
+  --color-surface: #f6f6f6;
+
+  /* Type
+     ponytail: --font-display is a free stand-in for the licensed
+     "Test Tiempos Headline VF" used in Figma. Drop the real @font-face in and
+     change this one line — nothing else references the family. */
+  --font-display: 'Newsreader', 'Tiempos Headline', Times, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Layout — Figma: 1440px frame, 1280px content, 80px gutters */
+  --spacing-gutter: 5rem;
+  --container-content: 80rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-feature-settings:
+      'cv01' 1, 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv05' 1, 'cv06' 1, 'cv09' 1,
+      'cv10' 1, 'ss03' 1;
+    background: var(--color-cream);
+    color: var(--color-navy);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Figma sets tracking:-1px on ~all Inter text and -3px/-1.92px on display */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 2px;
+  }
+
+  /* Figma exports every icon with preserveAspectRatio="none", and <img> defaults to
+     object-fit:fill — so a 8.5x5.2 chevron dropped in a 16x16 box stretched 3x.
+     The SVGs now carry their true viewBox aspect; this keeps it. Sits in @layer base
+     so an explicit object-cover/object-fill utility still wins where one is wanted. */
+  img[src$='.svg'] {
+    object-fit: contain;
+  }
+}
+
+@layer components {
+  /* The 1280-in-1440 content rail every section shares.
+     The gutter RAMPS rather than stepping: a hard 20px -> 80px jump at 768px made
+     content *narrower* as the viewport grew (727px at 767w vs 608px at 768w), which
+     is exactly where every md: two-column layout switches on. 5.556vw hits Figma's
+     80px at the 1440 frame and caps there. */
+  .rail {
+    width: 100%;
+    max-width: calc(var(--container-content) + 2 * var(--spacing-gutter));
+    margin-inline: auto;
+    /* Floor is Figma's mobile gutter (24px at 393); 5.556vw hits the 80px desktop
+       gutter at 1440 and ramps monotonically between. */
+    padding-inline: clamp(1.5rem, 5.556vw, var(--spacing-gutter));
+  }
+
+  /* Eyebrow label — "WHAT YOU GET", "HOW IT WORKS", …
+     Figma draws these as 16px/20 Inter Regular at -1px (NOT a 12px spaced kicker);
+     content is authored mixed-case and uppercased here. */
+  .eyebrow {
+    font-size: 1rem;
+    line-height: 1.25rem;
+    font-weight: 400;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

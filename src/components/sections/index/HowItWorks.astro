@@ -1,0 +1,198 @@
+---
+/**
+ * "How It Works" — Figma 159:4204 (desktop) / 159:19379 (mobile).
+ * Four photo panels; the active one expands and reveals its caption while the
+ * rest collapse to a numbered strip. Prev/next step through them.
+ *
+ * NOTE: only step 01 carries a title in the Figma file — steps 02-04 are drawn
+ * as numbered images with no copy, so none is invented here.
+ */
+import Button from '../../Button.astro';
+
+interface Step {
+  number: string;
+  image: string;
+  imageAlt: string;
+  title?: string;
+}
+
+const steps: Step[] = [
+  {
+    number: '01.',
+    image: '/images/index/step-01.jpg',
+    imageAlt: 'A consultant reviewing a practice diagnostic with a med spa owner',
+    title: 'Find Your Starting Point',
+  },
+  {
+    number: '02.',
+    image: '/images/index/step-02.jpg',
+    imageAlt: 'An abstract network of connected nodes',
+  },
+  {
+    number: '03.',
+    image: '/images/index/step-03.jpg',
+    imageAlt: 'Clean architectural stairs rising against a pale sky',
+  },
+  {
+    number: '04.',
+    image: '/images/index/step-04.jpg',
+    imageAlt: 'A lone figure walking up a wide curved ramp',
+  },
+];
+---
+
+<section data-node-id="159:4204" class="bg-[#f6f3ec] py-20">
+  {/* Mobile order (Figma 159:19379) is header, CTA, panels, caption, controls; desktop
+      lifts the controls into the top-right cell and the CTA beside the caption. */}
+  <div
+    class="rail flex flex-col gap-5 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-x-10 lg:gap-y-6"
+  >
+    <div
+      class="order-1 flex flex-col gap-3 text-center lg:order-none lg:col-start-1 lg:row-start-1 lg:max-w-[865px] lg:text-left"
+    >
+      <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">
+        How It Works
+      </p>
+      <h2 class="text-[2.5rem] text-[#111827] lg:text-[4rem]">
+        The Proven Blueprint For More Profitable Practices
+      </h2>
+      <p class="text-sm leading-6 tracking-[-1px] text-[#6b7280] lg:text-base">
+        Kelly has spent decades refining the systems that have helped thousands of elective medical
+        practices grow faster, increase profits, and avoid costly mistakes. Now, those same proven
+        strategies are available to help you do the same.
+      </p>
+    </div>
+
+    <div
+      class="order-5 mt-7 flex shrink-0 items-center justify-center gap-4 lg:order-none lg:col-start-2 lg:row-start-1 lg:mt-0 lg:justify-self-end"
+    >
+      <Button size="lg" arrow={false} class="js-prev disabled:pointer-events-none disabled:opacity-40">
+        <img
+          src="/icons/arrow-left.svg"
+          alt=""
+          aria-hidden="true"
+          width="32"
+          height="32"
+          loading="lazy"
+          class="size-6 lg:size-8"
+        />
+        <span class="sr-only">Previous step</span>
+      </Button>
+      <Button size="lg" arrow={false} class="js-next disabled:pointer-events-none disabled:opacity-40">
+        <img
+          src="/icons/arrow-left.svg"
+          alt=""
+          aria-hidden="true"
+          width="32"
+          height="32"
+          loading="lazy"
+          class="size-6 rotate-180 lg:size-8"
+        />
+        <span class="sr-only">Next step</span>
+      </Button>
+    </div>
+
+    {/* Mobile keeps Figma's clipped strip but stays scrollable; desktop fits the rail exactly. */}
+    {/* Figma row gaps are uneven: 64px header -> panels (159:5346 y392), 24px
+        panels -> caption (159:5356 y927). The grid carries the 24, lg:mt-10 the rest. */}
+    <div
+      data-steps
+      class="order-3 overflow-x-auto [scrollbar-width:none] lg:order-none lg:col-span-2 lg:row-start-2 lg:mt-10 lg:overflow-visible [&::-webkit-scrollbar]:hidden"
+    >
+      <ul class="flex h-[511px] gap-4">
+        {
+          steps.map((step, i) => (
+            <li class="contents">
+              {/* Figma: 795 + 3x146 + 3x16 gaps = the 1280 rail. The active
+                  panel grows instead of being pinned to 795 so the row still
+                  fits once a scrollbar narrows the viewport. */}
+              <button
+                type="button"
+                aria-expanded={i === 0 ? 'true' : 'false'}
+                class="group relative w-[83px] shrink-0 overflow-hidden rounded-lg text-left transition-[width,flex-grow] duration-500 ease-out focus-visible:outline-offset-4 aria-expanded:w-[293px] lg:w-[146px] lg:aria-expanded:w-auto lg:aria-expanded:grow"
+              >
+                <img
+                  src={step.image}
+                  alt={step.imageAlt}
+                  width="1600"
+                  height="1029"
+                  loading="lazy"
+                  decoding="async"
+                  class="absolute inset-0 size-full max-w-none object-cover"
+                />
+                <span
+                  aria-hidden="true"
+                  class="absolute inset-0 bg-gradient-to-b from-transparent to-black group-aria-expanded:to-black/35"
+                />
+                <span class="sr-only">
+                  Step {i + 1} of {steps.length}
+                  {step.title ? `: ${step.title}` : ''}
+                </span>
+
+                {/* Figma centres the number in the collapsed strips (159:5355 sits
+                    40px into a 146px panel) and left-aligns it in the open one. */}
+                <span
+                  aria-hidden="true"
+                  class="absolute inset-0 flex flex-col items-center justify-end gap-4 p-5 group-aria-expanded:items-start group-aria-expanded:justify-between lg:p-6"
+                >
+                  <span class="font-display text-[2rem] leading-none font-medium tracking-[-0.02em] whitespace-nowrap text-white group-aria-expanded:text-5xl lg:text-5xl lg:group-aria-expanded:text-[4rem]">
+                    {step.number}
+                  </span>
+                  {step.title && (
+                    <span class="hidden text-2xl leading-8 font-medium tracking-[-0.03em] text-white group-aria-expanded:block lg:text-[2.5rem] lg:leading-[1.2]">
+                      {step.title}
+                    </span>
+                  )}
+                </span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <p
+      class="order-4 text-center text-xl leading-7 tracking-[-1px] text-[#111827] lg:order-none lg:col-start-1 lg:row-start-3 lg:max-w-[795px] lg:self-start lg:text-left lg:text-[1.75rem] lg:leading-10"
+    >
+      Choose the path that matches your current stage — Growth Hub, Courses, Coaching, or
+      Consulting.
+    </p>
+
+    {/* Figma 159:19386 puts this 32px under the body and above the panels on mobile;
+        desktop (159:5360) parks it right of the caption in the last row. */}
+    <Button
+      href="/book-a-call"
+      size="lg"
+      class="order-2 mt-3 shrink-0 self-center lg:order-none lg:col-start-2 lg:row-start-3 lg:mt-0 lg:self-start lg:justify-self-end"
+    >
+      Schedule A Call
+    </Button>
+  </div>
+</section>
+
+<script>
+  // ponytail: one expanded panel at a time — same contract as the FAQ accordion.
+  document.querySelectorAll<HTMLElement>('[data-steps]').forEach((root) => {
+    const panels = Array.from(root.querySelectorAll<HTMLButtonElement>('button[aria-expanded]'));
+    const section = root.closest('section');
+    const prev = section?.querySelector<HTMLButtonElement>('.js-prev');
+    const next = section?.querySelector<HTMLButtonElement>('.js-next');
+    if (panels.length < 2) return;
+
+    const open = (i: number) => {
+      const index = Math.max(0, Math.min(panels.length - 1, i));
+      panels.forEach((p, n) => p.setAttribute('aria-expanded', String(n === index)));
+      if (prev) prev.disabled = index === 0;
+      if (next) next.disabled = index === panels.length - 1;
+      panels[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    };
+
+    const current = () => panels.findIndex((p) => p.getAttribute('aria-expanded') === 'true');
+
+    panels.forEach((panel, i) => panel.addEventListener('click', () => open(i)));
+    prev?.addEventListener('click', () => open(current() - 1));
+    next?.addEventListener('click', () => open(current() + 1));
+
+    if (prev) prev.disabled = true;
+  });
+</script>

@@ -1,0 +1,84 @@
+---
+/**
+ * "Featured Book" — Figma 159:8082 (desktop 1440x1127) / 159:22763 (mobile 393x1626).
+ *
+ * Desktop: split header (659 / 561 with the "All Books" CTA), then a navy
+ * 558x715 cover panel beside the book copy. Mobile centres the header and
+ * stacks the panel above left-aligned copy.
+ */
+import Button from '../../Button.astro';
+import SectionHead from '../../SectionHead.astro';
+
+/** 159:8107 */
+const blurb = [
+  'Most practice owners focus on increasing revenue while overlooking the hidden operational and financial issues limiting profitability. In this practical guide, Kelly shares the ten most common profit leaks found inside elective medical practices and the systems used to eliminate them.',
+  'Learn how to improve margins, increase accountability, optimize team performance, and build a healthier, more scalable business.',
+];
+
+/* Figma gives no destination for this button. An Amazon search for the exact
+   title is the honest stand-in — swap in the real ASIN URL when it exists. */
+const amazonUrl = 'https://www.amazon.com/s?k=Top+10+Profit+Killers+Kelly+Smith';
+---
+
+<section data-node-id="159:8082" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-16">
+    <SectionHead
+      eyebrow="Books & Resources"
+      title="Lessons From The Front Lines Of Practice Growth"
+      body="Explore the books, frameworks, and business resources Kelly Smith has created to help practice owners increase profitability, strengthen leadership, and build more valuable businesses."
+      cta={{ label: 'All Books', href: '/resources' }}
+    />
+
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-16">
+      {/* 159:22777 — mobile panel is 345x442 with the 210px cover inset 67.5/64. */}
+      <div
+        data-node-id="159:8096"
+        class="relative flex justify-center rounded-lg bg-[var(--color-navy)] px-[19.5%] py-16 lg:basis-[558px] lg:min-w-0 lg:px-[85px] lg:py-[66px]"
+      >
+        <span
+          class="absolute top-5 left-5 flex items-center gap-2 rounded-full bg-white py-1 pr-3 pl-2"
+        >
+          <span class="size-1.5 rounded-full bg-[var(--color-lime)]" aria-hidden="true"></span>
+          <span
+            class="text-sm leading-[1.6] font-medium tracking-[-0.0125em] text-[var(--color-lime)]"
+            >Featured</span
+          >
+        </span>
+        <img
+          src="/images/about/top-10-profit-killers.jpg"
+          alt="Cover of Top 10 Profit Killers by Kelly Smith, for plastic surgeons and medical spas"
+          width="311"
+          height="466"
+          loading="lazy"
+          decoding="async"
+          class="w-full max-w-[388px] rounded-[4px] object-cover shadow-[0px_16px_35px_0px_rgba(0,0,0,0.1),0px_64px_64px_0px_rgba(0,0,0,0.09),0px_144px_86px_0px_rgba(0,0,0,0.05)]"
+        />
+      </div>
+
+      <div class="flex flex-col gap-13 lg:min-w-0 lg:flex-1">
+        <div class="flex flex-col gap-3">
+          <h3
+            class="font-[family-name:var(--font-sans)] text-5xl leading-14 font-normal tracking-[-4px] text-[#111827]"
+          >
+            Top 10 Profit Killers
+          </h3>
+          <div class="flex flex-col leading-[1.6] tracking-[-1px]">
+            <p class="text-lg font-medium text-[#1c1d1f] lg:text-xl">Kelly Smith</p>
+            <p class="text-base text-[#6b7280]">
+              Founder &amp; CEO of Projected Growth Consulting (PGC)
+            </p>
+          </div>
+        </div>
+
+        {/* 159:22788 sets 16px/20 with a blank 20px line between paragraphs; 159:8107 opens it to 20px/28. */}
+        <div
+          class="flex flex-col gap-5 text-base leading-5 tracking-[-1px] text-[#6b7280] lg:gap-7 lg:text-xl lg:leading-7"
+        >
+          {blurb.map((para) => <p>{para}</p>)}
+        </div>
+
+        <Button href={amazonUrl} size="lg" class="self-start">Buy Now on Amazon</Button>
+      </div>
+    </div>
+  </div>
+</section>

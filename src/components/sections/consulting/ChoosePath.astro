@@ -1,0 +1,63 @@
+---
+/**
+ * "Choose Your Path" — Figma 159:13240 (desktop) / 159:23757 (mobile).
+ * Header row + the two dark program cards. Each card links to the matching
+ * detail section further down the page, which is what the corner arrow means.
+ */
+import DarkCard from '../../DarkCard.astro';
+import SectionHead from '../../SectionHead.astro';
+
+interface Card {
+  bestFor: string;
+  title: string;
+  body: string;
+  href: string;
+  image: string;
+  imageAlt: string;
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  body: string;
+  cta: { label: string; href: string };
+  cards: Card[];
+}
+
+const { eyebrow, title, body, cta, cards } = Astro.props;
+---
+
+<section data-node-id="159:13240" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-8 lg:gap-[52px]">
+    <SectionHead
+      align="center"
+      eyebrow={eyebrow}
+      title={title}
+      body={body}
+      cta={cta}
+      bodyClass="text-sm lg:text-base"
+    />
+
+    <ul class="grid gap-6 md:grid-cols-2">
+      {
+        cards.map((card) => (
+          <li class="flex">
+            <DarkCard
+              image={card.image}
+              alt={card.imageAlt}
+              width="1280"
+              height="853"
+              imgClass="h-60 w-full rounded-[4px] object-cover md:h-[322px]"
+              kicker={card.bestFor}
+              title={card.title}
+              body={card.body}
+              href={card.href}
+              arrow
+              class="w-full justify-center overflow-hidden"
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

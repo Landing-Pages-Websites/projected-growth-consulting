@@ -1,0 +1,219 @@
+---
+/**
+ * "What You Get" — Figma 159:4067 (desktop) / 159:19242 (mobile).
+ * Four dark cards, each closing with an abstract data-viz block built from divs
+ * (no assets in Figma either) and a lime diagonal arrow.
+ *
+ * Figma gives no hrefs; each card is linked to the page it names.
+ */
+import Button from '../../Button.astro';
+
+type Art = 'bars' | 'tiles' | 'split' | 'grid';
+
+interface Card {
+  eyebrow: string;
+  title: string;
+  body: string;
+  art: Art;
+  href: string;
+}
+
+const cards: Card[] = [
+  {
+    eyebrow: 'Growth Hub',
+    title: 'Your complete growth system.',
+    body: 'Access proven tools, scorecards, implementation guides, and business frameworks designed to help you make better decisions and grow with confidence.',
+    art: 'bars',
+    href: '/growth-hub',
+  },
+  {
+    eyebrow: 'Courses',
+    title: 'Practical education built for operators.',
+    body: 'Step-by-step programs covering marketing, leadership, operations, financial performance, and patient acquisition.',
+    art: 'tiles',
+    href: '/courses',
+  },
+  {
+    eyebrow: 'Coaching',
+    title: 'Direct guidance from industry experts.',
+    body: 'Work alongside experienced advisors to solve challenges faster, improve accountability, and accelerate growth.',
+    art: 'split',
+    href: '/consulting',
+  },
+  {
+    eyebrow: 'Frameworks',
+    title: 'Proven systems. Repeatable results.',
+    body: 'Implement the same business frameworks used by thousands of successful practice owners to improve performance and profitability.',
+    art: 'grid',
+    href: '/resources',
+  },
+];
+
+/* Card 1 — bottom-anchored bars, heights as a % of the 282px plot. */
+const bars = [
+  { h: '54.26%', bg: '#29342f' },
+  { h: '45.39%', bg: '#2e3f37' },
+  { h: '83.69%', bg: '#344a40' },
+  { h: '100%', bg: 'var(--color-lime)' },
+];
+
+/* Card 3 — the two pull-out metrics under the lime shape. */
+const splitStats = [
+  { value: '1:1', label: 'Executive Coaching' },
+  { value: '15+', label: 'Years of Expertise' },
+];
+
+/* Card 4 — 6x6 swatch grid, row by row. */
+const L = 'var(--color-lime)';
+const A = '#29342f';
+const B = '#2e3f37';
+const C = '#344a40';
+const swatches = [
+  [L, L, L, L, L, L],
+  [L, A, B, B, A, B],
+  [A, A, A, A, A, A],
+  [A, A, C, C, C, C],
+  [C, C, A, A, A, A],
+  [A, A, C, C, A, A],
+];
+---
+
+<section data-node-id="159:4067" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-16 md:gap-[82px]">
+    <div
+      class="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-end lg:justify-between lg:gap-10 lg:text-left"
+    >
+      <div class="flex flex-col gap-3 lg:basis-[532px] lg:min-w-0">
+        <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">
+          What You Get
+        </p>
+        <h2 class="text-[2.5rem] text-[#111827] md:text-[4rem]">
+          The Proven Secrets Behind More Profitable Practices
+        </h2>
+      </div>
+
+      <div class="flex flex-col items-center gap-8 lg:basis-[561px] lg:min-w-0 lg:items-end">
+        <p
+          class="text-sm leading-6 tracking-[-1px] text-[#6b7280] md:text-right md:text-base"
+        >
+          Discover the exact strategies, tools, and systems Kelly Smith has used to help thousands
+          of aesthetic practices increase profits, improve performance, and build businesses that
+          grow with confidence.
+        </p>
+        <Button href="/book-a-call" size="lg">Schedule A Call</Button>
+      </div>
+    </div>
+
+    <ul class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      {
+        cards.map((card) => (
+          <li class="flex">
+            <a
+              href={card.href}
+              class="group flex flex-1 flex-col gap-10 rounded-lg bg-[#111827] p-6 transition-colors duration-200 hover:bg-[#161f31]"
+            >
+              <div class="flex flex-col gap-4">
+                <p class="text-xs leading-[1.6] font-medium tracking-[-0.017em] text-white uppercase">
+                  {card.eyebrow}
+                </p>
+                {/* Figma 159:4085 / 159:4087 — the title box is a fixed 3 lines and the
+                    body a fixed 5 lines in every card, so all four descriptions and all
+                    four art blocks sit on the same baseline. */}
+                <h3 class="text-2xl leading-[1.04] tracking-[-0.03em] text-white lg:min-h-[108px] lg:text-[2rem] lg:leading-[1.12]">
+                  {card.title}
+                </h3>
+                <p class="text-[13px] leading-[1.4] tracking-[-0.015em] text-[var(--color-cream)] lg:min-h-[130px] lg:text-base lg:leading-[1.625]">
+                  {card.body}
+                </p>
+              </div>
+
+              <div class="mt-auto h-[284px] w-full" aria-hidden="true">
+                {card.art === 'bars' && (
+                  <div class="relative flex h-full flex-col justify-between">
+                    {[0, 1, 2, 3, 4].map(() => (
+                      <span class="block h-px w-full bg-white/10" />
+                    ))}
+                    <div class="absolute inset-x-0 top-0.5 bottom-0 flex items-end">
+                      {bars.map((bar) => (
+                        <span class="flex-1" style={`height:${bar.h};background:${bar.bg}`} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {card.art === 'tiles' && (
+                  <div class="flex h-full flex-col gap-3">
+                    {[1, 2].map((row) => (
+                      <div class="flex flex-1 gap-3">
+                        {[1, 2].map(() => (
+                          <span
+                            class:list={[
+                              'grid flex-1 place-items-center',
+                              row === 1 ? 'bg-[var(--color-lime)]' : 'bg-[var(--color-lime)]/65',
+                            ]}
+                          >
+                            <img
+                              src="/icons/play.svg"
+                              alt=""
+                              width="32"
+                              height="32"
+                              loading="lazy"
+                              class="size-8 opacity-20"
+                            />
+                          </span>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {card.art === 'split' && (
+                  <div class="flex h-full flex-col">
+                    <div class="flex h-[121px] items-end">
+                      <span class="h-full flex-1 bg-[var(--color-lime)]" />
+                      <span class="h-[93px] flex-1 bg-[var(--color-lime)]" />
+                    </div>
+                    <div class="mt-auto grid flex-1 grid-cols-2 items-end">
+                      {splitStats.map((stat) => (
+                        <div class="flex h-full flex-col justify-end gap-3 border-l border-white/10 pb-1 pl-3">
+                          <p class="text-2xl leading-[1.12] tracking-[-0.03em] text-white">
+                            {stat.value}
+                          </p>
+                          <p class="text-sm leading-[1.6] tracking-[-0.014em] text-[var(--color-cream)]">
+                            {stat.label}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {card.art === 'grid' && (
+                  <div class="flex flex-col gap-3">
+                    {swatches.map((row) => (
+                      <div class="flex gap-3">
+                        {row.map((bg) => (
+                          <span class="aspect-square flex-1" style={`background:${bg}`} />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <img
+                src="/icons/card-arrow.svg"
+                alt=""
+                aria-hidden="true"
+                width="40"
+                height="40"
+                loading="lazy"
+                class="size-10 transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:-translate-y-1"
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

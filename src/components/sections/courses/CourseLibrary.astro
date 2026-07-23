@@ -1,0 +1,303 @@
+---
+/**
+ * /courses — "Course Library"
+ * Figma desktop 159:12772 (1440x2252) · mobile 159:23304 (393x3768)
+ *
+ * Desktop: centred header, then a 2-col grid where the featured card spans both
+ * columns and lays its banner beside the copy. Mobile: every card stacks
+ * banner-over-copy, featured included — one component, no duplication.
+ */
+import Button from '../../Button.astro';
+
+interface Course {
+  title: string;
+  /** Leading price/plan text, e.g. "$397/" or "Subscription Membership". */
+  price: string;
+  /** Grey tail after the price, e.g. "Lifetime access". Omit for plan-only cards. */
+  priceNote?: string;
+  body: string;
+  image: string;
+  imageAlt: string;
+  /** Figma writes width/height on every banner; the exports differ per card. */
+  imageWidth: number;
+  imageHeight: number;
+  rating: string;
+  students: string;
+  views: string;
+  duration: string;
+  featured?: boolean;
+}
+
+const eyebrow = 'COURSE COLLECTION';
+const title = 'Training Built For Practice Growth';
+const body =
+  'Every course is designed around real-world implementation, giving you practical systems, templates, and frameworks you can apply immediately.';
+
+const author = {
+  name: 'Kelly Smith',
+  role: 'Founder & CEO of Projected Growth Consulting (PGC)',
+};
+
+const courses: Course[] = [
+  {
+    title: 'Conversion, Consultation & Closing',
+    price: '$397/',
+    priceNote: 'Lifetime access',
+    body: 'Learn how to improve consultation performance, increase patient conversions, and create a repeatable sales process using proven scripts, forms, and tracking systems.',
+    image: '/images/courses/conversion-consultation-closing.jpg',
+    imageAlt:
+      'Conversion, Consultation & Closing course — video lesson on a laptop beside the printed workbook',
+    imageWidth: 1080,
+    imageHeight: 1080,
+    rating: '5/5',
+    students: '1.2k',
+    views: '2.4k',
+    duration: '15:56',
+    featured: true,
+  },
+  {
+    title: 'Social Media For The Elective Industry',
+    price: '$497/',
+    priceNote: 'Lifetime access',
+    body: 'Build a stronger online presence and attract more qualified leads with social media strategies created specifically for aesthetic practices.',
+    image: '/images/courses/social-media-elective-industry.jpg',
+    imageAlt:
+      'Social Media For The Elective Industry course — video lesson on a tablet beside the Social Media Workbook',
+    imageWidth: 1080,
+    imageHeight: 1080,
+    rating: '5/5',
+    students: '1.6k',
+    views: '1.7k',
+    duration: '20:53',
+  },
+  {
+    title: 'Six-Figure Sales Events',
+    price: '$797/',
+    priceNote: 'Lifetime access',
+    body: 'Learn the exact process used to generate high-revenue sales events, from planning and promotion to execution and follow-up.',
+    image: '/images/courses/six-figure-sales-events.png',
+    imageAlt:
+      'Six-Figure Sales Events course — video lesson on a monitor beside the Sales Event Workbook',
+    imageWidth: 596,
+    imageHeight: 283,
+    rating: '5/5',
+    students: '2.1k',
+    views: '6.3k',
+    duration: '45:32',
+  },
+  {
+    title: 'TikTok Marketing For Med Spas',
+    price: '$299/',
+    priceNote: 'Lifetime access',
+    body: 'Master short-form content and leverage TikTok to increase visibility, engagement, and bookings.',
+    image: '/images/courses/tiktok-marketing-med-spas.png',
+    imageAlt:
+      'TikTok Marketing For Med Spas course — video lesson beside the TikTok Marketing Plan Workbook',
+    imageWidth: 596,
+    imageHeight: 283,
+    rating: '5/5',
+    students: '1.9k',
+    views: '5.4k',
+    duration: '24:39',
+  },
+  {
+    title: 'MedSpa Profix',
+    price: 'Subscription Membership',
+    body: 'Access a growing library of business growth training covering leadership, operations, marketing, memberships, profitability, and more.',
+    image: '/images/courses/medspa-profix.png',
+    imageAlt:
+      'MedSpa Profix membership — video lesson on a laptop beside the MedSpa Profix Membership materials',
+    imageWidth: 596,
+    imageHeight: 283,
+    rating: '5/5',
+    students: '1.4k',
+    views: '3.5k',
+    duration: '32:45',
+  },
+];
+
+/** The four Figma "detail" chips: 16px glyph + grey 14px value. */
+const chip = 'inline-flex items-center gap-1 py-1 pr-3 pl-1.5';
+const chipText = 'text-sm leading-5 tracking-[-0.005em] text-[#6b7280]';
+---
+
+<section id="course-library" data-node-id="159:12772" class="bg-[#f6f3ec] py-20 scroll-mt-24">
+  <div class="rail flex flex-col gap-16">
+    <header class="flex flex-col items-center gap-8 text-center">
+      <div class="flex max-w-[659px] flex-col gap-3">
+        {/* Figma 159:12775 — Inter Regular 16/20, not the 12px medium default. */}
+        <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">
+          {eyebrow}
+        </p>
+        <h2 class="text-[2.5rem] text-[#111827] lg:text-[4rem]">{title}</h2>
+      </div>
+      <div class="flex max-w-[561px] flex-col items-center gap-8">
+        <p class="text-sm leading-6 tracking-[-1px] text-[#6b7280] lg:text-base">{body}</p>
+        <Button href="/book-a-call" size="lg">Schedule A Call</Button>
+      </div>
+    </header>
+
+    <ul class="grid gap-6 md:grid-cols-2">
+      {
+        courses.map((course) => (
+          <li
+            class:list={[
+              'flex flex-col rounded-lg bg-white p-4 transition-shadow duration-200 hover:shadow-[0_8px_24px_rgba(17,24,39,0.08)]',
+              /* banner→copy: 32px on the featured card (159:23321), 24 elsewhere. */
+              course.featured ? 'gap-8 md:col-span-2 md:flex-row' : 'gap-6',
+            ]}
+          >
+            <div
+              class:list={[
+                /* Mobile banners are 313x200 (159:23319); the wider desktop crop
+                   only starts once the grid goes two-up. */
+                'aspect-[313/200] shrink-0 overflow-hidden rounded-[4px] bg-white',
+                /* basis is half the row MINUS half the 32px gap — with shrink-0 a
+                   plain basis-1/2 made the banner 624px (and 359px tall) instead
+                   of Figma's 608x350, which grew the whole card. */
+                course.featured
+                  ? 'md:aspect-[608/350] md:basis-[calc(50%-16px)]'
+                  : 'md:aspect-[596/283]',
+              ]}
+            >
+              <img
+                src={course.image}
+                alt={course.imageAlt}
+                width={course.imageWidth}
+                height={course.imageHeight}
+                loading="lazy"
+                decoding="async"
+                class="size-full object-cover"
+              />
+            </div>
+
+            <div
+              class:list={[
+                'flex flex-col gap-8 p-4',
+                course.featured && 'md:min-w-0 md:basis-1/2 md:justify-between',
+              ]}
+            >
+              <div class="flex flex-col gap-6">
+                {course.featured && (
+                  <p class="flex">
+                    <span class="rounded-full border border-[#ffecba] bg-[#fffaeb] px-3 py-0.5 text-xs leading-4 tracking-[-1px] text-[#a98635] uppercase">
+                      featured
+                    </span>
+                  </p>
+                )}
+
+                <div class="flex flex-col gap-2">
+                  <h3 class="font-display text-2xl leading-8 font-medium tracking-[-0.004em] text-[#111827]">
+                    {course.title}
+                  </h3>
+                  {/* one line on purpose — a newline prints a space before the grey tail */}
+                  {/* Figma 159:12796 is a fixed 32px row. h-8 pins it: the 14px grey
+                      tail's descent otherwise pushed the line box to 34px. */}
+                  <p class="h-8 font-display leading-8 font-medium tracking-[-0.005em] text-[#111827]"><span class="text-xl leading-8">{course.price}</span>{course.priceNote && <span class="text-sm leading-8 text-[#6b7280]">{course.priceNote}</span>}</p>
+                  <p class="text-sm leading-6 tracking-[-1px] text-[#6b7280]">{course.body}</p>
+                </div>
+
+                <ul class="flex items-center">
+                  <li class={chip}>
+                    <img
+                      src="/icons/star-fill.svg"
+                      alt=""
+                      aria-hidden="true"
+                      width="16"
+                      height="16"
+                      loading="lazy"
+                      class="size-4 shrink-0 object-contain"
+                    />
+                    <span class={chipText}>
+                      {course.rating}
+                      <span class="sr-only"> rating</span>
+                    </span>
+                  </li>
+                  <li class={chip}>
+                    <img
+                      src="/icons/user-line.svg"
+                      alt=""
+                      aria-hidden="true"
+                      width="16"
+                      height="16"
+                      loading="lazy"
+                      class="size-4 shrink-0 object-contain"
+                    />
+                    <span class={chipText}>
+                      {course.students}
+                      <span class="sr-only"> students enrolled</span>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Figma 159:23341 stacks the view/duration chips under the author
+                  on mobile (wrap is 100px tall, chips at y=72) and only puts them
+                  on one row once the card is two-up. */}
+              <div
+                class="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between"
+              >
+                <div class="flex min-w-0 items-center gap-3">
+                  <span class="size-10 shrink-0 overflow-hidden rounded-full">
+                    {/* Figma crops a 140x112 fill inside the 40px circle at (-24,-9). */}
+                    <img
+                      src="/images/courses/author-avatar.jpg"
+                      alt=""
+                      aria-hidden="true"
+                      width="140"
+                      height="112"
+                      loading="lazy"
+                      decoding="async"
+                      class="-mt-[9px] -ml-6 h-28 w-[140px] max-w-none object-cover"
+                    />
+                  </span>
+                  <span class="flex min-w-0 flex-col gap-1">
+                    <span class="text-sm leading-5 font-semibold tracking-[-1px] text-[#111827]">
+                      {author.name}
+                    </span>
+                    <span class="text-xs leading-4 tracking-[-1px] text-[#6b7280]">
+                      {author.role}
+                    </span>
+                  </span>
+                </div>
+
+                <ul class="flex shrink-0 items-center">
+                  <li class={chip}>
+                    <img
+                      src="/icons/eye-line.svg"
+                      alt=""
+                      aria-hidden="true"
+                      width="16"
+                      height="16"
+                      loading="lazy"
+                      class="size-4 shrink-0 object-contain"
+                    />
+                    <span class={chipText}>
+                      {course.views}
+                      <span class="sr-only"> views</span>
+                    </span>
+                  </li>
+                  <li class={chip}>
+                    <img
+                      src="/icons/timer-2-line.svg"
+                      alt=""
+                      aria-hidden="true"
+                      width="16"
+                      height="16"
+                      loading="lazy"
+                      class="size-4 shrink-0 object-contain"
+                    />
+                    <span class={chipText}>
+                      {course.duration}
+                      <span class="sr-only"> minutes</span>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

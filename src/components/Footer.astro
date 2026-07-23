@@ -1,0 +1,121 @@
+---
+/**
+ * Footer + the dark CTA card that sits above it.
+ * Figma 159:5558 — bg #f6f3ec, CTA card #111827 rounded-12, 80px gutters.
+ */
+import { site, footerNav, legalNav } from '../lib/site';
+import Button from './Button.astro';
+import SocialProof from './SocialProof.astro';
+
+interface Props {
+  /** Some pages (e.g. /book-a-call) already end in a CTA — let them opt out. */
+  cta?: boolean;
+  ctaTitle?: string;
+  ctaBody?: string;
+}
+
+const {
+  cta = true,
+  ctaTitle = 'Stop Guessing. Start Growing With A System.',
+  ctaBody =
+    'Join the membership built from the same playbook that has helped thousands of elective medical practices grow more profitably and predictably.',
+} = Astro.props;
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-[#f6f3ec]" data-node-id="159:5558">
+  {
+    cta && (
+      <div class="rail pt-20">
+        <div class="relative overflow-hidden rounded-xl bg-[#111827] px-6 py-12 md:px-20 md:py-14">
+          <img
+            src="/images/footer-cta-glyph.svg"
+            alt=""
+            aria-hidden="true"
+            class="pointer-events-none absolute -top-9 right-0 hidden h-[489px] w-[485px] md:block"
+          />
+          <div class="relative flex flex-col items-start gap-6">
+            <h2 class="max-w-[16ch] text-[2rem] leading-[1.17] tracking-[-0.03em] text-white md:text-5xl">
+              {ctaTitle}
+            </h2>
+            <p class="max-w-[532px] text-base leading-6 tracking-[-1px] text-[#6b7280]">
+              {ctaBody}
+            </p>
+            <div class="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+              <Button href="/growth-hub">Join The Growth Hub</Button>
+              <SocialProof />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  <div class="rail flex flex-col gap-16 py-8 pt-16 lg:gap-[106px]">
+    <div class="flex flex-col gap-12 xl:flex-row xl:gap-[106px]">
+      <div class="flex w-full max-w-[444px] flex-col gap-8">
+        <img
+          src="/images/logo-wordmark.svg"
+          alt={site.name}
+          width="390"
+          height="84"
+          class="h-16 w-auto md:h-[84px]"
+        />
+        <div class="flex flex-col gap-6">
+          <div class="flex flex-col gap-2">
+            <p class="text-lg leading-8 font-semibold tracking-[-1px] text-[#111827]">
+              {site.name}.
+            </p>
+            <p class="text-base leading-6 font-medium text-[#808080]">{site.description}</p>
+          </div>
+          <div class="flex items-start gap-2">
+            <a href={site.social.instagram} aria-label="Instagram" target="_blank" rel="noreferrer noopener" class="transition-opacity hover:opacity-70">
+              <img src="/icons/instagram.svg" alt="" width="32" height="32" class="size-8" />
+            </a>
+            <a href={site.social.linkedin} aria-label="LinkedIn" target="_blank" rel="noreferrer noopener" class="transition-opacity hover:opacity-70">
+              <img src="/icons/linkedin.svg" alt="" width="32" height="32" class="size-8" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid w-full grid-cols-2 gap-10 lg:grid-cols-3 lg:max-w-[730px]">
+        {
+          footerNav.map((group) => (
+            <div class="flex flex-col gap-6">
+              <p class="text-lg leading-8 font-semibold tracking-[-1px] text-[#6b7280] uppercase">
+                {group.title}
+              </p>
+              <div class="flex flex-col gap-3">
+                {group.links.map((link) => (
+                  <a
+                    href={link.href}
+                    class="text-lg leading-8 font-medium tracking-[-1px] text-[#111827] transition-colors hover:text-[var(--color-lime-border)]"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-col justify-between gap-4 text-sm leading-6 font-medium md:flex-row">
+      <p class="tracking-[-0.03em] text-[#808080]">
+        © Copyright {year} - {site.name} - All Rights Reserved
+      </p>
+      <div class="flex flex-wrap items-center gap-6 tracking-[-1px] text-[#6b7280] md:justify-end md:gap-8">
+        {
+          legalNav.map((link) => (
+            <a href={link.href} class="transition-colors hover:text-[#111827]">
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</footer>

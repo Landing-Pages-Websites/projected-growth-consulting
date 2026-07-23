@@ -1,0 +1,78 @@
+---
+/**
+ * Growth Hub upsell — copy + benefit rows beside a portrait photo.
+ * Figma desktop 184:2738 (copy left, image right) · mobile 184:3818 (image on
+ * top, copy left-aligned below).
+ */
+import Button from '../../Button.astro';
+
+const benefits = [
+  'Step-by-step solutions designed to solve specific business challenges quickly, without overwhelming your team.',
+  'Join live implementation sessions, ask questions, and receive expert guidance on your biggest priorities.',
+  'Access KPI dashboards, planning tools, SOPs, scripts, calculators, and ready-to-use resources that help your team execute faster.',
+  'Connect with elective medical practice owners, exchange ideas, and learn from real-world experiences and successes.',
+];
+---
+
+<section data-node-id="184:2738" class="bg-[#f6f3ec] py-20">
+  {/* Figma 184:2739 — both columns start at the section's 80px top inset, so the
+      photo's top edge lines up with the eyebrow, not with the column's centre. */}
+  <div class="rail flex flex-col gap-10 lg:flex-row lg:items-start">
+    <img
+      src="/images/pgc-proof/growth-hub.jpg"
+      alt="A practice owner working late at her desk, reviewing paperwork by lamplight"
+      width="933"
+      height="1400"
+      loading="lazy"
+      decoding="async"
+      class="h-[280px] w-full rounded-2xl object-cover sm:h-[420px] lg:order-2 lg:h-[812px] lg:min-w-0 lg:flex-1"
+    />
+
+    <div class="flex flex-col gap-6 lg:order-1 lg:min-w-0 lg:flex-1">
+      <div class="flex flex-col gap-3 lg:max-w-[584px]">
+        {/* Figma 184:2743 — the eyebrow line box is 20px, not Inter's default 24. */}
+        <p class="eyebrow text-base leading-5 tracking-[-1px] text-[#111827]">
+          READY TO GO FURTHER?
+        </p>
+        <h2 class="text-[2.5rem] text-[#111827] lg:text-[4rem]">
+          Turn Free Insights Into Real Business Growth
+        </h2>
+        <p class="text-base leading-6 tracking-[-0.06em] text-[#6b7280]">
+          PGC Proof gives you a preview of Kelly Smith's proven strategies. When you're ready to
+          move beyond ideas and start implementing systems that drive measurable results, the
+          Growth Hub provides everything you need to train your team, improve profitability, and
+          build a more scalable practice.
+        </p>
+      </div>
+
+      <h3 class="font-sans text-xl leading-6 font-semibold tracking-[-0.04em] text-[#111]">
+        What You'll Unlock Inside The Growth Hub
+      </h3>
+
+      {/* Figma 184:2752 — 80px rows: a 16px inset over a 48px line box. The 1px
+          stroke is inside in Figma, so the padding absorbs it here. */}
+      <ul class="flex flex-col gap-4">
+        {
+          benefits.map((benefit) => (
+            <li class="flex min-h-20 items-center gap-2 rounded-sm border border-black/10 bg-white p-[15px]">
+              <img
+                src="/icons/check-circle-24-lime.svg"
+                alt=""
+                aria-hidden="true"
+                width="24"
+                height="24"
+                loading="lazy"
+                class="size-6 shrink-0"
+              />
+              <span class="text-base leading-6 font-medium tracking-[-0.04em] text-[#6b7280]">
+                {benefit}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <Button href="/growth-hub" size="lg" class="self-start">Join The Growth Hub</Button>
+    </div>
+  </div>
+</section>

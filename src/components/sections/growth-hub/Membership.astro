@@ -1,0 +1,120 @@
+---
+/**
+ * "Founding Membership" pricing block — Figma desktop 159:9849 / mobile 159:21211.
+ * Copy column on the left, the single lime-bordered plan card on the right.
+ */
+import Button from '../../Button.astro';
+
+const features = [
+  '24+ One-Hour Implementation Lessons',
+  'New Courses Added Monthly',
+  'Live Coaching With Kelly',
+  'Practice Diagnostic',
+  'KPI Dashboard',
+  'Executive Goal Tracker',
+  'Private Owner Community',
+  'Mobile App Access',
+  'Templates & Playbooks',
+  'AI Resources',
+  'Team Training Materials',
+  'Charter Pricing Locked In',
+];
+---
+
+<section id="membership" data-node-id="159:9849" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-16">
+    <!-- Figma 159:9849 splits the rail 608/64/608. `flex-1` cannot: flex-basis 0%
+         is a content box, so the card's 64px padding + 4px border push it 34px
+         wider than the copy column. Percentage widths give the exact split. -->
+    <div class="flex min-w-0 flex-col gap-12 lg:w-[calc(50%-2rem)]">
+      <div class="flex flex-col gap-3">
+        <p class="eyebrow text-center text-base tracking-[-1px] text-[#111827] lg:text-left">
+          FOUNDING MEMBERSHIP
+        </p>
+        {/* Figma 159:21211 centres the eyebrow, title and body on mobile. */}
+        <h2 class="text-center text-[2.5rem] text-[#111827] lg:text-left lg:text-[4rem]">
+          Everything Your Team Needs To Grow
+        </h2>
+        <p class="text-center text-base leading-6 tracking-[-1px] text-[#6b7280] lg:text-left">
+          One affordable membership gives your entire practice access to proven implementation
+          systems, coaching, tools, and ongoing support.
+        </p>
+      </div>
+      <div class="flex justify-center lg:justify-start">
+        <Button href="/book-a-call" size="lg">Join The Growth Hub</Button>
+      </div>
+    </div>
+
+    <div
+      class="flex min-w-0 flex-col gap-6 overflow-hidden rounded-lg border-2 border-[var(--color-lime)] bg-white p-8 lg:w-[calc(50%-2rem)]"
+    >
+      <div class="flex flex-col gap-4">
+        <p class="text-sm leading-5 font-medium text-[var(--color-lime)] uppercase">
+          Limited · First 50 Members
+        </p>
+
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:gap-2">
+          <p class="flex items-center gap-2 tracking-[-1px] text-[#111827]">
+            <img
+              src="/icons/cash-fill.svg"
+              alt=""
+              aria-hidden="true"
+              width="24"
+              height="24"
+              loading="lazy"
+              class="size-6 shrink-0"
+            />
+            {/* Figma 159:9872 is a single 145px text run — "/month" sits on the
+                $97 baseline with no gap, so both spans share one flex item. */}
+            <span class="whitespace-nowrap"
+              ><span class="text-5xl leading-14 font-semibold">$97</span><span
+                class="text-lg leading-8 font-semibold">/month</span
+              ></span
+            >
+          </p>
+          <p class="flex-1 text-sm leading-5 font-medium text-[rgba(107,114,128,0.5)]">
+            <span class="line-through">Standard: $197/mo.</span> Save $100 every month, forever
+          </p>
+        </div>
+
+        <p class="text-sm leading-5 text-[#6b7280]">
+          <span class="font-medium">Best For</span> : Elective medical practices that want to improve
+          profitability, train their team, and build better systems without hiring expensive
+          consultants.
+        </p>
+      </div>
+
+      <Button href="/book-a-call" size="lg" class="w-full">
+        Join the Founding Charter ($97/mo)
+      </Button>
+
+      <div class="flex flex-col gap-3">
+        <p class="text-sm leading-6 font-semibold tracking-[-1px] text-[#6b7280]">
+          Membership Includes :
+        </p>
+        <ul class="flex flex-col gap-3">
+          {
+            features.map((feature) => (
+              <li class="flex items-center gap-2">
+                <span class="flex shrink-0 items-center p-1">
+                  <img
+                    src="/icons/check-fill.svg"
+                    alt=""
+                    aria-hidden="true"
+                    width="16"
+                    height="16"
+                    loading="lazy"
+                    class="size-4"
+                  />
+                </span>
+                <span class="min-w-0 flex-1 text-sm leading-6 tracking-[-1px] text-[#6b7280]">
+                  {feature}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

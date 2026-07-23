@@ -1,0 +1,165 @@
+---
+/**
+ * Contact form — Figma desktop 184:2202 (1440x830) · mobile 184:4166 (393x1287).
+ *
+ * Desktop is a two-up: copy + contact details on the left, the form on the
+ * right, 80px gap. Mobile keeps the same DOM order and stacks it.
+ */
+import Button from '../../Button.astro';
+
+const eyebrow = 'CONTACT FORM';
+const title = 'Still Have Questions?';
+const body =
+  'Complete the form and a member of our team will get back to you as soon as possible.';
+
+const contacts: { icon: string; label: string; href?: string }[] = [
+  {
+    icon: '/icons/mail.svg',
+    label: 'info@projectedgrowthconsulting.com',
+    href: 'mailto:info@projectedgrowthconsulting.com',
+  },
+  { icon: '/icons/phone.svg', label: '(877) 716-1291', href: 'tel:+18777161291' },
+  { icon: '/icons/location.svg', label: 'St. Petersburg, US' },
+];
+
+type Field = {
+  name: string;
+  label: string;
+  type: 'text' | 'email' | 'tel' | 'textarea';
+  autocomplete: string;
+  required?: boolean;
+  /** Figma pairs first/last name in one row on desktop; everything else is full width. */
+  half?: boolean;
+};
+
+const fields: Field[] = [
+  { name: 'first-name', label: 'First name', type: 'text', autocomplete: 'given-name', required: true, half: true },
+  { name: 'last-name', label: 'Last name', type: 'text', autocomplete: 'family-name', required: true, half: true },
+  { name: 'email', label: 'Email', type: 'email', autocomplete: 'email', required: true },
+  // Figma marks no field as optional; phone stays optional so a missing number
+  // never blocks a legitimate enquiry.
+  { name: 'phone', label: 'Phone number', type: 'tel', autocomplete: 'tel' },
+  { name: 'message', label: 'Message', type: 'textarea', autocomplete: 'off', required: true },
+];
+
+const control =
+  'w-full rounded-lg border border-black/10 bg-white p-3 text-base leading-6 tracking-[-1px] text-[#111827]';
+---
+
+<section
+  id="contact-form"
+  data-node-id="184:2202"
+  class="scroll-mt-24 bg-[#f6f3ec] py-20"
+>
+  <div class="rail flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-20">
+    <div class="flex flex-col gap-8 lg:min-w-0 lg:flex-1">
+      <div class="flex flex-col gap-3">
+        {/* Figma 184:2208 — 16px/20 Inter Regular at -1px, uppercase. */}
+        <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">
+          {eyebrow}
+        </p>
+        <h2 class="text-[2.5rem] tracking-[-0.04em] text-[#111827] lg:text-[4rem]">
+          {title}
+        </h2>
+        <p class="text-base leading-6 tracking-[-1px] text-[#6b7280] lg:max-w-[42ch]">
+          {body}
+        </p>
+      </div>
+
+      <ul class="flex flex-col gap-4 py-2">
+        {
+          contacts.map((c) => (
+            <li class="flex min-w-0 items-start gap-4 text-base leading-6 text-[#6b7280]">
+              <img
+                src={c.icon}
+                alt=""
+                aria-hidden="true"
+                width="24"
+                height="24"
+                loading="lazy"
+                class="size-6 shrink-0"
+              />
+              {c.href ? (
+                <a
+                  href={c.href}
+                  class="min-w-0 wrap-anywhere underline decoration-from-font underline-offset-2 transition-colors hover:text-[#111827]"
+                >
+                  {c.label}
+                </a>
+              ) : (
+                <span>{c.label}</span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!--
+      Wire `action` to a real endpoint before launch: an Astro server endpoint
+      (src/pages/api/contact.ts + an SSR adapter) or a hosted handler such as
+      Formspree / Netlify Forms / HubSpot. It is a plain POST, so it keeps
+      working without JavaScript once `action` is set — and there is
+      deliberately no faked success state until a real endpoint responds.
+    -->
+    <form
+      method="post"
+      class="flex flex-col gap-6 lg:min-w-0 lg:flex-1"
+      aria-labelledby="contact-form-title"
+    >
+      <h3 id="contact-form-title" class="sr-only">Send us a message</h3>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        {
+          fields.map((f) => (
+            <div class:list={['flex flex-col gap-2', !f.half && 'sm:col-span-2']}>
+              <label
+                for={f.name}
+                class="text-base leading-6 tracking-[-1px] text-[#111827]"
+              >
+                {f.label}
+              </label>
+              {f.type === 'textarea' ? (
+                <textarea
+                  id={f.name}
+                  name={f.name}
+                  rows="6"
+                  required={f.required}
+                  class:list={[control, 'h-[180px] resize-y']}
+                />
+              ) : (
+                <input
+                  id={f.name}
+                  name={f.name}
+                  type={f.type}
+                  autocomplete={f.autocomplete}
+                  required={f.required}
+                  class:list={[control, 'h-12']}
+                />
+              )}
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="flex items-start gap-2 pb-4">
+        <input
+          id="consent"
+          name="consent"
+          type="checkbox"
+          required
+          class="mt-1 size-[18px] shrink-0 rounded border border-black/10 bg-white accent-[var(--color-lime)]"
+        />
+        <!-- Figma I184:2248;4179:9061 — 14px at leading 1.5 (21px), not 24. -->
+        <label for="consent" class="text-sm leading-normal text-[#6b7280]">
+          I have read and agree to the <a
+            href="/privacy-policy"
+            class="text-[var(--color-lime)] underline decoration-from-font underline-offset-2">Privacy Policy</a
+          >, and I consent to being contacted regarding my inquiry.
+        </label>
+      </div>
+
+      <Button type="submit" class="w-full">Submit</Button>
+    </form>
+  </div>
+</section>

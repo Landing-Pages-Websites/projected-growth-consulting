@@ -1,0 +1,30 @@
+---
+/** Overlapping avatar cluster + "Join thousands…" line. Hero + footer CTA. */
+import { socialProof } from '../lib/site';
+
+interface Props {
+  class?: string;
+  tone?: 'light' | 'dark';
+}
+const { class: className = '', tone = 'light' } = Astro.props;
+---
+
+<div class:list={['flex items-center gap-3', className]}>
+  <img
+    src="/images/avatars.png"
+    alt=""
+    aria-hidden="true"
+    width="140"
+    height="36"
+    class="h-9 w-[140px] shrink-0"
+    loading="lazy"
+  />
+  <p
+    class:list={[
+      'max-w-[278px] text-sm leading-[18px]',
+      tone === 'light' ? 'text-[var(--color-ink-100)]' : 'text-[#6b7280]',
+    ]}
+  >
+    {socialProof.copy}
+  </p>
+</div>

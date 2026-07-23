@@ -1,0 +1,87 @@
+---
+/**
+ * /press — "About Kelly". Figma desktop 159:16645 · mobile 159:25908.
+ *
+ * Desktop: an 865px header block, then a 413px lime-framed portrait beside the
+ * 843px credentials card (both 776 tall, 24px gap = the 1280 rail).
+ * Mobile centres the header and adds a "Schedule A Call" button that the
+ * desktop frame does not have (159:25908).
+ */
+import Button from '../../Button.astro';
+
+const bio: string[] = [
+  "Kelly Smith didn't build Projected Growth Consulting around theory. She built it around what actually works inside elective medical practices.",
+  "After spending more than two decades working with practice owners across the country, Kelly recognized that most businesses weren't failing because of a lack of effort—they were failing because they lacked systems, accountability, and clear performance metrics.",
+  'What began as consulting evolved into a proven growth platform that has now supported more than 6,000 practices across med spas, plastic surgery, functional medicine, and wellness.',
+  'Today, Kelly continues to work directly with owners and leadership teams, helping them implement practical frameworks that improve profitability, operations, leadership, and long-term business value.',
+];
+---
+
+<section data-node-id="159:16645" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-10">
+    <div
+      class="flex flex-col items-center gap-3 text-center lg:max-w-[865px] lg:items-start lg:text-left"
+    >
+      <p class="eyebrow text-base tracking-[-1px] text-[#111827]">Meet Kelly Smith</p>
+      <h2 class="text-[2.5rem] tracking-[-0.04em] text-[#111827] lg:text-[4rem]">
+        A Leading Voice<br class="hidden lg:inline" /> In Practice Growth
+      </h2>
+      {/* Figma puts 32px between the heading and the body, 12px above it. */}
+      <p class="mt-5 text-base leading-6 tracking-[-1px] text-[#6b7280]">
+        Whether you're just getting started or leading a multi-location practice, the PGC
+        ecosystem helps you identify what's holding growth back, implement proven systems,
+        and scale with confidence.
+      </p>
+      <Button href="/book-a-call" size="lg" class="mt-5 lg:hidden">Schedule A Call</Button>
+    </div>
+
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-stretch">
+      <div
+        data-node-id="159:17785"
+        class="rounded-lg bg-[var(--color-lime)] p-5 lg:basis-[413px] lg:min-w-0"
+      >
+        <!-- 159:25922 is 608 tall on mobile; on desktop 159:17786 is inset a symmetric
+             20px and the lime frame stretches to the taller credentials card, so the
+             image fills it rather than pinning 736. -->
+        <img
+          src="/images/press/kelly-smith.png"
+          alt="Kelly Smith, Founder and CEO of Projected Growth Consulting, seated at a desk in a white blazer"
+          width="348"
+          height="322"
+          loading="lazy"
+          decoding="async"
+          class="h-[608px] w-full rounded-xl object-cover object-top lg:h-full"
+        />
+      </div>
+
+      <div
+        data-node-id="159:17776"
+        class="flex flex-col gap-10 lg:min-w-0 lg:flex-1 lg:rounded-lg lg:bg-[var(--color-surface)] lg:p-9"
+      >
+        {/* 159:25924 sits straight on the section background on mobile — the grey
+            card, its radius and its 36px padding only exist on desktop (159:17776). */}
+        <h3
+          class="text-2xl leading-[34px] font-medium text-[#111827] lg:text-[2.25rem] lg:leading-[1.6]"
+        >
+          Founder &amp; CEO, Projected Growth Consulting<br />
+          International Speaker • Author of 5 Books • MedSpa Growth Strategist
+        </h3>
+
+        <!-- 159:25927 sets the mobile bio at 14/21 with a blank line between
+             paragraphs; 159:17780 is 20/28 on desktop. -->
+        <div
+          class="flex flex-col gap-[21px] text-sm leading-[21px] tracking-[-1px] text-[#6b7280] lg:gap-7 lg:text-xl lg:leading-7"
+        >
+          {bio.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+
+        <div class="mt-auto flex flex-col leading-[1.6] tracking-[-1px]">
+          <p class="text-lg font-medium text-[#1c1d1f] lg:text-xl">Kelly Smith</p>
+          <p class="text-base text-[#6b7280]">
+            Founder &amp; CEO of Projected Growth Consulting (PGC)
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

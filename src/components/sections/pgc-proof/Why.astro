@@ -1,0 +1,48 @@
+---
+/**
+ * Why watch PGC Proof — four dark value cards.
+ * Figma desktop 184:2689 · mobile 184:3862.
+ */
+import IconCard from '../../IconCard.astro';
+import SectionHead from '../../SectionHead.astro';
+
+const reasons = [
+  {
+    title: 'Proven Frameworks',
+    body: 'Business systems refined through years of consulting and implementation.',
+    icon: '/icons/why-frameworks.svg',
+  },
+  {
+    title: 'Quick To Apply',
+    body: 'Actionable lessons your team can implement without spending weeks in training.',
+    icon: '/icons/why-quick.svg',
+  },
+  {
+    title: 'Built For Teams',
+    body: 'Share webinars with managers and staff so everyone improves together.',
+    icon: '/icons/why-teams.svg',
+  },
+  {
+    title: 'Real Practice Results',
+    body: 'Strategies that have helped thousands of practices improve profitability and operations.',
+    icon: '/icons/why-results.svg',
+  },
+];
+---
+
+<section data-node-id="184:2689" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-12 lg:gap-16">
+    <SectionHead
+      eyebrow="WHY WATCH PGC PROOF"
+      title="Learn From Someone Who's Already Done It"
+      body="Kelly Smith isn't teaching theory. Every strategy shared inside PGC Proof comes from years of helping elective medical practices solve real business challenges and create measurable results."
+      cta={{ label: 'Schedule A Call', href: '/book-a-call' }}
+    />
+
+    <ul class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      {
+        reasons.map((r) => <IconCard icon={r.icon} title={r.title} body={r.body} />)
+      }
+    </ul>
+  </div>
+</section>

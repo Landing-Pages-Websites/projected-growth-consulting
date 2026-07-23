@@ -1,0 +1,114 @@
+---
+/**
+ * Shared numbered-stepper section. Consulting "Our Process" (Figma 159:13395
+ * desktop / 159:23912 mobile) and growth-hub "The Practice OS" (159:8426 /
+ * 159:19813) are the same design with different copy, so both render this.
+ * A 1px rail with numbered badges, step 1 dark and carrying the image, the
+ * rest white cards. Nothing toggles, so it ships as plain markup — no script.
+ */
+import Button from './Button.astro';
+
+interface Step {
+  title: string;
+  body: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+interface Props {
+  /** Figma node of the calling page's section, kept for design traceability. */
+  nodeId?: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  cta: { label: string; href: string };
+  steps: Step[];
+  /**
+   * Height of the step-1 photo. Default is what growth-hub already renders;
+   * /consulting's mobile frame (159:23944) gives it 256px, not 167px.
+   */
+  imageClass?: string;
+}
+
+const {
+  nodeId,
+  eyebrow,
+  title,
+  body,
+  cta,
+  steps,
+  imageClass = 'h-[167px] sm:h-[272px]',
+} = Astro.props;
+---
+
+<section data-node-id={nodeId} class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
+    <div
+      class="flex flex-col items-center gap-3 text-center lg:basis-[561px] lg:min-w-0 lg:items-start lg:text-left"
+    >
+      <p class="eyebrow text-base tracking-[-1px] text-[#111827]">{eyebrow}</p>
+      <h2 class="text-[2.5rem] text-[#111827] lg:text-[4rem]">{title}</h2>
+      <p class="mt-3 text-sm leading-6 tracking-[-1px] text-[#6b7280] lg:text-base">
+        {body}
+      </p>
+      <Button href={cta.href} size="lg" class="mt-5 lg:mt-8">{cta.label}</Button>
+    </div>
+
+    <ol class="relative flex min-w-0 flex-col gap-6 lg:flex-1">
+      <span
+        aria-hidden="true"
+        class="absolute top-0 bottom-0 left-6 w-px -translate-x-1/2 bg-[#dee2e6]"
+      ></span>
+      {
+        steps.map((step, i) => (
+          <li class="relative flex items-start gap-6">
+            <span
+              aria-hidden="true"
+              class:list={[
+                'grid size-12 shrink-0 place-items-center rounded-full text-2xl leading-8 font-bold tracking-[-1px]',
+                i === 0
+                  ? 'bg-[#111827] text-[var(--color-lime)]'
+                  : 'bg-[var(--color-cream)] text-[#6b7280]',
+              ]}
+            >
+              {i + 1}
+            </span>
+
+            <div
+              class:list={[
+                'flex min-w-0 flex-1 flex-col gap-6 overflow-hidden rounded-lg p-4 sm:p-8',
+                i === 0
+                  ? 'border-[0.5px] border-[#e9ecef] bg-[#111827] shadow-[0_24px_64px_0_rgba(224,224,224,0.48)]'
+                  : 'border border-[#e9ecef] bg-white',
+              ]}
+            >
+              <div class="flex flex-col gap-2">
+                <h3
+                  class:list={[
+                    'font-sans text-2xl leading-8 font-medium tracking-[-1px]',
+                    i === 0 ? 'text-[var(--color-cream)]' : 'text-[#111827]',
+                  ]}
+                >
+                  {step.title}
+                </h3>
+                <p class="text-base leading-6 tracking-[-1px] text-[#6b7280]">{step.body}</p>
+              </div>
+              {step.image && (
+                <img
+                  src={step.image}
+                  alt={step.imageAlt ?? ''}
+                  aria-hidden={step.imageAlt ? undefined : 'true'}
+                  width="1280"
+                  height="853"
+                  loading="lazy"
+                  decoding="async"
+                  class:list={['w-full rounded-lg object-cover', imageClass]}
+                />
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

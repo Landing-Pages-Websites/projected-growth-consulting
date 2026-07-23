@@ -1,0 +1,141 @@
+---
+/**
+ * The one article card used across /blog — Figma "Article Card"
+ * (184:3059 stacked, 184:3078 split; mobile 184:4463 / 184:4483).
+ *
+ * layout="stacked" — image on top, full excerpt.
+ * layout="split"   — from lg up the image moves into a left column and the copy
+ *                    into a right one; below lg it is identical to "stacked".
+ *                    Done with one DOM: the media/body wrapper goes
+ *                    `display: contents` at lg so both drop into the card grid.
+ *
+ * The card is one link: the title anchor stretches over the whole card, so the
+ * a11y tree gets a single well-named destination instead of three.
+ */
+import type { Post } from '../../../lib/posts';
+import { author, postHref } from '../../../lib/posts';
+
+interface Props {
+  post: Post;
+  layout?: 'stacked' | 'split';
+  /** Featured cards carry the lime 40px arrow; the "Latest" grid does not. */
+  arrow?: boolean;
+  /** Above-the-fold cards skip lazy loading. */
+  eager?: boolean;
+}
+
+const { post, layout = 'stacked', arrow = false, eager = false } = Astro.props;
+const split = layout === 'split';
+---
+
+<article
+  data-node-id={split ? '184:3078' : '184:3059'}
+  data-category={post.category}
+  class:list={[
+    'group relative flex h-full w-full flex-col gap-6 rounded-lg border border-[#d4d4d8] bg-[var(--color-surface)] p-4',
+    'transition-shadow duration-150 hover:shadow-[0_2px_16px_rgba(17,24,39,0.08)]',
+    'focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[var(--color-lime)]',
+    split && 'lg:grid lg:grid-cols-2 lg:grid-rows-[auto_1fr_auto] lg:gap-x-6 lg:gap-y-0',
+  ]}
+>
+  <div class:list={['flex flex-col gap-6', split ? 'lg:contents' : 'lg:gap-5']}>
+    <div
+      class:list={[
+        'relative h-[275px] w-full overflow-hidden rounded-xl',
+        split && 'lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:h-full lg:min-h-[275px]',
+      ]}
+    >
+      <img
+        src={post.image}
+        alt=""
+        aria-hidden="true"
+        width={post.imageWidth}
+        height={post.imageHeight}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        class="size-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+      />
+      <div
+        class="absolute top-[11px] left-[9px] flex items-center gap-2 rounded-[99px] bg-white py-1 pr-3 pl-2"
+      >
+        <img
+          src="/icons/tag-dot.svg"
+          alt=""
+          aria-hidden="true"
+          width="6"
+          height="6"
+          class="size-1.5"
+        />
+        <span class="text-sm leading-[1.6] font-medium tracking-[-0.2px] text-[#6b7280]">
+          {post.category}
+        </span>
+      </div>
+    </div>
+
+    <div class:list={['flex flex-col gap-4', split && 'lg:col-start-2 lg:row-start-1']}>
+      <p class="text-xs leading-4 font-medium tracking-[0.96px] text-[#6b7280] uppercase">
+        {post.readingTime}
+      </p>
+      <h3 class="text-2xl leading-[1.4] tracking-[-0.48px] text-[#111827]">
+        <a href={postHref(post.slug)} class="after:absolute after:inset-0 focus:outline-none">
+          {post.title}
+        </a>
+      </h3>
+      {/* Figma prints the excerpt everywhere except the desktop split card. */}
+      <p
+        class:list={[
+          /* Figma 184:3161 — Inter 16/24 at tracking:-1px, not -0.02em (-0.32px).
+             The looser value pushed every 3-line excerpt onto a 4th line. */
+          'text-base leading-6 tracking-[-1px] text-[#6b7280]',
+          split && 'lg:hidden',
+        ]}
+      >
+        {post.excerpt}
+      </p>
+    </div>
+  </div>
+
+  <div
+    class:list={[
+      'flex flex-col gap-6',
+      split && 'lg:col-start-2 lg:row-start-3 lg:gap-4 lg:self-end',
+    ]}
+  >
+    <div class="flex items-center gap-3">
+      <img
+        src={author.avatar}
+        alt=""
+        aria-hidden="true"
+        width="364"
+        height="387"
+        loading="lazy"
+        decoding="async"
+        class="size-12 shrink-0 rounded-full border border-[#e0e3de] object-cover"
+      />
+      <div class="flex flex-col">
+        <span class="text-base leading-6 font-semibold tracking-[-0.32px] text-[#111827]">
+          {author.name}
+        </span>
+        <time
+          datetime={post.date}
+          class="text-sm leading-4 font-medium tracking-[-0.28px] text-[#6b7280]"
+        >
+          {post.dateLabel}
+        </time>
+      </div>
+    </div>
+    {
+      arrow && (
+        <img
+          src="/icons/arrow-up-right-lime.svg"
+          alt=""
+          aria-hidden="true"
+          width="40"
+          height="40"
+          loading="lazy"
+          class="size-10 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        />
+      )
+    }
+  </div>
+</article>

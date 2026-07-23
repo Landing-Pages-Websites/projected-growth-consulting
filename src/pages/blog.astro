@@ -1,0 +1,23 @@
+---
+/** /blog — Figma desktop 184:3015 / mobile 184:4434. */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import FeaturedInsights from '../components/sections/blog/FeaturedInsights.astro';
+import LatestArticles from '../components/sections/blog/LatestArticles.astro';
+---
+
+<Base
+  title="Insights & Strategies"
+  description="Practical articles from Kelly Smith on leadership, profitability, marketing, operations, KPIs, memberships, and growth for elective medical practices."
+  ogImage="/images/heroes/blog.jpg"
+>
+  <PageHero
+    nodeId="184:3016"
+    title="Insights & Strategies"
+    body="Explore practical articles from Kelly Smith covering leadership, profitability, marketing, operations, KPIs, memberships, and practice growth. Every article is written to help elective medical practice owners make smarter decisions and implement proven strategies faster."
+    image="/images/heroes/blog.jpg"
+    primaryCta={{ label: 'Browse Articles', href: '#latest-articles' }}
+  />
+  <FeaturedInsights />
+  <LatestArticles />
+</Base>

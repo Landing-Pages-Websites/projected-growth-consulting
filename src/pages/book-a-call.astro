@@ -1,0 +1,103 @@
+---
+/**
+ * /book-a-call — Figma desktop 159:11239 · mobile 159:22954.
+ * Hero · Stats · Calendly · What You'll Get · Testimonials · FAQs · Footer.
+ */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import StatsBar from '../components/StatsBar.astro';
+import Testimonials from '../components/Testimonials.astro';
+import FAQ, { type FaqItem } from '../components/FAQ.astro';
+import Calendly from '../components/sections/book-a-call/Calendly.astro';
+import WhatYoullGet from '../components/sections/book-a-call/WhatYoullGet.astro';
+
+const stats = [
+  { value: '6,000+', label: 'Practice Owners Supported' },
+  { value: '$250M+', label: 'Client Revenue Generated' },
+  { value: '15+', label: 'Years of Industry Experience' },
+  { value: '92%', label: 'Members Renew Annually' },
+];
+
+/* Figma 159:12534 ships all eight questions but only the first answer — the
+   other seven items are collapsed, so their answer text does not exist in the
+   file. Answers 2–8 are written from this page's own copy (the hero, the
+   "What To Expect" cards and the widget panel); no new claims or figures. */
+const faqs: FaqItem[] = [
+  {
+    q: 'Is the strategy call free?',
+    a: 'Yes. Your strategy call is completely complimentary and designed to help us better understand your practice, goals, and current challenges.',
+  },
+  {
+    q: 'Who should book a strategy call?',
+    a: 'Owners, medical directors, and leadership teams of elective medical practices who want guidance on growth, profitability, operations, and leadership.',
+  },
+  {
+    q: 'How long is the call?',
+    a: 'Thirty minutes. It is a focused conversation, so the time goes to your goals rather than a long presentation.',
+  },
+  {
+    q: 'Will I receive personalized recommendations?',
+    a: 'Yes. You will get practical recommendations tailored to your stage of growth, plus a clearer view of the opportunities impacting revenue, profitability, and performance.',
+  },
+  {
+    q: 'Is this a sales call?',
+    a: 'No. No generic advice and no sales pressure — just a focused discussion around your business goals, challenges, and opportunities.',
+  },
+  {
+    q: 'What should I prepare before the call?',
+    a: 'Nothing formal. It helps to bring your current goals, the challenges slowing you down, and any numbers you already track.',
+  },
+  {
+    q: 'Do I need to be an existing client?',
+    a: 'No. The call is open to any elective medical practice owner, whether or not you have worked with PGC before.',
+  },
+  {
+    q: 'What happens after the call?',
+    a: 'You leave with actionable insights and a better understanding of which solutions fit your business. If one of our programs is a fit, we will walk you through the options.',
+  },
+];
+---
+
+<Base
+  title="Book A Call"
+  description="Book a complimentary 30-minute strategy call with Projected Growth Consulting — personalized guidance on growth, profitability, operations, and leadership for your elective medical practice."
+  ogImage="/images/heroes/book-a-call.png"
+>
+  <PageHero
+    nodeId="159:11240"
+    title="Let's Build Your Next Growth Plan"
+    body="Get personalized guidance on growth, profitability, operations, and leadership from a team that has helped over 6,000 elective medical practices scale successfully."
+    image="/images/heroes/book-a-call.png"
+    imagePosition="50% 9%"
+    primaryCta={{ label: 'Book A MedSpa Consulting Call', href: '#schedule' }}
+    secondaryCta={{ label: 'Browse Courses', href: '/courses' }}
+  />
+
+  <StatsBar
+    nodeId="159:11278"
+    stats={stats}
+    spread
+    intro="Helping elective medical practices grow with proven systems, coaching, and accountability."
+  />
+
+  <Calendly />
+
+  <WhatYoullGet />
+
+  <Testimonials
+    nodeId="159:12468"
+    cta={{ label: 'View All Testimonials', href: '/testimonials' }}
+    mobileCta={{ label: 'Schedule A Call', href: '#schedule' }}
+  />
+
+  <FAQ
+    nodeId="159:12534"
+    items={faqs}
+    eyebrow="FREQUENTLY ASKED QUESTIONS"
+    title="Before You Schedule"
+    body="Everything you need to know before scheduling your strategy call."
+    ctaLabel="Schedule A Call"
+    ctaHref="#schedule"
+    ctaClass="mt-8 lg:mt-12"
+  />
+</Base>

@@ -1,0 +1,175 @@
+---
+/**
+ * Free on-demand masterclasses.
+ * Figma desktop 184:2548 · mobile 184:3675.
+ * The first card is featured (poster left, copy right on lg); the other two sit
+ * in a two-up grid with the poster on top.
+ */
+import Button from '../../Button.astro';
+import SectionHead from '../../SectionHead.astro';
+import DarkCard from '../../DarkCard.astro';
+
+interface Webinar {
+  title: string;
+  body: string;
+  learn: string[];
+  image: string;
+  imageAlt: string;
+  width: number;
+  height: number;
+  href: string;
+}
+
+const webinars: Webinar[] = [
+  {
+    title: 'Smarter Hiring For Elective Medical Practices',
+    body: 'Build a hiring system that attracts, selects, and retains high-performing team members.',
+    learn: [
+      'Create a recruiting pipeline that consistently attracts top talent.',
+      'Find the best hiring channels for elective medical practices.',
+      'Reduce costly hiring mistakes and staff turnover.',
+      'Build a stronger, more accountable team.',
+    ],
+    image: '/images/pgc-proof/webinar-hiring.png',
+    imageAlt:
+      'Hiring & Recruiting For Med Spas Masterclass — live with Kelly Smith, CEO & Founder of Projected Growth Consulting',
+    width: 853,
+    height: 479,
+    href: '/growth-hub',
+  },
+  {
+    title: 'Million Dollar Memberships',
+    body: 'Learn the proven framework Kelly Smith uses to help practices create recurring revenue and increase patient lifetime value.',
+    learn: [
+      'Design a profitable membership program.',
+      'Increase retention and recurring revenue.',
+      'Improve patient loyalty and long-term growth.',
+      'Launch memberships with confidence.',
+    ],
+    image: '/images/pgc-proof/webinar-memberships.png',
+    imageAlt:
+      'Million Dollar Memberships Masterclass — live with Kelly Smith, CEO & Founder of Projected Growth Consulting',
+    width: 598,
+    height: 336,
+    href: '/growth-hub',
+  },
+  {
+    title: 'Six-Figure Sales Events',
+    body: 'Discover the planning process behind high-performing promotional events that generate measurable revenue.',
+    learn: [
+      'Plan successful sales events from start to finish.',
+      'Prepare your team for maximum conversions.',
+      'Increase event attendance and sales performance.',
+      'Avoid common event planning mistakes.',
+    ],
+    image: '/images/pgc-proof/webinar-sales-events.png',
+    imageAlt:
+      '6 Figure Sales Events Simplified — live with Kelly Smith, CEO & Founder of Projected Growth Consulting',
+    width: 598,
+    height: 336,
+    href: '/growth-hub',
+  },
+];
+
+const [featured, ...rest] = webinars;
+
+const heading = 'font-sans text-2xl leading-7 tracking-[-0.04em] text-[#f6f3ec]';
+const bodyText = 'text-base leading-6 tracking-[-0.04em] text-[var(--color-cream)]/80';
+/* Figma 184:2570 — each check row is 29px tall over a 24px line, so the rows sit
+   on a 37px pitch (29 + the 8px list gap) and the last one keeps 16px to the CTA. */
+const checkRow = 'flex min-h-[29px] items-start gap-[5px]';
+---
+
+<section data-node-id="184:2548" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-12 lg:gap-16">
+    <SectionHead
+      eyebrow="FREE EXPERT TRAINING"
+      title="Practical Solutions You Can Start Using Today"
+      body="No fluff. No endless theory. Every webinar is designed to help you solve a specific business challenge with practical strategies you can implement immediately."
+      cta={{ label: 'Schedule A Call', href: '/book-a-call' }}
+    />
+
+    <ul class="grid gap-6 md:grid-cols-2">
+      <li class="md:col-span-2">
+        <DarkCard
+          image={featured.image}
+          alt={featured.imageAlt}
+          width={featured.width}
+          height={featured.height}
+          imgClass="h-[168px] w-full rounded-sm object-cover md:aspect-16/9 md:h-auto lg:aspect-auto lg:h-[380px] lg:w-[calc(50%-8px)] lg:shrink-0"
+          class="lg:flex-row lg:items-center lg:gap-4"
+        >
+          {/* The featured card puts its copy in a column beside the poster, so it
+              goes through the slot rather than the title/body props. */}
+          <div class="flex flex-col gap-4 lg:min-w-0 lg:flex-1">
+            <div class="flex flex-col gap-2">
+              <h3 class={heading}>{featured.title}</h3>
+              <p class={bodyText}>{featured.body}</p>
+            </div>
+            <p class="text-base leading-6 font-medium tracking-[-0.04em] text-[#f6f3ec]">
+              You&rsquo;ll Learn :
+            </p>
+            <ul class="flex flex-col gap-2">
+              {
+                featured.learn.map((point) => (
+                  <li class={checkRow}>
+                    <img
+                      src="/icons/check-circle.svg"
+                      alt=""
+                      aria-hidden="true"
+                      width="16"
+                      height="16"
+                      loading="lazy"
+                      class="mt-1 size-4 shrink-0"
+                    />
+                    <span class={bodyText}>{point}</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <Button href={featured.href} size="lg" class="self-start">Access Now</Button>
+          </div>
+        </DarkCard>
+      </li>
+
+      {
+        rest.map((w) => (
+          <li>
+            <DarkCard
+              image={w.image}
+              alt={w.imageAlt}
+              width={w.width}
+              height={w.height}
+              imgClass="h-[168px] w-full rounded-sm object-cover lg:aspect-16/9 lg:h-auto"
+              title={w.title}
+              body={w.body}
+            >
+              <p class="text-base leading-6 font-medium tracking-[-0.04em] text-[#f6f3ec]">
+                You&rsquo;ll Learn :
+              </p>
+              <ul class="flex flex-col gap-2">
+                {w.learn.map((point) => (
+                  <li class={checkRow}>
+                    <img
+                      src="/icons/check-circle.svg"
+                      alt=""
+                      aria-hidden="true"
+                      width="16"
+                      height="16"
+                      loading="lazy"
+                      class="mt-1 size-4 shrink-0"
+                    />
+                    <span class={bodyText}>{point}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button href={w.href} size="lg" class="mt-auto self-start">
+                Access Now
+              </Button>
+            </DarkCard>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,142 @@
+---
+/**
+ * Scheduler section — Figma desktop 159:11294 · mobile 159:22992.
+ *
+ * In Figma the booking widget is a flat screenshot of the live Calendly embed
+ * (node 159:12426, 1280x773), so this renders the real embed: our own left
+ * rail — the brand mark, event details and the clock/calendar rows the
+ * screenshot shows — beside Calendly's inline widget, with the widget's own
+ * duplicate event panel hidden. No fake calendar UI.
+ *
+ * ponytail: one env var, no config file. Set PUBLIC_CALENDLY_URL to the event
+ * URL and the scheduler switches on at build time; without it the panel falls
+ * back to a working request-a-time CTA rather than an empty box.
+ */
+import Button from '../../Button.astro';
+
+const eyebrow = 'SCHEDULE YOUR CALL';
+const title = 'Choose A Time That Works For You';
+const body =
+  "Select a time that fits your schedule and reserve your strategy session. We'll discuss your goals, challenges, and the opportunities available for your practice.";
+
+/* Event card copy, transcribed from the widget panel in the design. */
+const event = {
+  host: 'PGC Coaches',
+  name: 'PGC Introduction Call',
+  duration: '30 min',
+  body: "Meet with one of our experts to discuss your business's needs and how we can assist you!",
+};
+
+let embedUrl = '';
+if (import.meta.env.PUBLIC_CALENDLY_URL) {
+  /* URL, not string concat — the configured value may already carry a query. */
+  const url = new URL(import.meta.env.PUBLIC_CALENDLY_URL);
+  url.searchParams.set('hide_event_type_details', '1'); // the left rail below already says all this
+  url.searchParams.set('hide_gdpr_banner', '1');
+  url.searchParams.set('primary_color', 'b5be3f'); // --color-lime
+  embedUrl = url.toString();
+}
+---
+
+<section id="schedule" data-node-id="159:11294" class="scroll-mt-24 bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-12 lg:gap-16">
+    <div
+      class="flex flex-col items-center gap-3 text-center lg:max-w-[865px] lg:items-start lg:text-left"
+    >
+      {/* Figma 159:12421 — 16px/20 Inter Regular at -1px (162px wide), not 12px/500. */}
+      <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">{eyebrow}</p>
+      <h2 class="text-[2.5rem] tracking-[-0.04em] text-[#111827] lg:text-[4rem]">
+        {title}
+      </h2>
+      {/* Mobile 159:22993 puts 32px between the heading block and the body
+          (title 0..128, body at 160); desktop 159:12419 keeps the 12px gap. */}
+      <p class="mt-5 text-sm leading-6 tracking-[-1px] text-[#6b7280] lg:mt-0 lg:text-base">
+        {body}
+      </p>
+    </div>
+
+    <div class="overflow-hidden rounded-xl border border-[#e4e4e7] bg-white">
+      <div class="flex flex-col lg:flex-row">
+        <div
+          class="flex flex-col gap-2 border-b border-[#e4e4e7] p-6 lg:w-[33.33%] lg:shrink-0 lg:border-r lg:border-b-0 lg:pt-12"
+        >
+          {/* self-start: a column flex item stretches to the panel width, which
+              made w-auto resolve to 100% and squashed the square mark flat. */}
+          <img
+            src="/images/logo-mark.png"
+            alt="Projected Growth Consulting"
+            width="100"
+            height="101"
+            class="mb-4 h-[3.75rem] w-auto self-start lg:h-[6.25rem]"
+          />
+          <p class="text-base leading-6 font-medium tracking-[-1px] text-[#6b7280]">
+            {event.host}
+          </p>
+          <p class="text-2xl leading-8 font-semibold tracking-[-1px] text-[#111827]">
+            {event.name}
+          </p>
+          <p
+            class="flex items-center gap-2 text-base leading-6 font-medium tracking-[-1px] text-[#111827]"
+          >
+            <img
+              src="/icons/timer-2-line.svg"
+              alt=""
+              aria-hidden="true"
+              width="16"
+              height="16"
+              class="size-4 shrink-0 object-contain"
+            />
+            {event.duration}
+          </p>
+          <p
+            class="flex items-center gap-2 text-base leading-6 font-medium tracking-[-1px] text-[#111827]"
+          >
+            <img
+              src="/icons/calendar-line.svg"
+              alt=""
+              aria-hidden="true"
+              width="16"
+              height="16"
+              class="size-4 shrink-0 object-contain"
+            />
+            Pick a date to see open times
+          </p>
+          <p class="mt-4 text-base leading-6 tracking-[-1px] text-[#6b7280]">
+            {event.body}
+          </p>
+        </div>
+
+        {
+          embedUrl ? (
+            <div
+              id="calendly-embed"
+              data-calendly-mount
+              class="calendly-inline-widget h-[560px] flex-1 lg:h-[773px]"
+              data-url={embedUrl}
+              style="min-width:320px"
+            />
+          ) : (
+            <div class="flex flex-1 flex-col items-start justify-center gap-4 p-6 lg:p-10">
+              <p class="text-2xl leading-8 font-semibold tracking-[-1px] text-[#111827]">
+                Request Your Time Slot
+              </p>
+              <p class="max-w-prose text-base leading-6 tracking-[-1px] text-[#6b7280]">
+                Tell us the days and times that suit you and we'll confirm your 30-minute
+                strategy call by email.
+              </p>
+              <Button href="/contact-us" size="lg">
+                Request A Time
+              </Button>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+{
+  embedUrl && (
+    <script is:inline async src="https://assets.calendly.com/assets/external/widget.js" />
+  )
+}

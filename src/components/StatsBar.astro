@@ -1,0 +1,127 @@
+---
+/**
+ * Stats strip that sits directly under the inner-page hero (12 pages).
+ * Figma desktop 159:8311 / mobile 159:19698 (base — intro line + 4 stats)
+ *       desktop 159:5701  (/about — adds the two-tone lead statement)
+ *       desktop 159:13327 (/consulting — display heading instead of intro, 3 stats)
+ *
+ * The three treatments differ only in the block ABOVE the grid, so the "variant"
+ * is expressed by which header prop you pass:
+ *   base        -> intro
+ *   /about      -> lead + leadAccent + intro
+ *   /consulting -> heading
+ */
+interface Stat {
+  /** Include the suffix: "6,000+", "$250M+", "92%", "Custom". */
+  value: string;
+  label: string;
+  /**
+   * Desktop-only overrides for a `spread` row, where Figma gives each column its
+   * own width and alignment (/consulting "Program Highlights", 159:13330):
+   * 'lg:w-[188px]', 'lg:w-[265px] lg:text-center', 'lg:w-[244px] lg:text-right'.
+   */
+  class?: string;
+}
+
+interface Props {
+  stats: Stat[];
+  /** Grey 20px centred line above the grid. */
+  intro?: string;
+  /** Display heading above the grid (renders an <h2>). */
+  heading?: string;
+  /** Big statement above everything; leadAccent is the lime-coloured tail. */
+  lead?: string;
+  leadAccent?: string;
+  /** Figma node of the calling page's Stats section, kept for design traceability. */
+  nodeId?: string;
+  /**
+   * Desktop distribution. Default keeps the equal-width grid every other page
+   * already renders. `true` = Figma's `justify-between` row of hug-width columns
+   * (159:13227, 159:13330, /press 159:16632, /pgc-proof 184:2532), so the last
+   * stat lands on the right rail edge.
+   */
+  spread?: boolean;
+  class?: string;
+}
+
+const {
+  stats,
+  intro,
+  heading,
+  lead,
+  leadAccent,
+  nodeId = '159:8311',
+  spread = false,
+  class: className = '',
+} = Astro.props;
+
+/* Figma colours the trailing +/% lime and leaves the number navy. */
+const split = (value: string): [string, string] => {
+  const m = value.match(/^(.*?)([+%]+)$/);
+  return m ? [m[1], m[2]] : [value, ''];
+};
+
+/* Tailwind needs the class literal, so map instead of interpolating. */
+const cols =
+  { 1: 'md:grid-cols-1', 2: 'md:grid-cols-2', 3: 'md:grid-cols-3' }[
+    stats.length
+  ] ?? 'xl:grid-cols-4';
+---
+
+<section
+  data-node-id={nodeId}
+  class:list={['bg-[#f6f3ec]', className]}
+>
+  <div class="rail flex flex-col gap-12 py-20 md:gap-16">
+    {
+      lead && (
+        <p class="max-w-[1107px] text-[28px] leading-[1.15] tracking-[-0.05em] text-[#111827] md:text-[48px] md:leading-[56px] md:tracking-[-0.083em]">
+          {lead}{' '}
+          {leadAccent && <span class="text-lime">{leadAccent}</span>}
+        </p>
+      )
+    }
+
+    <div class="flex flex-col gap-12">
+      {
+        /* 48px on mobile too — Figma 159:23845 wraps it to two lines. */
+        heading && (
+          <h2 class="text-center text-[48px] tracking-[-0.06em] text-[#111827]">
+            {heading}
+          </h2>
+        )
+      }
+      {
+        intro && (
+          <p class="text-center text-xl leading-8 tracking-[-1px] text-[#6b7280]">
+            {intro}
+          </p>
+        )
+      }
+
+      <div
+        class:list={[
+          'grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 md:gap-y-12',
+          cols,
+          spread &&
+            (stats.length >= 4 ? 'xl:flex xl:justify-between' : 'lg:flex lg:justify-between'),
+        ]}
+      >
+        {
+          stats.map((stat) => {
+            const [num, suffix] = split(stat.value);
+            return (
+              <div class={stat.class}>
+                {/* one line on purpose — a newline here prints a space before the +/% */}
+                <p class="font-display text-[48px] leading-[56px] font-medium tracking-[-0.01em] text-[#111827]">{num}{suffix && <span class="text-lime">{suffix}</span>}</p>
+                <p class="text-base leading-8 tracking-[-1px] text-[#6b7280]">
+                  {stat.label}
+                </p>
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+</section>

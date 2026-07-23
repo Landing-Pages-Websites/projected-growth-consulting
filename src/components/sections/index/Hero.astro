@@ -1,0 +1,97 @@
+---
+/**
+ * Home hero — Figma 159:3979 (desktop 1440x900) / 159:19171 (mobile 393x1261).
+ * Home-only: full-bleed photo, four stats pinned to the right gutter column on
+ * desktop and stacked under the copy on mobile. Header.astro is absolutely
+ * positioned over this section, hence the large top padding.
+ */
+import Button from '../../Button.astro';
+import SocialProof from '../../SocialProof.astro';
+
+const stats = [
+  { value: '6,000+', label: 'Practices Served' },
+  { value: '$250M+', label: 'Client Revenue Generated' },
+  { value: '30%', label: 'Revenue Increase in 90 days' },
+  { value: '20+ Years', label: 'Helping Practice Owners Scale' },
+];
+---
+
+<section
+  data-node-id="159:3979"
+  class="relative flex min-h-[1261px] flex-col overflow-hidden pt-[176px] pb-10 lg:min-h-[900px] lg:pt-[108px] lg:pb-[104px]"
+>
+  <div class="absolute inset-0">
+    <img
+      src="/images/home-hero.png"
+      alt=""
+      aria-hidden="true"
+      width="1440"
+      height="900"
+      decoding="async"
+      fetchpriority="high"
+      class="size-full object-cover"
+    />
+    <div class="absolute inset-0 bg-black/55"></div>
+  </div>
+
+  {/* Two columns on desktop: the 624px title column bottom-anchored, and the
+      608px column carrying the stats at the top and the pitch at the bottom.
+      Those are the 1440 figures — the title column is a shrinkable basis so the
+      right column keeps its 414px intrinsic width down at 1024 instead of
+      collapsing to 192px and pushing the CTAs off-screen.
+      Mobile collapses to one column — social proof, title, pitch, then stats. */}
+  <div class="rail relative flex flex-1 flex-col gap-8 lg:flex-row lg:gap-12">
+    <div class="flex flex-col justify-end gap-6 lg:basis-[624px] lg:min-w-0 lg:gap-3">
+      <SocialProof class="flex-col text-center lg:flex-row lg:text-left" />
+      <h1
+        class="text-center text-5xl tracking-[-0.0625em] text-[var(--color-cream)] lg:text-left lg:text-7xl lg:tracking-[-0.042em]"
+      >
+        The Business OS for Elective Medical Practices.
+      </h1>
+    </div>
+
+    <div class="flex flex-1 flex-col justify-between gap-10">
+      <ul class="order-2 flex w-full flex-col gap-4 lg:order-1 lg:w-[414px] lg:self-end">
+        {
+          stats.map((stat) => (
+            <li class="flex flex-col gap-3 border-b border-white/20 pb-4 text-center lg:text-left">
+              <p class="font-display text-5xl leading-[1.1] tracking-[-0.04em] text-[var(--color-cream)]">
+                {stat.value}
+              </p>
+              <p class="text-base leading-[normal] tracking-[-1px] text-[var(--color-cream)]">
+                {stat.label}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="order-1 flex flex-col items-center gap-6 lg:order-2 lg:items-start">
+        <p
+          class="text-center text-base leading-6 font-medium tracking-[-1px] text-[var(--color-cream)] lg:text-left lg:text-xl lg:leading-7"
+        >
+          Courses, coaching, and a membership built by Kelly Smith — for med spa, biohacking,
+          plastic surgery, and functional medicine owners ready to scale profitably.
+        </p>
+        <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+          <Button href="/book-a-call" size="lg" class="w-full sm:w-auto">
+            Book A MedSpa Consulting Call
+          </Button>
+          <Button href="/courses" variant="secondary" size="lg" class="w-full sm:w-auto">
+            Browse Courses
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Figma 159:3994 — 78px blurred band fading the photo into the section below. */}
+  <img
+    src="/images/home-hero-strip.png"
+    alt=""
+    aria-hidden="true"
+    width="1024"
+    height="56"
+    class="pointer-events-none absolute inset-x-0 bottom-0 hidden h-[78px] w-full object-fill backdrop-blur-[2px] lg:block"
+  />
+</section>

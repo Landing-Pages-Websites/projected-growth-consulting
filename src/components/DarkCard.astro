@@ -1,0 +1,128 @@
+---
+/**
+ * The dark #111827 photo card. One Figma component, previously copy-pasted into
+ * six files: /press (159:17802, 159:18966), /growth-hub (159:8406, 159:9610,
+ * 159:9765), /consulting (159:13240), /resources (159:14810) and /pgc-proof
+ * (184:2548, 184:2663).
+ *
+ * Renders the card only — the caller keeps its own <li> so grid-level classes
+ * (col-span, etc.) stay where they belong.
+ *
+ * Content shapes, all optional and additive:
+ *   kicker    → the 20px line ABOVE the title
+ *   takeaways → the "Key Takeaways" bullet list
+ *   href      → makes the card a link, with the hover micro-interactions
+ *   arrow     → the lime diagonal arrow pinned to the bottom
+ *   <slot />  → anything extra under the copy (check-lists, buttons)
+ */
+interface Props {
+  image: string;
+  /** Empty alt = decorative; the img is hidden from a11y too. */
+  alt?: string;
+  /** Intrinsic size of the source file, for CLS. */
+  width: number | string;
+  height: number | string;
+  imgClass?: string;
+  kicker?: string;
+  title?: string;
+  /** Extra classes on the <h3> — e.g. a min-height where Figma reserves 2 lines. */
+  titleClass?: string;
+  body?: string;
+  takeaways?: string[];
+  href?: string;
+  arrow?: boolean;
+  class?: string;
+}
+
+const {
+  image,
+  alt = '',
+  width,
+  height,
+  imgClass = 'h-[322px] w-full rounded-[4px] object-cover',
+  kicker,
+  title,
+  titleClass = '',
+  body,
+  takeaways,
+  href,
+  arrow = false,
+  class: className,
+} = Astro.props;
+
+const Tag = href ? 'a' : 'div';
+const muted = 'leading-6 tracking-[-0.04em] text-[var(--color-cream)]/80';
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'flex h-full flex-col gap-4 rounded-lg border border-black/10 bg-[#111827] px-[15px] py-4',
+    href && 'group',
+    className,
+  ]}
+>
+  <img
+    src={image}
+    alt={alt}
+    aria-hidden={alt === '' ? 'true' : undefined}
+    width={width}
+    height={height}
+    loading="lazy"
+    decoding="async"
+    class:list={[
+      imgClass,
+      href && 'transition-transform duration-500 ease-out group-hover:scale-[1.02]',
+    ]}
+  />
+
+  {
+    (kicker || title || body || takeaways) && (
+      <div class="flex flex-col gap-2">
+        {kicker && <p class:list={['text-xl', muted]}>{kicker}</p>}
+        {title && (
+          <h3
+            class:list={[
+              'font-sans text-2xl leading-7 tracking-[-0.04em] text-[#f6f3ec]',
+              titleClass,
+            ]}
+          >
+            {title}
+          </h3>
+        )}
+        {body && <p class:list={['text-base', muted]}>{body}</p>}
+        {takeaways && (
+          <div class:list={['text-base', muted]}>
+            <p>Key Takeaways</p>
+            <ul class="mt-6 list-disc ps-6">
+              {takeaways.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  <slot />
+
+  {/* Figma 159:17809 — decorative diagonal arrow. */}
+  {
+    arrow && (
+      <img
+        src="/icons/card-arrow.svg"
+        alt=""
+        aria-hidden="true"
+        width="40"
+        height="40"
+        loading="lazy"
+        class:list={[
+          'mt-auto size-10',
+          href &&
+            'transition-transform duration-150 ease-out group-hover:translate-x-1 group-hover:-translate-y-1',
+        ]}
+      />
+    )
+  }
+</Tag>

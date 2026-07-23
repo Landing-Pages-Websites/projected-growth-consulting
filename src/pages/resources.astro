@@ -1,0 +1,83 @@
+---
+/**
+ * /resources — Figma desktop 159:14755 / mobile 159:25273.
+ * Hero · Stats · Featured Resources · Books · PGC Growth App · FAQs · Footer.
+ */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import StatsBar from '../components/StatsBar.astro';
+import FAQ from '../components/FAQ.astro';
+import type { FaqItem } from '../components/FAQ.astro';
+import FeaturedResources from '../components/sections/resources/FeaturedResources.astro';
+import Books from '../components/sections/resources/Books.astro';
+import PgcGrowthApp from '../components/sections/resources/PgcGrowthApp.astro';
+
+const description =
+  'Proven tools, templates, books and the PGC Growth App for med spas, wellness centers and aesthetic practices — built to improve profitability, streamline operations and accelerate growth.';
+
+const stats = [
+  { value: '6,000+', label: 'Practice Owners Supported' },
+  { value: '$250M+', label: 'Client Revenue Generated' },
+  { value: '15+', label: 'Years of Industry Experience' },
+  { value: '92%', label: 'Members Renew Annually' },
+];
+
+/* Figma 159:14986 ships copy for every question but only the first answer;
+   the remaining five are written from this page's own facts. */
+const faqs: FaqItem[] = [
+  {
+    q: 'Are the free resources really free?',
+    a: 'Yes. Many of our most popular tools and templates can be downloaded at no cost.',
+  },
+  {
+    q: 'Who are these resources designed for?',
+    a: 'They are built for med spas, wellness centers, and aesthetic practices — the owners and leadership teams responsible for profitability, operations, and growth.',
+  },
+  {
+    q: 'Can I customize the templates?',
+    a: 'Yes. The trackers, workbooks, and templates are yours to adapt to your own goals, services, pricing, and team structure.',
+  },
+  {
+    q: 'How do I access purchased resources?',
+    a: 'Books and workbooks are purchased and delivered through Amazon. The PGC Growth App is accessed by subscription, starting at $9.99 per month.',
+  },
+  {
+    q: 'Is the PGC App included with other programs?',
+    a: 'The PGC Growth App is available on its own subscription, starting at $9.99 per month. If you are already enrolled in a PGC program, contact us and we will confirm what your membership includes.',
+  },
+  {
+    q: 'Which resource should I start with?',
+    a: 'Most practice owners start with the free 7-Figure KPI Tracker, then add the PGC Growth App once they want their benchmarks, revenue, and productivity tracked in one place.',
+  },
+];
+---
+
+<Base title="Resources" description={description} ogImage="/images/heroes/resources.jpg">
+  <PageHero
+    nodeId="159:14756"
+    title="Tools, Templates & Growth Resources"
+    body="Access proven resources designed to help med spas, wellness centers, and aesthetic practices improve profitability, streamline operations, and accelerate growth."
+    image="/images/heroes/resources.jpg"
+    primaryCta={{ label: 'Book A MedSpa Consulting Call', href: '/book-a-call' }}
+    secondaryCta={{ label: 'Browse Courses', href: '/courses' }}
+  />
+
+  <StatsBar
+    nodeId="159:14794"
+    stats={stats}
+    intro="Helping elective medical practices grow with proven systems, coaching, and accountability."
+  />
+
+  <FeaturedResources />
+  <Books />
+  <PgcGrowthApp />
+
+  <FAQ
+    nodeId="159:14973"
+    items={faqs}
+    eyebrow="Frequently Asked Questions"
+    title="Questions About Our Resources?"
+    body="Everything you need to know before downloading, purchasing, or using our tools."
+    ctaClass="mt-8 lg:mt-6"
+  />
+</Base>

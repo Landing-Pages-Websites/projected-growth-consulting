@@ -1,0 +1,127 @@
+---
+/**
+ * "Blogs" — Figma 159:5511 (desktop) / 159:19530 (mobile).
+ * Three article cards; only the KPI post has a route in figma-map.json, so the
+ * other two point at the blog index rather than invent slugs.
+ */
+import Button from '../../Button.astro';
+
+interface Post {
+  tag: string;
+  title: string;
+  excerpt: string;
+  image: string;
+  imageAlt: string;
+  href: string;
+}
+
+const posts: Post[] = [
+  {
+    tag: 'Profit Killers',
+    title: 'Profit Killer #5: Not Knowing Your Key Performance Indicators',
+    excerpt:
+      'To make the changes needed for your profit to grow, you have to know how your business currently performs. Track and measure....',
+    image: '/images/index/blog-profit-killers.jpg',
+    imageAlt: 'A marketing dashboard showing cost per conversion and quality score metrics',
+    href: '/blog',
+  },
+  {
+    tag: 'Financial',
+    title: 'Med Spa KPIs: The Owner’s Dashboard Guide',
+    excerpt:
+      'Schedule a consultation to turn med spa KPIs into smarter weekly decisions, stronger margins, and a focused plan for profitable practice growth.....',
+    image: '/images/index/blog-med-spa-kpis.png',
+    imageAlt: 'A med spa owner reviewing a KPI dashboard',
+    href: '/blog/med-spa-kpis-dashboard-guide',
+  },
+  {
+    tag: 'Operations',
+    title: '9 Keys to Stronger Aesthetic Clinic Operations',
+    excerpt:
+      'Get practical tips to improve aesthetic clinic operations, streamline your workflow, and create a smoother patient experience for lasting business growth....',
+    image: '/images/index/blog-clinic-operations.png',
+    imageAlt: 'A clinic team coordinating the day’s treatment schedule',
+    href: '/blog',
+  },
+];
+---
+
+<section data-node-id="159:5511" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-16">
+    <div
+      class="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-end lg:justify-between lg:gap-10 lg:text-left"
+    >
+      <div class="flex flex-col gap-3 lg:basis-[633px] lg:min-w-0">
+        <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">
+          Latest Insights
+        </p>
+        <h2 class="text-[2.5rem] text-[#111827] md:text-[4rem]">
+          Practical Growth Strategies For Modern Practice Owners
+        </h2>
+      </div>
+      <p
+        class="text-sm leading-6 tracking-[-1px] text-[#6b7280] md:text-base lg:basis-[561px] lg:min-w-0 lg:text-right"
+      >
+        Explore proven frameworks, leadership lessons, and business strategies used by thousands of
+        elective medical practices to improve profitability, strengthen operations, and scale with
+        confidence.
+      </p>
+    </div>
+
+    {/* Figma 159:5518 y410 / 159:5552 y1025 — both gaps are 64. The extra 18 keeps the
+        cards on Figma's y now that the stand-in display font renders a shorter H2; the
+        cards -> "Read More" gap stays at Figma's 64. */}
+    <ul class="grid gap-6 md:mt-[18px] md:grid-cols-2 lg:grid-cols-3">
+      {
+        posts.map((post) => (
+          <li class="flex md:last:col-span-2 lg:last:col-span-1">
+            <a
+              href={post.href}
+              class="group flex flex-1 flex-col gap-6 rounded-lg border border-[#d4d4d8] bg-[var(--color-surface)] p-4 transition-colors duration-200 hover:border-[var(--color-lime-border)]"
+            >
+              <div class="flex flex-col gap-5">
+                <div class="relative h-[275px] overflow-hidden rounded-xl">
+                  <img
+                    src={post.image}
+                    alt={post.imageAlt}
+                    width="900"
+                    height="600"
+                    loading="lazy"
+                    decoding="async"
+                    class="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                  />
+                  <p class="absolute top-[11px] left-[9px] flex items-center gap-2 rounded-full bg-white py-1 pr-3 pl-2 text-sm leading-[1.6] font-medium tracking-[-0.014em] text-[#6b7280]">
+                    <span class="size-1.5 shrink-0 rounded-full bg-[#111827]" aria-hidden="true" />
+                    {post.tag}
+                  </p>
+                </div>
+
+                <h3 class="text-2xl leading-[1.4] tracking-[-1px] text-[#111827] md:min-h-[68px]">
+                  {post.title}
+                </h3>
+
+                <p class="text-sm leading-5 tracking-[-1px] text-[#6b7280] md:min-h-[72px] md:text-base md:leading-6">
+                  {post.excerpt}
+                </p>
+              </div>
+
+              <img
+                src="/icons/card-arrow.svg"
+                alt=""
+                aria-hidden="true"
+                width="40"
+                height="40"
+                loading="lazy"
+                class="mt-auto size-10 transition-transform duration-200 ease-out group-hover:translate-x-1 group-hover:-translate-y-1"
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex justify-center">
+      <Button href="/blog" size="lg">Read More</Button>
+    </div>
+  </div>
+</section>

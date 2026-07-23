@@ -1,0 +1,132 @@
+---
+/**
+ * "Latest Articles" — Figma desktop 184:3116 / mobile 184:4521.
+ * Header + category filter rail (184:3224) + a 3-up card grid (184:3117) +
+ * pagination (184:3245). Mobile stacks the grid and scrolls the filter rail.
+ */
+import SectionHead from '../../SectionHead.astro';
+import ArticleCard from './ArticleCard.astro';
+import { categories, latestPosts } from '../../../lib/posts';
+
+const filters = ['All', ...categories];
+/** Figma draws four pages; only page one has content in the design. */
+const pages = [1, 2, 3, 4];
+const filterBase =
+  'shrink-0 cursor-pointer rounded-lg px-4 py-2 text-base leading-6 text-[#6b7280] transition-colors hover:text-[#111827] aria-pressed:bg-[var(--color-lime)] aria-pressed:text-white aria-pressed:hover:text-white';
+---
+
+<section id="latest-articles" data-node-id="184:3116" class="bg-[#f6f3ec] py-20">
+  <div class="rail flex flex-col gap-12 lg:gap-16">
+    <div class="flex flex-col gap-10">
+      <SectionHead
+        eyebrow="LATEST ARTICLES"
+        title="Practical Advice You Can Implement This Week"
+        body="No generic business theory. Every article focuses on solving common challenges practice owners face with actionable strategies you can put into practice immediately."
+      />
+
+      {/* Wider than the phone viewport by design — it scrolls, bleeding into the gutter. */}
+      <div
+        data-node-id="184:3224"
+        role="group"
+        aria-label="Filter articles by category"
+        class="-mx-5 flex items-center overflow-x-auto px-5 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden"
+      >
+        {
+          filters.map((label, i) => (
+            <button type="button" data-filter={label} aria-pressed={i === 0} class={filterBase}>
+              {label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <ul data-node-id="184:3117" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        latestPosts.map((post) => (
+          <li data-card>
+            <ArticleCard post={post} />
+          </li>
+        ))
+      }
+    </ul>
+
+    <p data-empty hidden class="text-center text-base leading-6 tracking-[-1px] text-[#6b7280]">
+      No articles in this category yet.
+    </p>
+
+    {/* ponytail: presentational — the design shows four pages but the post store
+        holds one. Wire the numbers to a paginate() route once it holds more. */}
+    <nav data-node-id="184:3245" aria-label="Pagination" class="flex items-center justify-center">
+      <button
+        type="button"
+        disabled
+        aria-label="Previous page"
+        class="cursor-not-allowed px-4 py-2"
+      >
+        <img src="/icons/pagination-arrow.svg" alt="" aria-hidden="true" width="24" height="24" class="size-6" />
+      </button>
+      {
+        pages.map((page) =>
+          page === 1 ? (
+            <span
+              aria-current="page"
+              class="rounded-lg bg-[var(--color-lime)] px-4 py-2 text-base leading-6 text-white"
+            >
+              {page}
+            </span>
+          ) : (
+            <button
+              type="button"
+              disabled
+              class="cursor-not-allowed px-4 py-2 text-base leading-6 text-[#6b7280]"
+            >
+              {page}
+            </button>
+          )
+        )
+      }
+      <button
+        type="button"
+        disabled
+        aria-label="Next page"
+        class="cursor-not-allowed px-4 py-2"
+      >
+        <img
+          src="/icons/pagination-arrow.svg"
+          alt=""
+          aria-hidden="true"
+          width="24"
+          height="24"
+          class="size-6 rotate-180"
+        />
+      </button>
+    </nav>
+  </div>
+</section>
+
+<script>
+  const section = document.getElementById('latest-articles');
+  if (section) {
+    const buttons = section.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const items = section.querySelectorAll<HTMLLIElement>('[data-card]');
+    const empty = section.querySelector<HTMLElement>('[data-empty]');
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+
+        let shown = 0;
+        items.forEach((item) => {
+          const category = item.querySelector('[data-category]')?.getAttribute('data-category');
+          const match = filter === 'All' || category === filter;
+          item.hidden = !match;
+          if (match) shown += 1;
+        });
+
+        if (empty) empty.hidden = shown > 0;
+      });
+    });
+  }
+</script>

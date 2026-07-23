@@ -1,0 +1,160 @@
+---
+/**
+ * FAQ accordion — Figma 159:5432 (desktop) / 159:19451 (mobile).
+ * Two columns on lg (578px copy + 662px accordion, 40px gap = the 1280 rail),
+ * stacked and centred below.
+ *
+ * FAQPage JSON-LD is emitted ONLY when `approved` is set. Every FAQ frame in
+ * Figma expands just its first item, so answers 2..N were written to fill the
+ * design rather than taken from it. Publishing those as machine-readable Q&A
+ * would put unreviewed claims about a medical business into the SERP, so the
+ * schema stays off until someone flips this per page. Visible copy is unaffected.
+ */
+import Button from './Button.astro';
+
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  items: FaqItem[];
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+  /** Pass "" to drop the button (e.g. on /book-a-call). */
+  ctaLabel?: string;
+  ctaHref?: string;
+  /** Top margin on the CTA. /press (159:19010) sits 24px under the body, not 64. */
+  ctaClass?: string;
+  /**
+   * Copy-column alignment BELOW lg. Figma centres it on most pages (home
+   * 159:19452 puts the CTA at x=94.5 of 345); /contact-us (184:4260) left-aligns
+   * every child at x=0. Desktop is always left.
+   */
+  align?: 'center' | 'left';
+  /** Set once the client has signed off every answer — turns on FAQPage JSON-LD. */
+  approved?: boolean;
+  /** Figma node of the calling page's FAQ section, kept for design traceability. */
+  nodeId?: string;
+  class?: string;
+}
+
+const {
+  items,
+  eyebrow = 'Frequently Asked Questions',
+  title = 'Everything You Need To Know Before You Get Started',
+  body = "Whether you're exploring coaching, consulting, courses, or the Growth Hub, here are answers to the questions we hear most often from practice owners.",
+  ctaLabel = 'Schedule A Call',
+  ctaHref = '/book-a-call',
+  ctaClass = 'mt-8 lg:mt-16',
+  align = 'center',
+  approved = false,
+  nodeId = '159:5432',
+  class: className = '',
+} = Astro.props;
+
+// Unique per instance so ids never collide with another accordion on the page.
+const uid = Math.random().toString(36).slice(2, 8);
+
+const schema = approved
+  ? JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: items.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: { '@type': 'Answer', text: item.a },
+      })),
+    }).replace(/</g, '\\u003c')
+  : null;
+---
+
+<section class:list={['bg-[#f6f3ec] py-20', className]} data-node-id={nodeId}>
+  <div class="rail flex flex-col gap-16 lg:flex-row lg:items-start lg:gap-10">
+    <div
+      class:list={[
+        'flex flex-col lg:min-w-0 lg:basis-[578px] lg:items-start lg:text-left',
+        align === 'center' ? 'items-center text-center' : 'items-start text-left',
+      ]}
+    >
+      {/* Figma 159:5435 — 16px/20 Inter Regular at -1px, uppercase. */}
+      <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">{eyebrow}</p>
+      <h2 class="mt-3 text-[2.5rem] tracking-[-0.04em] text-[#111827] lg:text-[4rem]">
+        {title}
+      </h2>
+      <p class="mt-3 text-sm leading-6 tracking-[-1px] text-[#6b7280] lg:text-base">
+        {body}
+      </p>
+      {
+        ctaLabel && (
+          <Button href={ctaHref} size="lg" class={ctaClass}>
+            {ctaLabel}
+          </Button>
+        )
+      }
+    </div>
+
+    {/* Figma FAQ items are 88px collapsed / 216 open (159:5446). A real border-b
+        made every row 1px taller; the divider is drawn as a shadow instead. */}
+    <div class="lg:min-w-0 lg:basis-[662px]" data-faq>
+      {
+        items.map((item, i) => (
+          <div class="shadow-[0_1px_0_#e4e4e7]">
+            <h3>
+              <button
+                type="button"
+                id={`faq-${uid}-b${i}`}
+                aria-controls={`faq-${uid}-p${i}`}
+                aria-expanded={i === 0 ? 'true' : 'false'}
+                class="group flex w-full items-center gap-5 p-6 text-left"
+              >
+                <span class="flex-1 font-[family-name:var(--font-display)] text-base leading-6 font-semibold text-[#111827] lg:text-lg lg:leading-8">
+                  {item.q}
+                </span>
+                <span class="grid size-10 shrink-0 place-items-center rounded-full bg-white transition-colors duration-200 group-aria-expanded:bg-[var(--color-lime)]">
+                  <img
+                    src="/icons/chevron-down.svg"
+                    alt=""
+                    aria-hidden="true"
+                    width="13"
+                    height="8"
+                    loading="lazy"
+                    class="h-2 w-[13px] brightness-0 transition-transform duration-200 group-aria-expanded:rotate-180"
+                  />
+                </span>
+              </button>
+            </h3>
+            <div
+              id={`faq-${uid}-p${i}`}
+              hidden={i !== 0}
+              class="-mt-2 px-6 pb-6 text-sm leading-5 text-[#6b7280] lg:text-base lg:leading-7"
+            >
+              <p>{item.a}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  {schema && <script type="application/ld+json" is:inline set:html={schema} />}
+</section>
+
+<script>
+  // ponytail: delegated click per accordion root — Enter/Space come free on <button>.
+  document.querySelectorAll<HTMLElement>('[data-faq]').forEach((root) => {
+    root.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement | null;
+      const btn = target?.closest<HTMLButtonElement>('button[aria-controls]');
+      if (!btn || !root.contains(btn)) return;
+      const willOpen = btn.getAttribute('aria-expanded') !== 'true';
+      root.querySelectorAll<HTMLButtonElement>('button[aria-controls]').forEach((b) => {
+        const open = willOpen && b === btn;
+        b.setAttribute('aria-expanded', String(open));
+        const panel = document.getElementById(b.getAttribute('aria-controls') ?? '');
+        if (panel) panel.hidden = !open;
+      });
+    });
+  });
+</script>

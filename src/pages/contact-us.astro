@@ -1,0 +1,89 @@
+---
+/**
+ * /contact-us — Figma desktop 184:2148 · mobile 184:4128.
+ * Hero · Stats · Contact Form · Testimonials · FAQs · Footer.
+ */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import StatsBar from '../components/StatsBar.astro';
+import Testimonials from '../components/Testimonials.astro';
+import FAQ, { type FaqItem } from '../components/FAQ.astro';
+import ContactForm from '../components/sections/contact-us/ContactForm.astro';
+
+const stats = [
+  { value: '6,000+', label: 'Practice Owners Supported' },
+  { value: '$250M+', label: 'Client Revenue Generated' },
+  { value: '15+', label: 'Years of Industry Experience' },
+  { value: '92%', label: 'Members Renew Annually' },
+];
+
+/* Figma 184:2334 ships all six questions but only the first answer — the other
+   five items are collapsed, so their answer text does not exist in the file.
+   Answers 2–6 are written from this page's own copy (the hero, the contact
+   block and the two CTAs); no new claims or figures. */
+const faqs: FaqItem[] = [
+  {
+    q: "What's the best way to reach your team?",
+    a: "You can complete the contact form on this page, email us, or call our office during business hours. We'll respond as quickly as possible.",
+  },
+  {
+    q: 'How soon can I expect a response?',
+    a: 'Our team reviews every message and gets back to you as soon as possible. If you reach out outside of business hours, we follow up once the office reopens.',
+  },
+  {
+    q: 'I want to discuss growing my practice. Should I use this form?',
+    a: 'You can, but the quickest route is to book a MedSpa consulting call. That gives you a focused conversation about your goals, your challenges, and the opportunities in front of your practice.',
+  },
+  {
+    q: 'Do you work with practices outside of med spas?',
+    a: 'Yes. We work with elective medical practices of every kind — our coaching, courses, and consulting are built around the operations, numbers, and growth systems those practices share.',
+  },
+  {
+    q: 'Can I contact you about speaking engagements or partnerships?',
+    a: 'Yes. Use the form on this page and tell us what you have in mind. Speaking opportunities and partnership enquiries reach the same team.',
+  },
+  {
+    q: "I'm an existing client. Can I use this form for support?",
+    a: 'Yes. Existing clients can use this form for support questions. Include your practice name in the message so we can route it to the right member of the team.',
+  },
+];
+---
+
+<Base
+  title="Contact Us"
+  description="Get in touch with Projected Growth Consulting — questions about our programs, support for existing clients, speaking opportunities, or partnerships. Email info@projectedgrowthconsulting.com or call (877) 716-1291."
+  ogImage="/images/heroes/contact-us.jpg"
+>
+  <PageHero
+    nodeId="184:2149"
+    title="We're Here To Help"
+    body="Whether you have a question about our programs, need support, are interested in speaking opportunities, or simply want to connect, we'd love to hear from you. Our team will get back to you as soon as possible."
+    image="/images/heroes/contact-us.jpg"
+    bodyTracking="-1px"
+    primaryCta={{ label: 'Book A MedSpa Consulting Call', href: '/book-a-call' }}
+    secondaryCta={{ label: 'Browse Courses', href: '/courses' }}
+  />
+
+  <StatsBar
+    nodeId="184:2186"
+    stats={stats}
+    spread
+    intro="Helping elective medical practices grow with proven systems, coaching, and accountability."
+  />
+
+  <ContactForm />
+
+  <Testimonials nodeId="184:2254" cta={{ label: 'View All Testimonials', href: '/testimonials' }} />
+
+  <FAQ
+    nodeId="184:2320"
+    items={faqs}
+    eyebrow="FREQUENTLY ASKED QUESTIONS"
+    title="Common Questions, Clear Answers"
+    body="Find quick answers to common questions about contacting our team, our services, and the best way to get the support or guidance you need."
+    ctaLabel="Schedule A Call"
+    ctaHref="/book-a-call"
+    align="left"
+    ctaClass="mt-10 lg:mt-16"
+  />
+</Base>

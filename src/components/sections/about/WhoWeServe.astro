@@ -1,0 +1,93 @@
+---
+/**
+ * "Who We Serve" — Figma 159:6910 (desktop 1440x1444) / 159:22715 (mobile 393x1926).
+ *
+ * Desktop: left header, then a 620px photo beside a 620px list, CTA centred
+ * underneath. Mobile centres the header and lifts the CTA above the photo —
+ * same single button, reordered with `order`.
+ *
+ * Figma draws a 2px rail under every list item and fills the first one lime to
+ * 256/620 (41%). It is decoration, not a control, so it renders as static art.
+ */
+import Button from '../../Button.astro';
+
+const audiences = [
+  {
+    title: 'Med Spas',
+    body: 'Build a more profitable practice through proven systems for memberships, lead conversion, team performance, and operational efficiency.',
+  },
+  {
+    title: 'Plastic Surgery Practices',
+    body: 'Improve patient acquisition, increase case acceptance rates, and create scalable systems that support long-term growth.',
+  },
+  {
+    title: 'Functional Medicine Clinics',
+    body: 'Strengthen operations, optimize patient retention, and build a sustainable business around exceptional patient outcomes.',
+  },
+  {
+    title: 'Biohacking & Longevity Practices',
+    body: 'Implement growth frameworks designed to help emerging wellness and longevity brands scale with confidence.',
+  },
+  {
+    title: 'Wellness & Aesthetic Providers',
+    body: 'From established clinics to growing healthcare businesses, we help owners improve performance, leadership, and profitability through proven business systems.',
+  },
+];
+---
+
+<section data-node-id="159:6910" class="bg-[var(--color-cream)] py-20">
+  <div class="rail flex flex-col gap-8 lg:gap-16">
+    <div
+      class="order-1 flex flex-col items-center gap-3 text-center lg:max-w-[557px] lg:items-start lg:text-left"
+    >
+      <p class="eyebrow text-base tracking-[-1px] text-[#111827]">Who We Work With</p>
+      <h2 class="text-[2.5rem] text-[#111827] lg:text-[4rem]">
+        Built Specifically For Elective Medical Practices
+      </h2>
+      <p class="text-base leading-6 tracking-[-1px] text-[#6b7280]">
+        We partner with ambitious practice owners who want to build stronger businesses, improve
+        profitability, and create sustainable long-term growth.
+      </p>
+    </div>
+
+    <div class="order-2 flex justify-center lg:order-4">
+      <Button href="/book-a-call" size="lg">Book A Consulting Call</Button>
+    </div>
+
+    {/* 159:22728 sits 68px under the mobile CTA but only 32px under the header body,
+        so the extra air is a margin on this block rather than a bigger column gap. */}
+    <div class="order-3 mt-9 flex flex-col gap-10 lg:mt-0 lg:flex-row lg:items-stretch">
+      <img
+        src="/images/about/who-we-serve.jpg"
+        alt="A clinician performing an aesthetic treatment on a patient in a med spa"
+        width="826"
+        height="1240"
+        loading="lazy"
+        decoding="async"
+        class="aspect-345/400 w-full rounded-lg object-cover lg:aspect-620/778 lg:basis-[620px] lg:min-w-0"
+      />
+
+      <ul class="flex flex-1 flex-col lg:min-w-0">
+        {
+          audiences.map((item, i) => (
+            <li class="flex flex-col gap-2">
+              <h3 class="text-2xl leading-10 tracking-[-0.5px] text-[#111827]">{item.title}</h3>
+              <p class="text-base leading-6 tracking-[-1px] text-[#6b7280]">{item.body}</p>
+              {/* The 8px flex gap above the rail is part of Figma's 24/32px offset. */}
+              <div
+                class:list={[
+                  'mt-4 h-0.5 w-full bg-[#e4e4e7] lg:mt-6',
+                  i === audiences.length - 1 ? 'mb-0' : 'mb-6 lg:mb-8',
+                ]}
+                aria-hidden="true"
+              >
+                {/* 159:8051 / 159:22738 — a fixed 256px fill in both frames, not a ratio. */}
+                {i === 0 && <div class="h-full w-64 max-w-full bg-[var(--color-lime)]" />}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

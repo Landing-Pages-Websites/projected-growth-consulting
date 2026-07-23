@@ -1,0 +1,59 @@
+---
+/**
+ * "What to expect" — three dark cards.
+ * Figma desktop 159:12427 · mobile 159:23000 (named "What We Believe" there).
+ */
+import IconCard from '../../IconCard.astro';
+import SectionHead from '../../SectionHead.astro';
+
+interface Card {
+  title: string;
+  body: string;
+  icon: string;
+}
+
+const eyebrow = 'WHAT TO EXPECT';
+const title = 'A Practical Conversation Focused On Growth.';
+const body =
+  'No generic advice. No sales pressure. Just a focused discussion around your business goals, challenges, and opportunities.';
+
+const cards: Card[] = [
+  {
+    title: 'Growth Assessment',
+    body: 'Identify the biggest opportunities impacting revenue, profitability, and performance.',
+    icon: '/images/book-a-call/icon-growth-assessment.svg',
+  },
+  {
+    title: 'Strategic Direction',
+    body: 'Receive practical recommendations tailored to your stage of growth.',
+    icon: '/images/book-a-call/icon-strategic-direction.svg',
+  },
+  {
+    title: 'Clear Next Steps',
+    body: 'Leave with actionable insights and a better understanding of the solutions fit your business.',
+    icon: '/images/book-a-call/icon-clear-next-steps.svg',
+  },
+];
+---
+
+<section data-node-id="159:12427" class="bg-[#f6f3ec] py-20">
+  {/* Figma 159:12427: header block 80..268, cards at 332 — a 64px gap. */}
+  <div class="rail flex flex-col gap-12 lg:gap-16">
+    {/* Mobile 159:23001 centres the whole block — the CTA sits at x=94.5 of 345,
+        i.e. dead centre. Desktop is unaffected (always title-left / body-right). */}
+    <SectionHead
+      align="center"
+      eyebrow={eyebrow}
+      title={title}
+      body={body}
+      cta={{ label: 'Schedule A Call', href: '#schedule' }}
+    />
+
+    {/* 3-up: 1 col base, 2-up at 768 (last card spans full), 3-up at 1024+ (BREAKPOINTS.md). */}
+    <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 md:[&>li:last-child]:col-span-2 lg:[&>li:last-child]:col-span-1">
+      {
+        cards.map((card) => <IconCard icon={card.icon} title={card.title} body={card.body} />)
+      }
+    </ul>
+  </div>
+</section>

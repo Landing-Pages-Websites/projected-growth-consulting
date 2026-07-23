@@ -1,0 +1,91 @@
+---
+/**
+ * /courses — Figma desktop 159:12717 · mobile 159:23266
+ * Sections: Hero · Stats · Course Library · What's Included · FAQs · Footer
+ * (Footer + its CTA card are rendered by Base/Footer.)
+ */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import StatsBar from '../components/StatsBar.astro';
+import CourseLibrary from '../components/sections/courses/CourseLibrary.astro';
+import WhatsIncluded from '../components/sections/courses/WhatsIncluded.astro';
+import FAQ from '../components/FAQ.astro';
+
+const stats = [
+  { value: '6,000+', label: 'Practice Owners Supported' },
+  { value: '$250M+', label: 'Client Revenue Generated' },
+  { value: '15+', label: 'Years of Industry Experience' },
+  { value: '92%', label: 'Members Renew Annually' },
+];
+
+/**
+ * Figma 159:13018 ships six questions but only renders the first answer — the
+ * other five accordions are drawn collapsed, so no answer copy exists in the
+ * design. Answers 2-6 are written from copy that IS on this page (hero,
+ * pricing, What's Included) and should be confirmed by the client before launch.
+ */
+const faqs = [
+  {
+    q: 'Are the courses self-paced?',
+    a: 'Yes. All courses can be completed on your own schedule.',
+  },
+  {
+    q: 'How long do I have access?',
+    a: 'Every course sold with lifetime access stays in your account permanently, so you can revisit the lessons anytime as your practice grows. MedSpa Profix is a subscription membership, so access continues for as long as your membership is active.',
+  },
+  {
+    q: 'Who are these courses designed for?',
+    a: 'Med spas, wellness centers, and aesthetic practices — owners, medical directors, and their teams who want to improve revenue, marketing, sales, leadership, and operational performance.',
+  },
+  {
+    q: 'Do the courses include templates and resources?',
+    a: 'Yes. Alongside the video training you get workbooks and guides, plus ready-to-use marketing templates, consultation scripts, checklists, and business tools.',
+  },
+  {
+    q: 'Can my team access the courses?',
+    a: 'Team access depends on the course and the size of your practice. Schedule a call and we will walk you through the right setup for your team.',
+  },
+  {
+    q: "Where should I start if I'm new?",
+    a: 'Start with Conversion, Consultation & Closing, our featured course. It covers consultation performance, patient conversions, and a repeatable sales process — the fastest place to see a return.',
+  },
+];
+---
+
+<Base
+  title="Courses"
+  description="Industry-specific training for med spas, wellness centers, and aesthetic practices — courses on conversion, social media, sales events, TikTok marketing, and the MedSpa Profix membership."
+  ogImage="/images/heroes/courses.jpg"
+>
+  <PageHero
+    nodeId="159:12718"
+    title="Learn Proven Strategies. Grow With Confidence."
+    body="Access industry-specific training designed to help med spas, wellness centers, and aesthetic practices improve revenue, marketing, sales, leadership, and operational performance."
+    image="/images/heroes/courses.jpg"
+    primaryCta={{ label: 'Book A MedSpa Consulting Call', href: '/book-a-call' }}
+    secondaryCta={{ label: 'Browse Courses', href: '#course-library' }}
+  />
+
+  {/* Figma 159:12759 spreads the four stats across the rail, hug-width. */}
+  <StatsBar
+    nodeId="159:12756"
+    stats={stats}
+    intro="Helping elective medical practices grow with proven systems, coaching, and accountability."
+    spread
+  />
+
+  <CourseLibrary />
+
+  <WhatsIncluded />
+
+  <FAQ
+    nodeId="159:13018"
+    items={faqs}
+    eyebrow="Frequently Asked Questions"
+    title="Questions About Our Courses?"
+    body="Everything you need to know before enrolling."
+    ctaLabel="Schedule A Call"
+    ctaHref="/book-a-call"
+    ctaClass="mt-8 lg:mt-12"
+  />
+</Base>

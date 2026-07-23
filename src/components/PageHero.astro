@@ -1,0 +1,232 @@
+---
+/**
+ * Inner-page hero — Figma 159:5663 (desktop 1440x720) / 159:22603 (mobile 393x795).
+ * Used by every page except Home and the blog post. Cross-checked against
+ * 159:8273 (/growth-hub), 184:2149 (/contact-us), 184:3016 (/blog, one CTA)
+ * and 184:3371 (/privacy-policy — no image, centred, shorter).
+ *
+ * Figma bottom-anchors the content block (top:379 of 720) and pins the title to
+ * a 624/1280 column with the body + CTAs in the 608px column beside it, bottoms
+ * aligned. Mobile stacks and centres everything.
+ */
+import Button from './Button.astro';
+
+/**
+ * `mobile` carries the Figma mobile frame's variant when it genuinely differs
+ * from the desktop frame (e.g. /growth-hub shortens "Join The Growth Hub" to
+ * "Join Growth Hub" and points its second CTA elsewhere). Both render into the
+ * DOM and one is hidden per breakpoint, so each frame is matched exactly.
+ * Omit it — the overwhelmingly common case — and a single button renders.
+ */
+type Cta = { label: string; href: string; mobile?: { label: string; href: string } };
+
+interface Props {
+  title: string;
+  eyebrow?: string;
+  body?: string;
+  /** Path under /images/ — omit for the cream, image-less variant (privacy policy). */
+  image?: string;
+  /** Leave unset when the photo is decorative; it then gets alt="" + aria-hidden. */
+  imageAlt?: string;
+  primaryCta?: Cta;
+  secondaryCta?: Cta;
+  align?: 'left' | 'center';
+  /**
+   * CSS object-position for the photo. Figma crops each hero differently — the
+   * default 50% 50% is what every page used before this prop existed, so only
+   * pages that measured a different crop pass it (/book-a-call: "50% 9%").
+   */
+  imagePosition?: string;
+  /**
+   * Body letter-spacing. Figma sets -1px on this paragraph at both breakpoints
+   * (184:4140); the -0.02em default every other page already renders is kept so
+   * this stays additive. At 393px the difference is a whole extra line.
+   */
+  bodyTracking?: string;
+  /** Figma node of the calling page's Hero section, kept for design traceability. */
+  nodeId?: string;
+}
+
+const {
+  title,
+  eyebrow,
+  body,
+  image,
+  imageAlt,
+  primaryCta,
+  secondaryCta,
+  align = 'left',
+  imagePosition,
+  bodyTracking,
+  nodeId = '159:5663',
+} = Astro.props;
+
+const onImage = Boolean(image);
+const centered = align === 'center';
+const hasCta = Boolean(primaryCta || secondaryCta);
+---
+
+<section
+  data-node-id={nodeId}
+  class:list={[
+    'relative flex flex-col justify-end overflow-hidden',
+    // Header is absolute-positioned over this section — reserve its 88px + air.
+    'pt-[136px] lg:pt-[168px]',
+    onImage
+      ? 'min-h-[795px] pb-6 lg:min-h-[720px] lg:pb-20'
+      : // Figma 184:3371 / 184:5078 bottom-anchor the cream hero much higher than
+        // the photo heroes: content ends 106px above the section bottom on desktop
+        // (312 of 418) and 98px on mobile (261 of 359).
+        'min-h-[359px] bg-[var(--color-cream)] pb-[98px] lg:min-h-[418px] lg:pb-[106px]',
+  ]}
+>
+  {
+    image && (
+      <div class="absolute inset-0">
+        <img
+          src={image}
+          alt={imageAlt ?? ''}
+          aria-hidden={imageAlt ? undefined : 'true'}
+          width="1440"
+          height="720"
+          decoding="async"
+          fetchpriority="high"
+          class="size-full object-cover"
+          style={imagePosition ? `object-position:${imagePosition}` : undefined}
+        />
+        <div class="absolute inset-0 bg-black/55"></div>
+      </div>
+    )
+  }
+
+  <div
+    class:list={[
+      'rail relative flex flex-col',
+      centered
+        ? 'items-center gap-4 text-center'
+        : 'items-center gap-8 text-center lg:flex-row lg:items-end lg:gap-12 lg:text-left',
+    ]}
+  >
+    <div
+      class:list={[
+        'flex w-full flex-col',
+        centered ? 'max-w-[768px] items-center' : 'lg:w-[48.75%] lg:shrink-0',
+      ]}
+    >
+      {
+        eyebrow && (
+          <p
+            class:list={[
+              'eyebrow mb-3',
+              onImage ? 'text-[var(--color-lime)]' : 'text-[#6b7280]',
+            ]}
+          >
+            {eyebrow}
+          </p>
+        )
+      }
+      <h1
+        class:list={[
+          'text-5xl md:text-6xl lg:text-7xl',
+          onImage ? 'text-[var(--color-cream)]' : 'text-[var(--color-navy)]',
+        ]}
+      >
+        {title}
+      </h1>
+    </div>
+
+    {
+      (body || hasCta) && (
+        <div
+          class:list={[
+            'flex w-full flex-col gap-6',
+            centered
+              ? 'max-w-[768px] items-center'
+              : 'items-center lg:min-w-0 lg:flex-1 lg:items-start',
+          ]}
+        >
+          {body && (
+            <p
+              class:list={[
+                'w-full text-base leading-6',
+                // Figma 184:3398 keeps the cream hero's line at Inter Regular
+                // 16/1.5 with no tracking on both breakpoints; the photo heroes
+                // step up to 20px medium.
+                onImage
+                  ? 'font-medium tracking-[-1px] text-[var(--color-cream)] lg:text-xl lg:leading-7'
+                  : 'font-normal text-[#6b7280]',
+              ]}
+              style={bodyTracking ? `letter-spacing:${bodyTracking}` : undefined}
+            >
+              {body}
+            </p>
+          )}
+
+          {hasCta && (
+            <div
+              class:list={[
+                'flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center',
+                centered && 'sm:justify-center',
+              ]}
+            >
+              {primaryCta && (
+                <Fragment>
+                  <Button
+                    href={primaryCta.href}
+                    size="lg"
+                    class:list={['w-full sm:w-auto', primaryCta.mobile && 'hidden lg:inline-flex']}
+                  >
+                    {primaryCta.label}
+                  </Button>
+                  {primaryCta.mobile && (
+                    <Button href={primaryCta.mobile.href} size="lg" class="w-full sm:w-auto lg:hidden">
+                      {primaryCta.mobile.label}
+                    </Button>
+                  )}
+                </Fragment>
+              )}
+              {secondaryCta && (
+                <Fragment>
+                  <Button
+                    href={secondaryCta.href}
+                    variant="secondary"
+                    size="lg"
+                    class:list={['w-full sm:w-auto', secondaryCta.mobile && 'hidden lg:inline-flex']}
+                  >
+                    {secondaryCta.label}
+                  </Button>
+                  {secondaryCta.mobile && (
+                    <Button
+                      href={secondaryCta.mobile.href}
+                      variant="secondary"
+                      size="lg"
+                      class="w-full sm:w-auto lg:hidden"
+                    >
+                      {secondaryCta.mobile.label}
+                    </Button>
+                  )}
+                </Fragment>
+              )}
+            </div>
+          )}
+        </div>
+      )
+    }
+  </div>
+
+  {
+    /* Figma 159:5678 — 78px blurred band fading the photo into the light section
+       below. Byte-identical to the home hero's strip, so it is reused, not
+       duplicated. Desktop only; the mobile frame has no band. */
+    image && (
+      <img
+        src="/images/home-hero-strip.png"
+        alt=""
+        aria-hidden="true"
+        width="1024"
+        height="56"
+        class="pointer-events-none absolute inset-x-0 bottom-0 hidden h-[78px] w-full object-fill backdrop-blur-[2px] lg:block"
+      />
+    )
+  }
+</section>

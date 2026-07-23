@@ -1,0 +1,78 @@
+---
+/**
+ * /courses — "What's Included"
+ * Figma desktop 159:12968 (1440x740) · mobile 159:23501 (393x1794)
+ *
+ * Desktop pins the title left and the body + CTA right, bottoms aligned, over a
+ * 4-across row of dark cards (302px each, 24px gaps = the 1280 rail).
+ * Mobile centres the header and stacks the cards.
+ */
+import Button from '../../Button.astro';
+import IconCard from '../../IconCard.astro';
+
+interface Feature {
+  title: string;
+  body: string;
+  icon: string;
+}
+
+const eyebrow = "WHAT'S INCLUDED";
+const title = 'Everything You Need To Implement Faster';
+const body =
+  'Each course is built to help you move from learning to execution with practical tools, proven frameworks, and real-world resources.';
+
+const features: Feature[] = [
+  {
+    title: 'Expert-Led Video Training',
+    body: 'Learn proven strategies through step-by-step lessons created specifically for med spas and aesthetic practices.',
+    icon: '/icons/course-video.svg',
+  },
+  {
+    title: 'Workbooks & Guides',
+    body: 'Turn ideas into action with structured exercises, worksheets, and easy-to-follow implementation plans.',
+    icon: '/icons/course-workbook.svg',
+  },
+  {
+    title: 'Templates, Scripts & Resources',
+    body: 'Access ready-to-use marketing templates, consultation scripts, checklists, and business tools.',
+    icon: '/icons/course-templates.svg',
+  },
+  {
+    title: 'Lifetime Access',
+    body: 'Revisit lessons anytime and continue learning as your practice grows and new challenges emerge.',
+    icon: '/icons/course-lifetime.svg',
+  },
+];
+---
+
+<section data-node-id="159:12968" class="bg-[#f6f3ec] py-20">
+  {/* Figma: header→cards is 48px on mobile (159:23514) and 64px at desktop (159:12981). */}
+  <div class="rail flex flex-col gap-12 lg:gap-16">
+    <div
+      class="flex flex-col items-center gap-8 text-center lg:flex-row lg:items-end lg:justify-between lg:gap-10 lg:text-left"
+    >
+      <div class="flex flex-col gap-3 lg:basis-[659px] lg:min-w-0">
+        {/* Figma 159:12971 — Inter Regular 16/20, not the 12px medium default. */}
+      <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">
+        {eyebrow}
+      </p>
+        <h2 class="text-[2.5rem] text-[#111827] lg:text-[4rem]">{title}</h2>
+      </div>
+
+      <div class="flex max-w-[561px] flex-col items-center gap-8 lg:items-end">
+        <p class="text-sm leading-6 tracking-[-1px] text-[#6b7280] lg:text-right lg:text-base">
+          {body}
+        </p>
+        <Button href="/book-a-call" size="lg">Schedule A Call</Button>
+      </div>
+    </div>
+
+    <ul class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      {
+        features.map((feature) => (
+          <IconCard icon={feature.icon} title={feature.title} body={feature.body} />
+        ))
+      }
+    </ul>
+  </div>
+</section>

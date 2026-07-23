@@ -1,0 +1,25 @@
+---
+/**
+ * Dark card with a lime 56px icon tile — used in the four-across (or three-across)
+ * card rows on /about, /pgc-proof, /courses, /growth-hub and /book-a-call.
+ * Renders an <li>; the caller owns the grid <ul>.
+ * Figma: 8px card radius, 24px padding, 4px tile radius, 32px icon.
+ */
+interface Props {
+  icon: string;
+  title: string;
+  body: string;
+}
+
+const { icon, title, body } = Astro.props;
+---
+
+<li class="flex flex-col gap-8 rounded-lg bg-[#111827] p-6">
+  <span class="grid size-14 shrink-0 place-items-center rounded-[4px] bg-[var(--color-lime)]">
+    <img src={icon} alt="" aria-hidden="true" width="32" height="32" loading="lazy" class="size-8" />
+  </span>
+  <div class="flex flex-col gap-4">
+    <h3 class="text-[2rem] leading-[1.12] tracking-[-0.03em] text-white">{title}</h3>
+    <p class="text-base leading-[1.6] tracking-[-0.0125em] text-[var(--color-cream)]">{body}</p>
+  </div>
+</li>

@@ -1,0 +1,142 @@
+---
+/** /growth-hub — Figma desktop 159:8272 · mobile 159:19676. */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import StatsBar from '../components/StatsBar.astro';
+import Testimonials from '../components/Testimonials.astro';
+import FAQ from '../components/FAQ.astro';
+import Process from '../components/Process.astro';
+
+import Issues from '../components/sections/growth-hub/Issues.astro';
+import WhyGrowthHub from '../components/sections/growth-hub/WhyGrowthHub.astro';
+import WhatYoullLearn from '../components/sections/growth-hub/WhatYoullLearn.astro';
+import IsThisForYou from '../components/sections/growth-hub/IsThisForYou.astro';
+import Coaching from '../components/sections/growth-hub/Coaching.astro';
+import CoachingPaths from '../components/sections/growth-hub/CoachingPaths.astro';
+import Membership from '../components/sections/growth-hub/Membership.astro';
+
+/* "The Practice OS" steps — Figma desktop 159:8426 / mobile 159:19813. */
+const processSteps = [
+  {
+    title: 'Find The Gaps',
+    body: 'Complete the Practice Diagnostic to uncover where your biggest growth opportunities and profit leaks exist.',
+    image: '/images/growth-hub/process-find-the-gaps.jpg',
+    imageAlt: 'The Practice Diagnostic scoring a practice across its growth areas',
+  },
+  {
+    title: 'Focus First',
+    body: 'Prioritize the one improvement that will create the biggest impact instead of trying to fix everything at once.',
+  },
+  {
+    title: 'Implement Fast',
+    body: 'Assign the matching one-hour lesson to yourself or your team and put proven systems into action immediately.',
+  },
+  {
+    title: 'Scale Smarter',
+    body: 'Track progress with KPI dashboards, monthly coaching, and repeatable systems that keep your business growing.',
+  },
+];
+
+const stats = [
+  { value: '6,000+', label: 'Practice Owners Supported' },
+  { value: '$250M+', label: 'Client Revenue Generated' },
+  { value: '15+', label: 'Years of Industry Experience' },
+  { value: '92%', label: 'Members Renew Annually' },
+];
+
+/* Figma only fills in the answer for the first item (159:11078); the remaining
+   seven accordion rows ship collapsed with no answer copy in the design. Those
+   answers are written from copy that does appear on this page — the membership
+   feature list, the pricing, the "who it's for" checklist and the coaching
+   tiers — so nothing here claims anything the design doesn't already claim. */
+const faqs = [
+  {
+    q: 'What is Growth Hub?',
+    a: "Growth Hub is PGC's all-in-one membership platform designed to help elective medical practices improve profitability, strengthen operations, and implement proven growth systems through training, tools, resources, and ongoing support.",
+  },
+  {
+    q: 'Who is Growth Hub designed for?',
+    a: 'Owners of elective medical, aesthetic, and wellness practices who want practical solutions, stronger teams, and proven systems rather than more theory — particularly owners who want to delegate more, improve profitability and KPIs, and build a practice that is less dependent on them.',
+  },
+  {
+    q: 'What do I get as a member?',
+    a: 'Membership includes 24+ one-hour implementation lessons with new courses added monthly, live coaching with Kelly, the Practice Diagnostic, the KPI Dashboard, the Executive Goal Tracker, the private owner community, mobile app access, templates and playbooks, AI resources, team training materials, and charter pricing locked in.',
+  },
+  {
+    q: 'How much time do I need to commit each week?',
+    a: 'Every lesson is built to solve one specific business problem in about an hour, so you can work at the pace your schedule allows — and assign lessons to managers and staff instead of doing all the implementation yourself.',
+  },
+  {
+    q: 'Is Growth Hub suitable for new practice owners?',
+    a: 'Yes. The Practice Diagnostic shows you where your biggest growth opportunities and profit leaks are, then points you to the one improvement that will create the biggest impact — so newer owners start with priorities rather than a 12-hour course.',
+  },
+  {
+    q: 'Can my team access Growth Hub?',
+    a: 'Yes. One membership covers your entire practice. You can assign lessons to managers and staff, and team training materials are included so implementation does not always fall on the owner.',
+  },
+  {
+    q: 'How is Growth Hub different from traditional coaching?',
+    a: 'Traditional consulting tends to leave you with more homework, and long courses rarely get finished. Growth Hub delivers quick, practical solutions your team can implement immediately, with templates, scripts, scorecards and checklists included alongside monthly coaching and accountability tools.',
+  },
+  {
+    q: 'Can I upgrade my membership later?',
+    a: 'Yes. Members who want more support can move into Executive Coaching for private 1:1 work with Kelly Smith, the Growth Accelerator for structured group coaching and peer accountability, or the Mastermind for advanced strategy with other growth-focused owners.',
+  },
+];
+---
+
+<Base
+  title="The Growth Hub"
+  description="Proven secrets to building a more profitable practice. One-hour implementation lessons, business systems, coaching and tools for busy owners of elective medical practices — from $97/month."
+  ogImage="/images/heroes/growth-hub.png"
+>
+  <PageHero
+    nodeId="159:8273"
+    title="Proven Secrets To Building A More Profitable Practice"
+    body="Built for busy owners of elective medical practices, Growth Hub gives you and your team one-hour implementation lessons, proven business systems, coaching, and practical tools to solve problems faster, delegate with confidence, and grow a more profitable business."
+    image="/images/heroes/growth-hub.png"
+    primaryCta={{
+      label: 'Join The Growth Hub',
+      href: '#membership',
+      mobile: { label: 'Join Growth Hub', href: '#membership' },
+    }}
+    secondaryCta={{
+      label: 'Book A Strategy Call',
+      href: '/book-a-call',
+      mobile: { label: 'Browse Courses', href: '/courses' },
+    }}
+  />
+
+  <StatsBar
+    nodeId="159:8311"
+    stats={stats}
+    spread
+    intro="Helping elective medical practices grow with proven systems, coaching, and accountability."
+  />
+
+  <Issues />
+  <WhyGrowthHub />
+  <Process
+    nodeId="159:8426"
+    eyebrow="THE PRACTICE OS"
+    title="A Simple System That Helps You Grow Faster"
+    body="Growth isn't about doing more. It's about identifying the biggest opportunity, implementing the right solution, and repeating the process across your entire practice."
+    cta={{ label: 'Join The Growth Hub', href: '#membership' }}
+    steps={processSteps}
+  />
+  <WhatYoullLearn />
+  <IsThisForYou />
+  <Coaching />
+  <CoachingPaths />
+
+  <Testimonials nodeId="159:9783" cta={{ label: 'View All Testimonials', href: '/testimonials' }} />
+
+  <Membership />
+
+  <FAQ
+    nodeId="159:11056"
+    items={faqs}
+    title="Everything You Need To Know About Growth Hub"
+    body="Learn how Growth Hub works, what's included, and how it helps elective medical practices build stronger systems, train better teams, and increase profitability."
+  />
+</Base>

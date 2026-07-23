@@ -1,0 +1,91 @@
+---
+/** /pgc-proof — Figma desktop 184:2494 · mobile 184:3637. */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import StatsBar from '../components/StatsBar.astro';
+import Testimonials from '../components/Testimonials.astro';
+import FAQ from '../components/FAQ.astro';
+import Webinars from '../components/sections/pgc-proof/Webinars.astro';
+import ComingSoon from '../components/sections/pgc-proof/ComingSoon.astro';
+import Why from '../components/sections/pgc-proof/Why.astro';
+import GrowthHub from '../components/sections/pgc-proof/GrowthHub.astro';
+
+const stats = [
+  { value: '6,000+', label: 'Practice Owners Supported' },
+  { value: '$250M+', label: 'Client Revenue Generated' },
+  { value: '15+', label: 'Years of Industry Experience' },
+  { value: '92%', label: 'Members Renew Annually' },
+];
+
+const faqs = [
+  {
+    q: 'How do I hire and retain better employees?',
+    a: 'Learn proven recruiting, onboarding, and retention systems that help you build a stronger team, reduce turnover, and create a culture where top performers stay.',
+  },
+  {
+    q: 'How can I create recurring revenue through memberships?',
+    a: 'The Million Dollar Memberships masterclass walks through the framework Kelly Smith uses to help practices design a profitable membership program, increase retention and recurring revenue, improve patient loyalty and long-term growth, and launch memberships with confidence.',
+  },
+  {
+    q: "Why aren't my consultations converting?",
+    a: 'PGC Proof covers the consultation and sales process step by step — preparing your team for maximum conversions, tightening the way offers are presented, and removing the gaps that cost you bookings. These are the same systems that have helped thousands of practices increase conversions.',
+  },
+  {
+    q: 'How do I make marketing more consistent?',
+    a: 'The Six-Figure Sales Events masterclass shows you the planning process behind high-performing promotional events: how to plan them from start to finish, increase attendance and sales performance, and avoid the common mistakes that make marketing feel unpredictable.',
+  },
+  {
+    q: 'Which KPIs actually matter?',
+    a: 'Inside the Growth Hub you get KPI dashboards, planning tools, SOPs, scripts, calculators, and ready-to-use resources, so you track the numbers that drive profitability instead of guessing which metrics matter.',
+  },
+  {
+    q: 'How do I stop being the bottleneck?',
+    a: 'Every webinar is built to be shared with managers and staff so everyone improves together, with actionable lessons your team can implement without spending weeks in training. That is how owners hand work off instead of holding it.',
+  },
+];
+---
+
+<Base
+  title="PGC Proof — Free On-Demand Masterclasses"
+  description="Free on-demand masterclasses led by Kelly Smith on hiring, memberships, and sales events for elective medical practices — the proven systems behind more profitable practices."
+  ogImage="/images/pgc-proof/hero.jpg"
+>
+  <PageHero
+    nodeId="184:2495"
+    title="Proven Systems Behind More Profitable Practices"
+    body="Explore free on-demand masterclasses led by Kelly Smith, covering the strategies, systems, and implementation techniques that have helped over 6,000 elective medical practices increase profitability, strengthen operations, and build lasting growth."
+    image="/images/pgc-proof/hero.jpg"
+    primaryCta={{ label: 'Book A MedSpa Consulting Call', href: '/book-a-call' }}
+    secondaryCta={{ label: 'Browse Courses', href: '/courses' }}
+  />
+
+  <StatsBar
+    nodeId="184:2532"
+    stats={stats}
+    spread
+    intro="Helping elective medical practices grow with proven systems, coaching, and accountability."
+  />
+
+  <Webinars />
+  <ComingSoon />
+  {
+    /* The mobile frame runs Growth Hub (184:3818) BEFORE Why (184:3862); the
+       desktop frame runs Why (184:2689) before Growth Hub (184:2738). Same two
+       sections, reversed — column-reverse flips them without a second copy. */
+  }
+  <div class="flex flex-col-reverse lg:flex-col">
+    <Why />
+    <GrowthHub />
+  </div>
+  <Testimonials nodeId="184:2782" />
+
+  <FAQ
+    nodeId="184:2842"
+    items={faqs}
+    eyebrow="Frequently Asked Questions"
+    title="Answers To The Questions Practice Owners Ask Every Day"
+    body="Each webinar tackles one of the biggest challenges facing elective medical practices, giving you practical solutions instead of overwhelming information."
+    ctaLabel="Schedule A Call"
+    ctaHref="/book-a-call"
+  />
+</Base>
