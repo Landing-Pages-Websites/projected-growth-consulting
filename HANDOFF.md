@@ -37,7 +37,7 @@ verified**; the client blockers that follow are what is left.
 ### Environment variables
 
 All optional, all `PUBLIC_` (inlined at build — never put a secret here). See
-`.env.example`. Each unset value degrades to something that still works:
+`env.example`. Each unset value degrades to something that still works:
 
 | Variable | Unset behaviour |
 |---|---|

@@ -5,7 +5,8 @@ dist/
 # dependencies
 node_modules/
 
-# env & secrets — never commit
+# env & secrets — never commit. No negation here on purpose: the template is
+# `env.example` (no leading dot) so nothing matching .env* can ever be exempted.
 .env
 .env.*
 *.pem
