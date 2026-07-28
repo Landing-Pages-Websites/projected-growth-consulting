@@ -22,6 +22,11 @@ const {
 } = Astro.props;
 
 const year = new Date().getFullYear();
+
+const socials = [
+  { label: 'Instagram', href: site.social.instagram, icon: '/icons/instagram.svg' },
+  { label: 'LinkedIn', href: site.social.linkedin, icon: '/icons/linkedin.svg' },
+].filter((s) => s.href);
 ---
 
 <footer class="bg-[#f6f3ec]" data-node-id="159:5558">
@@ -69,14 +74,26 @@ const year = new Date().getFullYear();
             </p>
             <p class="text-base leading-6 font-medium text-[#808080]">{site.description}</p>
           </div>
-          <div class="flex items-start gap-2">
-            <a href={site.social.instagram} aria-label="Instagram" target="_blank" rel="noreferrer noopener" class="transition-opacity hover:opacity-70">
-              <img src="/icons/instagram.svg" alt="" width="32" height="32" class="size-8" />
-            </a>
-            <a href={site.social.linkedin} aria-label="LinkedIn" target="_blank" rel="noreferrer noopener" class="transition-opacity hover:opacity-70">
-              <img src="/icons/linkedin.svg" alt="" width="32" height="32" class="size-8" />
-            </a>
-          </div>
+          {/* Rendered per-network, not as a fixed pair: an icon whose URL is not
+              yet known used to link to instagram.com / linkedin.com themselves,
+              i.e. a login wall. See the [OWNER] note in site.ts. */}
+          {
+            socials.length > 0 && (
+              <div class="flex items-start gap-2">
+                {socials.map((s) => (
+                  <a
+                    href={s.href}
+                    aria-label={s.label}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    class="transition-opacity hover:opacity-70"
+                  >
+                    <img src={s.icon} alt="" width="32" height="32" class="size-8" />
+                  </a>
+                ))}
+              </div>
+            )
+          }
         </div>
       </div>
 

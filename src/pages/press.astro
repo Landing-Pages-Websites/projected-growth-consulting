@@ -17,6 +17,11 @@ import SeminarTopics from '../components/sections/press/SeminarTopics.astro';
 const heroBody =
   'International speaker, bestselling author, and Founder of Projected Growth Consulting. Kelly has helped more than 6,000 elective medical practices improve profitability, increase valuation, and create sustainable growth.';
 
+/* The hero body runs 220 chars — Google cuts a description at ~160. Same claims,
+   trimmed to fit; the on-page copy is untouched. */
+const metaDescription =
+  'International speaker, bestselling author and Founder of Projected Growth Consulting. Kelly Smith has helped more than 6,000 elective medical practices.';
+
 const stats = [
   { value: '6,000+', label: 'Practice Owners Supported' },
   { value: '$250M+', label: 'Client Revenue Generated' },
@@ -57,14 +62,14 @@ const faqs: FaqItem[] = [
 
 <Base
   title="Press &amp; Speaking"
-  description={heroBody}
-  ogImage="/images/press/hero.png"
+  description={metaDescription}
+  ogImage="/images/press/hero.jpg"
 >
   <PageHero
     nodeId="159:16591"
     title="Industry Insights From Kelly Smith"
     body={heroBody}
-    image="/images/press/hero.png"
+    image="/images/press/hero.jpg"
     imageAlt="Kelly Smith recording at her desk beside a podcast microphone and copies of her book Top 10 Profit Killers"
     primaryCta={{ label: 'Book A MedSpa Consulting Call', href: '/book-a-call' }}
     secondaryCta={{ label: 'Browse Courses', href: '/courses' }}

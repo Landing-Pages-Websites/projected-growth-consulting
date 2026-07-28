@@ -10,16 +10,17 @@ import Article from '../../components/sections/blog-post/Article.astro';
 import { site } from '../../lib/site';
 
 const title = 'Med Spa KPIs: The Owner’s Dashboard Guide';
+/* 193 chars was past the ~160 SERP cut; same scope, trimmed to fit. */
 const description =
-  'The med spa KPIs that belong on an owner’s dashboard — what to review weekly, which financial metrics need a monthly close, and how to turn each number into an owner, an action, and a due date.';
+  'The med spa KPIs that belong on an owner’s dashboard — what to review weekly, which metrics need a monthly close, and how to turn each number into an action.';
 const category = 'Financial';
 const published = { label: '20 June 2026', iso: '2026-06-20' };
 const readTime = '5 Min';
 const author = {
   name: 'Kelly Smith',
-  avatar: '/images/blog-post/kelly-smith-avatar.png',
+  avatar: '/images/blog-post/kelly-smith-avatar.jpg',
 };
-const image = '/images/blog-post/med-spa-kpis-hero.png';
+const image = '/images/blog-post/med-spa-kpis-hero.jpg';
 
 const origin = (Astro.site ?? new URL(site.url)).origin;
 const url = new URL(Astro.url.pathname, origin).href;
@@ -59,7 +60,7 @@ const jsonLd = [
 ];
 ---
 
-<Base title={title} description={description} ogImage={image}>
+<Base title={title} description={description} ogImage={image} headerTheme="light">
   <Fragment slot="head">
     {/* Base already emits og:type=website; a second one would just conflict. */}
     <meta property="article:published_time" content={published.iso} />

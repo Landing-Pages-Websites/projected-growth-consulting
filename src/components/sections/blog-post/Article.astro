@@ -12,6 +12,9 @@
  */
 import Button from '../../Button.astro';
 
+/* Same gate as the contact form — see contact-us/ContactForm.astro. */
+const newsletterEndpoint = import.meta.env.PUBLIC_NEWSLETTER_ENDPOINT ?? '';
+
 const A = (href: string, label: string) =>
   `<a href="${href}" target="_blank" rel="noreferrer noopener">${label}</a>`;
 
@@ -424,9 +427,16 @@ const h3 =
          article keeps priority; xl restores the drawn 464 (1280/1440 unchanged). -->
     <aside class="flex w-full flex-col gap-6 lg:sticky lg:top-8 lg:basis-[360px] lg:min-w-0 xl:basis-[464px]">
       <!-- Newsletter — Figma 184:5390.
-           ponytail: no action= until there is an endpoint; markup is ready for one. -->
+           Rendered only when PUBLIC_NEWSLETTER_ENDPOINT is set. A subscribe box
+           with no action= re-loads the article and drops the address, so an
+           absent form beats one that looks like it worked. -->
       <form
-        class="flex flex-col gap-4 rounded-lg border border-black/10 bg-white p-8"
+        class:list={[
+          'flex flex-col gap-4 rounded-lg border border-black/10 bg-white p-8',
+          !newsletterEndpoint && 'hidden',
+        ]}
+        method="post"
+        action={newsletterEndpoint || undefined}
         data-node-id="184:5390"
       >
         <h2 class="text-[32px] leading-[1.4] font-bold tracking-normal text-[#111827]">

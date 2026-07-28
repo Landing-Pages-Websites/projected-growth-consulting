@@ -6,13 +6,37 @@
 import { primaryNav } from '../lib/site';
 import Button from './Button.astro';
 
+interface Props {
+  /**
+   * Almost every hero is a darkened photo, so the header is cream-on-dark by
+   * default. Pages whose hero is the cream, image-less variant pass `light`,
+   * or the whole nav renders cream-on-cream — i.e. invisible.
+   *
+   * This replaces two copies of a `body:has(section[data-node-id=…]) > header`
+   * repaint (blog-post/Hero.astro, privacy-policy.astro), both of which named
+   * this prop as the real fix. A third page (/404) was about to need a third.
+   */
+  theme?: 'dark' | 'light';
+}
+
+const { theme = 'dark' } = Astro.props;
+const light = theme === 'light';
+
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+
+const linkIdle = light
+  ? 'text-[#6b7280] hover:text-[var(--color-lime-border)]'
+  : 'text-[var(--color-cream)] hover:text-[var(--color-lime)]';
+const linkActive = light ? 'text-[var(--color-lime-border)]' : 'text-[var(--color-lime)]';
 ---
 
 <header
-  class="absolute inset-x-0 top-0 z-50 border-b border-white/10"
+  class:list={[
+    'absolute inset-x-0 top-0 z-50 border-b',
+    light ? 'border-black/10' : 'border-white/10',
+  ]}
   data-node-id="159:4045"
 >
   <div class="rail flex items-center justify-between py-6">
@@ -33,19 +57,27 @@ const isActive = (href: string) =>
         {
           primaryNav.map((item) =>
             item.children ? (
-              <div class="group relative">
+              <div class="group relative" data-dropdown>
+                {/* The parent is a real link to a real page, and the panel opens
+                    on :hover and :focus-within, so mouse and keyboard both
+                    reach the children with no JS. What CSS alone cannot do is
+                    a tap on a touch laptop (no hover) or Escape to dismiss —
+                    the toggle below adds exactly those two, and only when JS
+                    is available. aria-expanded is therefore set from script,
+                    never hardcoded, so it can't lie in the no-JS case. */}
                 <a
                   href={item.href}
                   class:list={[
                     'flex items-center gap-1 rounded-lg py-2 pl-3 pr-2 text-sm leading-4 font-medium tracking-[-1px] transition-colors',
-                    isActive(item.href) ? 'text-[var(--color-lime)]' : 'text-[var(--color-cream)] hover:text-[var(--color-lime)]',
+                    isActive(item.href) ? linkActive : linkIdle,
                   ]}
                   aria-haspopup="true"
+                  data-dropdown-trigger
                 >
                   {item.label}
-                  <img src="/icons/chevron-down.svg" alt="" aria-hidden="true" width="16" height="16" class="size-4 transition-transform group-hover:rotate-180" />
+                  <img src="/icons/chevron-down.svg" alt="" aria-hidden="true" width="16" height="16" class="size-4 transition-transform group-hover:rotate-180 group-data-[open]:rotate-180" />
                 </a>
-                <div class="invisible absolute left-0 top-full w-56 translate-y-1 rounded-lg border border-black/5 bg-white p-2 opacity-0 shadow-lg transition-all duration-150 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                <div class="invisible absolute left-0 top-full w-56 translate-y-1 rounded-lg border border-black/5 bg-white p-2 opacity-0 shadow-lg transition-all duration-150 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-data-[open]:visible group-data-[open]:translate-y-0 group-data-[open]:opacity-100">
                   {item.children.map((child) => (
                     <a
                       href={child.href}
@@ -61,7 +93,7 @@ const isActive = (href: string) =>
                 href={item.href}
                 class:list={[
                   'rounded-lg px-3 py-2 text-sm leading-4 font-medium tracking-[-1px] transition-colors',
-                  isActive(item.href) ? 'text-[var(--color-lime)]' : 'text-[var(--color-cream)] hover:text-[var(--color-lime)]',
+                  isActive(item.href) ? linkActive : linkIdle,
                 ]}
                 aria-current={isActive(item.href) ? 'page' : undefined}
               >
@@ -78,7 +110,10 @@ const isActive = (href: string) =>
 
       <button
         type="button"
-        class="flex size-10 items-center justify-center rounded-lg text-[var(--color-cream)] lg:hidden"
+        class:list={[
+          'flex size-10 items-center justify-center rounded-lg lg:hidden',
+          light ? 'text-[#6b7280]' : 'text-[var(--color-cream)]',
+        ]}
         aria-label="Open menu"
         aria-expanded="false"
         aria-controls="mobile-nav"
@@ -136,5 +171,43 @@ const isActive = (href: string) =>
       if ((e.target as HTMLElement).closest('a')) setOpen(false);
     });
   }
+
+  // Desktop dropdown: adds the two things :hover/:focus-within cannot do —
+  // open on tap where there is no hover, and dismiss with Escape.
+  function initDropdowns() {
+    document.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((wrap) => {
+      if (wrap.dataset.bound) return;
+      wrap.dataset.bound = '1';
+      const trigger = wrap.querySelector<HTMLAnchorElement>('[data-dropdown-trigger]');
+      if (!trigger) return;
+      trigger.setAttribute('aria-expanded', 'false');
+
+      const setOpen = (open: boolean) => {
+        wrap.toggleAttribute('data-open', open);
+        trigger.setAttribute('aria-expanded', String(open));
+      };
+
+      trigger.addEventListener('click', (e) => {
+        // Only hijack the navigation where hover is unavailable; on a mouse the
+        // panel is already open and the link should still go to its page.
+        if (window.matchMedia('(hover: hover)').matches) return;
+        if (wrap.hasAttribute('data-open')) return; // second tap follows the link
+        e.preventDefault();
+        setOpen(true);
+      });
+
+      wrap.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key !== 'Escape') return;
+        setOpen(false);
+        trigger.focus();
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!wrap.contains(e.target as Node)) setOpen(false);
+      });
+    });
+  }
+
   document.addEventListener('astro:page-load', initMenu);
+  document.addEventListener('astro:page-load', initDropdowns);
 </script>

@@ -157,20 +157,3 @@ const shares = [
   </div>
 </section>
 
-<style is:global>
-  /* Header.astro is cream-on-dark because every other hero is a darkened photo.
-     This hero is cream, so the shared header would render invisible on it.
-     ponytail: page-scoped repaint — the real fix is a `theme` prop on Header,
-     which is out of scope here (that file is locked). */
-  body:has(section[data-node-id='184:5330']) > header {
-    border-bottom-color: rgba(0, 0, 0, 0.1);
-  }
-  body:has(section[data-node-id='184:5330'])
-    > header
-    nav[aria-label='Primary']
-    > a:not([aria-current='page']),
-  body:has(section[data-node-id='184:5330']) > header nav[aria-label='Primary'] > div > a,
-  body:has(section[data-node-id='184:5330']) > header button[data-menu-toggle] {
-    color: #6b7280;
-  }
-</style>

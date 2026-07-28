@@ -13,18 +13,72 @@ interface Props {
   ogImage?: string;
   /** Keep a page out of the index until its real content lands (blog drafts). */
   noindex?: boolean;
+  /** 'light' for pages whose hero is the cream, image-less variant — the
+      overlaid header is cream-on-dark by default and vanishes on those. */
+  headerTheme?: 'dark' | 'light';
 }
 
 const {
   title,
   description = site.description,
   cta = true,
-  ogImage = '/images/home-hero.png',
+  ogImage = '/images/home-hero.jpg',
   noindex = false,
+  headerTheme = 'dark',
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
+
+const origin = (Astro.site ?? new URL(site.url)).origin;
+
+/**
+ * Organization + WebSite, emitted once on every route — Charter §6 roadmap
+ * item 2. Every field is a fact already published on this site (site.ts /
+ * /contact-us); nothing is inferred. `sameAs` is omitted entirely rather than
+ * filled with guesses, and only appears once real profile URLs land in site.ts.
+ */
+const sameAs = [site.social.instagram, site.social.linkedin].filter(Boolean);
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${origin}/#organization`,
+  name: site.name,
+  url: origin,
+  description: site.description,
+  slogan: site.tagline,
+  logo: { '@type': 'ImageObject', url: new URL('/images/logo-wordmark.svg', origin).href },
+  email: site.contact.email,
+  telephone: site.contact.phoneHref,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: site.contact.locality,
+    addressRegion: site.contact.region,
+    addressCountry: site.contact.country,
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'sales',
+    telephone: site.contact.phoneHref,
+    email: site.contact.email,
+    areaServed: site.contact.country,
+    availableLanguage: 'en',
+  },
+  ...(sameAs.length ? { sameAs } : {}),
+};
+
+const siteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${origin}/#website`,
+  name: site.name,
+  url: origin,
+  inLanguage: 'en-US',
+  publisher: { '@id': `${origin}/#organization` },
+};
+
+const ld = JSON.stringify([orgLd, siteLd]).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -46,16 +100,32 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {/* max-image-preview:large is what lets a photo, not a thumbnail, appear in
+        Discover and image-rich results. Without an explicit robots tag Google
+        assumes `standard`. */}
+    <meta
+      name="robots"
+      content={noindex
+        ? 'noindex, follow'
+        : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
+    />
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={new URL(ogImage, Astro.site ?? site.url).href} />
+    <meta property="og:image:alt" content={fullTitle} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#252c3a" />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <script type="application/ld+json" is:inline set:html={ld} />
 
     <!-- ponytail: CDN fonts. Self-host + preload when Core Web Vitals matter,
          and swap Newsreader for the licensed Tiempos Headline files. -->
@@ -66,6 +136,44 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,300..700&display=swap"
     />
 
+    {/* Charter §6 roadmap item 3. Env-gated like every other integration here,
+        so launch day is a variable, not a code change. Unset = no requests, no
+        cookies, no consent surface to manage. */}
+    {
+      import.meta.env.PUBLIC_GA4_ID && (
+        <>
+          <script
+            is:inline
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA4_ID}`}
+          />
+          <script is:inline define:vars={{ id: import.meta.env.PUBLIC_GA4_ID }}>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', id);
+            // View transitions swap the document without a real navigation, so
+            // GA would only ever record the landing page without this.
+            document.addEventListener('astro:page-load', () =>
+              gtag('event', 'page_view', { page_path: location.pathname })
+            );
+          </script>
+        </>
+      )
+    }
+
+    {/* Search Console HTML-tag verification, if that method is chosen over DNS. */}
+    {
+      import.meta.env.PUBLIC_GSC_VERIFICATION && (
+        <meta
+          name="google-site-verification"
+          content={import.meta.env.PUBLIC_GSC_VERIFICATION}
+        />
+      )
+    }
+
     <slot name="head" />
   </head>
   <body>
@@ -74,7 +182,7 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-[var(--color-lime)] focus:px-4 focus:py-2 focus:text-[var(--color-navy)]"
       >Skip to content</a
     >
-    <Header />
+    <Header theme={headerTheme} />
     <main id="main">
       <slot />
     </main>

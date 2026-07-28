@@ -37,7 +37,7 @@ export type Post = {
 
 export const author = {
   name: 'Kelly Smith',
-  avatar: '/images/blog/kelly-smith.png',
+  avatar: '/images/blog/kelly-smith.jpg',
 } as const;
 
 /** Figma 184:3224 — the filter rail above "Latest Articles". */
@@ -183,6 +183,14 @@ export const posts: Post[] = [
  * (see HANDOFF.md), so linking to them is safe — no 404s, nothing fabricated.
  */
 export const postHref = (slug: string) => `/blog/${slug}`;
+
+/**
+ * Slugs with real, written bodies. The single source of truth for two things
+ * that must never disagree: which posts get their own hand-built page instead
+ * of a shell (blog/[slug].astro), and which ones the sitemap may advertise.
+ * Add a slug here the moment its article ships.
+ */
+export const publishedSlugs = new Set<string>(['med-spa-kpis-dashboard-guide']);
 
 export const featuredPosts = posts.filter((p) => p.featured);
 export const latestPosts = posts.filter((p) => !p.featured);

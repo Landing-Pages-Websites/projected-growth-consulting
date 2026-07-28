@@ -6,9 +6,33 @@ export const site = {
   description:
     "The operator's business school for elective medical practices. Helping owners build more profitable, predictable businesses through coaching, courses, and proven growth systems.",
   url: 'https://projectedgrowthconsultancy.com',
+  /**
+   * Transcribed from the Figma /contact-us frame (184:2202). Single source of
+   * truth so the contact section and the Organization schema can never disagree.
+   *
+   * [OWNER] The email domain is `projectedgrowthconsulting.com` while the site
+   * is `projectedgrowthconsultancy.com` — consulting vs consultancy. That is
+   * what the design says, so it ships unchanged; confirm which is correct
+   * before launch, because a dead contact address loses enquiries silently.
+   */
+  contact: {
+    email: 'info@projectedgrowthconsulting.com',
+    phone: '(877) 716-1291',
+    phoneHref: '+18777161291',
+    locality: 'St. Petersburg',
+    region: 'FL',
+    country: 'US',
+  },
+  /**
+   * [OWNER] Real profile URLs required. Empty strings render no icon and emit
+   * no schema `sameAs` — deliberately: the previous values pointed at
+   * instagram.com and linkedin.com themselves, so every visitor who clicked a
+   * social icon landed on a login wall, and `sameAs` would have claimed the
+   * brand owns those homepages. An absent link beats a wrong one.
+   */
   social: {
-    instagram: 'https://www.instagram.com/',
-    linkedin: 'https://www.linkedin.com/',
+    instagram: '',
+    linkedin: '',
   },
 } as const;
 

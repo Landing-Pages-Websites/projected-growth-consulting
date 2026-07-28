@@ -7,9 +7,12 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "verify": "astro build && node scripts/verify-build.mjs",
+    "optimize-images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.1.4",
     "astro": "^5.6.1",
     "tailwindcss": "^4.1.4"

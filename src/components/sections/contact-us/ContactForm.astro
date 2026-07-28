@@ -6,21 +6,44 @@
  * right, 80px gap. Mobile keeps the same DOM order and stacks it.
  */
 import Button from '../../Button.astro';
+import { site } from '../../../lib/site';
 
-const eyebrow = 'CONTACT FORM';
 const title = 'Still Have Questions?';
-const body =
-  'Complete the form and a member of our team will get back to you as soon as possible.';
 
 const contacts: { icon: string; label: string; href?: string }[] = [
   {
     icon: '/icons/mail.svg',
-    label: 'info@projectedgrowthconsulting.com',
-    href: 'mailto:info@projectedgrowthconsulting.com',
+    label: site.contact.email,
+    href: `mailto:${site.contact.email}`,
   },
-  { icon: '/icons/phone.svg', label: '(877) 716-1291', href: 'tel:+18777161291' },
-  { icon: '/icons/location.svg', label: 'St. Petersburg, US' },
+  { icon: '/icons/phone.svg', label: site.contact.phone, href: `tel:${site.contact.phoneHref}` },
+  { icon: '/icons/location.svg', label: `${site.contact.locality}, ${site.contact.country}` },
 ];
+
+/**
+ * ponytail: one env var, same pattern as the Calendly section. Set
+ * PUBLIC_FORM_ENDPOINT to a POST handler (Formspree / Netlify / HubSpot / an
+ * SSR route) and the real form ships; leave it unset and the panel falls back
+ * to the direct contact routes.
+ *
+ * The fallback is not cosmetic. A `<form method="post">` with no `action`
+ * re-requests the current page on a static host, so the browser shows a
+ * success-looking reload and the enquiry is gone. Rendering no form at all is
+ * the only honest state when there is nowhere to send it.
+ */
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
+if (!endpoint) {
+  console.warn(
+    '[contact] PUBLIC_FORM_ENDPOINT is unset — /contact-us ships the direct-contact fallback instead of the form.'
+  );
+}
+
+/* The eyebrow and intro name whatever is actually on the right. "Complete the
+   form" next to no form is the kind of small lie that costs an enquiry. */
+const eyebrow = endpoint ? 'CONTACT FORM' : 'GET IN TOUCH';
+const body = endpoint
+  ? 'Complete the form and a member of our team will get back to you as soon as possible.'
+  : 'Email or call us and a member of our team will get back to you as soon as possible.';
 
 type Field = {
   name: string;
@@ -95,19 +118,42 @@ const control =
       </ul>
     </div>
 
-    <!--
-      Wire `action` to a real endpoint before launch: an Astro server endpoint
-      (src/pages/api/contact.ts + an SSR adapter) or a hosted handler such as
-      Formspree / Netlify Forms / HubSpot. It is a plain POST, so it keeps
-      working without JavaScript once `action` is set — and there is
-      deliberately no faked success state until a real endpoint responds.
-    -->
+    {
+      !endpoint && (
+        <div class="flex flex-col gap-6 rounded-xl border border-black/10 bg-white p-8 lg:min-w-0 lg:flex-1">
+          <h3 class="text-2xl leading-8 font-semibold tracking-[-1px] text-[#111827]">
+            Reach us directly
+          </h3>
+          <p class="text-base leading-6 tracking-[-1px] text-[#6b7280]">
+            Email or call and a member of the team will come back to you. Tell us
+            your practice, where you are stuck, and the best time to reach you.
+          </p>
+          <div class="flex flex-col gap-3 sm:flex-row">
+            <Button href={`mailto:${site.contact.email}`}>Email Us</Button>
+            <Button href={`tel:${site.contact.phoneHref}`} variant="secondary">
+              Call {site.contact.phone}
+            </Button>
+          </div>
+        </div>
+      )
+    }
+
     <form
+      class:list={['flex flex-col gap-6 lg:min-w-0 lg:flex-1', !endpoint && 'hidden']}
       method="post"
-      class="flex flex-col gap-6 lg:min-w-0 lg:flex-1"
+      action={endpoint || undefined}
       aria-labelledby="contact-form-title"
+      data-contact-form
     >
       <h3 id="contact-form-title" class="sr-only">Send us a message</h3>
+
+      {/* Bots fill every field they can see; people never see this one. Cheaper
+          and more accessible than a captcha, and the endpoint can drop any
+          submission where it is non-empty. */}
+      <div class="hidden" aria-hidden="true">
+        <label for="company-website">Leave this field empty</label>
+        <input id="company-website" name="company-website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
 
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {
@@ -160,6 +206,67 @@ const control =
       </div>
 
       <Button type="submit" class="w-full">Submit</Button>
+
+      {/* Live region, not an alert() — the message has to reach a screen reader
+          without stealing focus mid-form. */}
+      <p
+        data-form-status
+        role="status"
+        aria-live="polite"
+        class="hidden text-base leading-6 tracking-[-1px]"
+      >
+      </p>
     </form>
   </div>
 </section>
+
+{
+  endpoint && (
+    <script>
+      // Progressive enhancement only. With JS off the form is a plain POST to
+      // `action` and the endpoint's own response page handles it — which is why
+      // `action` is set in the markup rather than assigned here.
+      function initContactForm() {
+        const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+        if (!form || form.dataset.bound) return;
+        form.dataset.bound = '1';
+        const status = form.querySelector<HTMLElement>('[data-form-status]');
+        const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+        const say = (msg: string, ok: boolean) => {
+          if (!status) return;
+          status.textContent = msg;
+          status.classList.remove('hidden');
+          status.classList.toggle('text-[#111827]', ok);
+          status.classList.toggle('text-[#b42318]', !ok);
+        };
+
+        form.addEventListener('submit', async (e) => {
+          if (!form.reportValidity()) return;
+          e.preventDefault();
+          submit?.setAttribute('disabled', '');
+          say('Sending…', true);
+          try {
+            const res = await fetch(form.action, {
+              method: 'POST',
+              body: new FormData(form),
+              headers: { Accept: 'application/json' },
+            });
+            if (!res.ok) throw new Error(String(res.status));
+            form.reset();
+            say("Thanks — your message is on its way. We'll be in touch shortly.", true);
+          } catch {
+            // Never swallow it: the visitor gets a route that still works.
+            say(
+              'That did not send. Please email us directly and we will pick it up from there.',
+              false
+            );
+          } finally {
+            submit?.removeAttribute('disabled');
+          }
+        });
+      }
+      document.addEventListener('astro:page-load', initContactForm);
+    </script>
+  )
+}

@@ -11,6 +11,7 @@ import LegalContent from '../components/sections/privacy-policy/LegalContent.ast
 
 <Base
   title="Privacy Policy"
+  headerTheme="light"
   description="How Projected Growth Consulting collects, uses, shares and protects your personal information on projectedgrowthconsulting.com. Effective as of May 30, 2018."
 >
   <PageHero nodeId="184:3371" title="Privacy Policy" body="Effective as of May 30, 2018" align="center" />
@@ -18,22 +19,3 @@ import LegalContent from '../components/sections/privacy-policy/LegalContent.ast
   <LegalContent />
 </Base>
 
-<style is:global>
-  /* Figma 184:3372 — this hero has no photo, so the shared cream-on-dark header
-     would render invisible on it. Same situation, same fix, same shape as
-     src/components/sections/blog-post/Hero.astro; keyed on this page's content
-     section instead of a hero of its own (this page reuses PageHero).
-     ponytail: page-scoped repaint — the real fix is a `theme` prop on Header,
-     which is out of scope here (that file is locked). */
-  body:has(section[data-node-id='184:3399']) > header {
-    border-bottom-color: rgba(0, 0, 0, 0.1);
-  }
-  body:has(section[data-node-id='184:3399'])
-    > header
-    nav[aria-label='Primary']
-    > a:not([aria-current='page']),
-  body:has(section[data-node-id='184:3399']) > header nav[aria-label='Primary'] > div > a,
-  body:has(section[data-node-id='184:3399']) > header button[data-menu-toggle] {
-    color: #6b7280;
-  }
-</style>

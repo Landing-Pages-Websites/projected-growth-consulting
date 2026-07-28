@@ -1,0 +1,68 @@
+---
+/**
+ * 404 — nav recovery, not a landing page. No hero photo (the cream PageHero
+ * variant, same as /privacy-policy), no invented copy, no keyword target;
+ * `noindex` so a soft-404 can never enter the index.
+ *
+ * The links are the Charter §5 conversion paths plus the two places a visitor
+ * most likely mistyped their way out of, so a broken URL still lands on a
+ * money page instead of a dead end.
+ */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../lib/site';
+
+const destinations = [
+  { label: 'The Growth Hub', href: '/growth-hub', body: 'The membership — coaching, courses and the operating system in one place.' },
+  { label: 'Courses', href: '/courses', body: 'Self-paced programs on sales events, marketing and practice operations.' },
+  { label: 'Consulting', href: '/consulting', body: '1:1 work on startup, scale and the numbers behind both.' },
+  { label: 'Blog', href: '/blog', body: 'Articles on KPIs, pricing, memberships and clinic operations.' },
+];
+---
+
+<Base
+  title="Page Not Found"
+  headerTheme="light"
+  description="That page doesn't exist. Find the Growth Hub, courses, consulting, or book a strategy call with Projected Growth Consulting."
+  noindex
+>
+  <PageHero
+    eyebrow="404"
+    title="We Couldn't Find That Page"
+    body="The link may be out of date, or the address may have a typo. Everything below is one click away."
+    align="center"
+    primaryCta={{ label: 'Book A Strategy Call', href: '/book-a-call' }}
+    secondaryCta={{ label: 'Back To Home', href: '/' }}
+    nodeId="404"
+  />
+
+  <section class="bg-[#f6f3ec] py-20">
+    <div data-reveal-group class="rail grid gap-6 sm:grid-cols-2">
+      {
+        destinations.map((d) => (
+          <a
+            data-reveal
+            href={d.href}
+            class="flex flex-col gap-2 rounded-xl border border-black/10 bg-white p-8 transition-colors hover:border-[var(--color-lime-border)]"
+          >
+            <p class="text-2xl leading-8 font-semibold tracking-[-1px] text-[#111827]">
+              {d.label}
+            </p>
+            <p class="text-base leading-6 tracking-[-1px] text-[#6b7280]">{d.body}</p>
+          </a>
+        ))
+      }
+    </div>
+    <p class="rail mt-10 text-base leading-6 tracking-[-1px] text-[#6b7280]">
+      Still stuck? <a
+        href="/contact-us"
+        class="font-medium text-[#111827] underline underline-offset-4 transition-colors hover:text-[var(--color-lime-border)]"
+        >Contact us</a
+      > or call <a
+        href={`tel:${site.contact.phoneHref}`}
+        class="font-medium text-[#111827] underline underline-offset-4 transition-colors hover:text-[var(--color-lime-border)]"
+        >{site.contact.phone}</a
+      >.
+    </p>
+  </section>
+</Base>

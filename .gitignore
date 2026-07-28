@@ -11,6 +11,9 @@ node_modules/
 *.pem
 *.key
 
+# pre-optimisation image originals, kept locally only
+.backup-lowres/
+
 # os / editor
 .DS_Store
 *.log
