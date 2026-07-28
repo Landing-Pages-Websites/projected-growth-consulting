@@ -68,16 +68,18 @@ const jacketShadow =
 
 <section id="books" data-node-id="159:14856" class="bg-[#f6f3ec] py-20">
   <div class="rail flex flex-col gap-16">
-    <SectionHead
-      eyebrow="Books & Workbooks"
-      title="Learn From Proven Industry Strategies"
-      body="Written by Kelly Smith, these books and guides share the systems, frameworks, and lessons used to help thousands of practices grow."
-    />
+    <div data-reveal>
+      <SectionHead
+        eyebrow="Books & Workbooks"
+        title="Learn From Proven Industry Strategies"
+        body="Written by Kelly Smith, these books and guides share the systems, frameworks, and lessons used to help thousands of practices grow."
+      />
+    </div>
 
-    <ul class="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2 md:gap-y-8">
+    <ul data-reveal-group class="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2 md:gap-y-8">
       {
         books.map((book) => (
-          <li class="flex flex-col gap-8">
+          <li data-reveal class="flex flex-col gap-8">
             <div class="flex justify-center rounded-lg bg-[var(--color-navy)] px-9 py-[66px] lg:px-[85px]">
               <img
                 src={book.image}

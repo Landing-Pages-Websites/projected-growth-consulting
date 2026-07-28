@@ -32,18 +32,20 @@ const cards = [
 <section data-node-id="159:17788" class="bg-[#f6f3ec] py-20">
   {/* 159:17789 ends at y=268, 159:17801 starts at y=332 — 64px, not 48. */}
   <div class="rail flex flex-col gap-16">
-    <SectionHead
-      align="center"
-      eyebrow="How PGC Helps"
-      title="Solutions For Every Growth Stage"
-      body="Whether you're launching a new practice, improving operations, or preparing for long-term growth, PGC provides the tools, coaching, and strategies needed to achieve measurable results."
-      cta={{ label: 'Schedule A Call', href: '/book-a-call' }}
-    />
+    <div data-reveal>
+      <SectionHead
+        align="center"
+        eyebrow="How PGC Helps"
+        title="Solutions For Every Growth Stage"
+        body="Whether you're launching a new practice, improving operations, or preparing for long-term growth, PGC provides the tools, coaching, and strategies needed to achieve measurable results."
+        cta={{ label: 'Schedule A Call', href: '/book-a-call' }}
+      />
+    </div>
 
-    <ul class="grid gap-6 md:grid-cols-2">
+    <ul data-reveal-group class="grid gap-6 md:grid-cols-2">
       {
         cards.map((card) => (
-          <li>
+          <li data-reveal>
             {/* 322 tall on both frames — 159:17803 desktop, 159:25948 mobile. */}
             <DarkCard {...card} imgClass="h-[322px] w-full rounded-[4px] object-cover" arrow />
           </li>

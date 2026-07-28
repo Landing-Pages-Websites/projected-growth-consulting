@@ -81,6 +81,7 @@ const swatches = [
 <section data-node-id="159:4067" class="bg-[#f6f3ec] py-20">
   <div class="rail flex flex-col gap-16 md:gap-[82px]">
     <div
+      data-reveal
       class="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-end lg:justify-between lg:gap-10 lg:text-left"
     >
       <div class="flex flex-col gap-3 lg:basis-[532px] lg:min-w-0">
@@ -104,13 +105,13 @@ const swatches = [
       </div>
     </div>
 
-    <ul class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <ul data-reveal-group class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       {
         cards.map((card) => (
-          <li class="flex">
+          <li data-reveal class="flex">
             <a
               href={card.href}
-              class="group flex flex-1 flex-col gap-10 rounded-lg bg-[#111827] p-6 transition-colors duration-200 hover:bg-[#161f31]"
+              class="group card-hover flex flex-1 flex-col gap-10 rounded-lg bg-[#111827] p-6 transition-colors duration-200 hover:bg-[#161f31]"
             >
               <div class="flex flex-col gap-4">
                 <p class="text-xs leading-[1.6] font-medium tracking-[-0.017em] text-white uppercase">

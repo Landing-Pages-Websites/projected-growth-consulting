@@ -15,3 +15,6 @@ node_modules/
 .DS_Store
 *.log
 npm-debug.log*
+
+# working backup of superseded low-res heroes
+.backup-lowres/

@@ -118,12 +118,23 @@ const isActive = (href: string) =>
 </header>
 
 <script>
-  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
-  const drawer = document.getElementById('mobile-nav');
-  toggle?.addEventListener('click', () => {
-    const open = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!open));
-    toggle.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
-    if (drawer) drawer.hidden = open;
-  });
+  function initMenu() {
+    const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const drawer = document.getElementById('mobile-nav');
+    if (!toggle || toggle.dataset.menuBound) return;
+    toggle.dataset.menuBound = '1';
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      if (drawer) drawer.hidden = !open;
+    };
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+    // Close the drawer after tapping a link (view-transition nav keeps the DOM).
+    drawer?.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+  }
+  document.addEventListener('astro:page-load', initMenu);
 </script>

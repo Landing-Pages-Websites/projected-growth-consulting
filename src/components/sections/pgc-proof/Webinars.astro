@@ -89,8 +89,8 @@ const checkRow = 'flex min-h-[29px] items-start gap-[5px]';
       cta={{ label: 'Schedule A Call', href: '/book-a-call' }}
     />
 
-    <ul class="grid gap-6 md:grid-cols-2">
-      <li class="md:col-span-2">
+    <ul data-reveal-group class="grid gap-6 md:grid-cols-2">
+      <li data-reveal class="md:col-span-2">
         <DarkCard
           image={featured.image}
           alt={featured.imageAlt}
@@ -134,7 +134,7 @@ const checkRow = 'flex min-h-[29px] items-start gap-[5px]';
 
       {
         rest.map((w) => (
-          <li>
+          <li data-reveal>
             <DarkCard
               image={w.image}
               alt={w.imageAlt}

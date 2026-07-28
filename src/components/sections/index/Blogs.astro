@@ -49,6 +49,7 @@ const posts: Post[] = [
 <section data-node-id="159:5511" class="bg-[#f6f3ec] py-20">
   <div class="rail flex flex-col gap-16">
     <div
+      data-reveal
       class="flex flex-col items-center gap-3 text-center lg:flex-row lg:items-end lg:justify-between lg:gap-10 lg:text-left"
     >
       <div class="flex flex-col gap-3 lg:basis-[633px] lg:min-w-0">
@@ -71,13 +72,13 @@ const posts: Post[] = [
     {/* Figma 159:5518 y410 / 159:5552 y1025 — both gaps are 64. The extra 18 keeps the
         cards on Figma's y now that the stand-in display font renders a shorter H2; the
         cards -> "Read More" gap stays at Figma's 64. */}
-    <ul class="grid gap-6 md:mt-[18px] md:grid-cols-2 lg:grid-cols-3">
+    <ul data-reveal-group class="grid gap-6 md:mt-[18px] md:grid-cols-2 lg:grid-cols-3">
       {
         posts.map((post) => (
-          <li class="flex md:last:col-span-2 lg:last:col-span-1">
+          <li data-reveal class="flex md:last:col-span-2 lg:last:col-span-1">
             <a
               href={post.href}
-              class="group flex flex-1 flex-col gap-6 rounded-lg border border-[#d4d4d8] bg-[var(--color-surface)] p-4 transition-colors duration-200 hover:border-[var(--color-lime-border)]"
+              class="group card-hover flex flex-1 flex-col gap-6 rounded-lg border border-[#d4d4d8] bg-[var(--color-surface)] p-4 transition-colors duration-200 hover:border-[var(--color-lime-border)]"
             >
               <div class="flex flex-col gap-5">
                 <div class="relative h-[275px] overflow-hidden rounded-xl">

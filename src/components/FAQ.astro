@@ -71,8 +71,9 @@ const schema = approved
 ---
 
 <section class:list={['bg-[#f6f3ec] py-20', className]} data-node-id={nodeId}>
-  <div class="rail flex flex-col gap-16 lg:flex-row lg:items-start lg:gap-10">
+  <div data-reveal-group class="rail flex flex-col gap-16 lg:flex-row lg:items-start lg:gap-10">
     <div
+      data-reveal
       class:list={[
         'flex flex-col lg:min-w-0 lg:basis-[578px] lg:items-start lg:text-left',
         align === 'center' ? 'items-center text-center' : 'items-start text-left',
@@ -97,7 +98,7 @@ const schema = approved
 
     {/* Figma FAQ items are 88px collapsed / 216 open (159:5446). A real border-b
         made every row 1px taller; the divider is drawn as a shadow instead. */}
-    <div class="lg:min-w-0 lg:basis-[662px]" data-faq>
+    <div class="lg:min-w-0 lg:basis-[662px]" data-faq data-reveal>
       {
         items.map((item, i) => (
           <div class="shadow-[0_1px_0_#e4e4e7]">
@@ -143,18 +144,25 @@ const schema = approved
 
 <script>
   // ponytail: delegated click per accordion root — Enter/Space come free on <button>.
-  document.querySelectorAll<HTMLElement>('[data-faq]').forEach((root) => {
-    root.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement | null;
-      const btn = target?.closest<HTMLButtonElement>('button[aria-controls]');
-      if (!btn || !root.contains(btn)) return;
-      const willOpen = btn.getAttribute('aria-expanded') !== 'true';
-      root.querySelectorAll<HTMLButtonElement>('button[aria-controls]').forEach((b) => {
-        const open = willOpen && b === btn;
-        b.setAttribute('aria-expanded', String(open));
-        const panel = document.getElementById(b.getAttribute('aria-controls') ?? '');
-        if (panel) panel.hidden = !open;
+  // Bound on astro:page-load (fires on first load + after each view-transition nav),
+  // guarded so a re-fired event never double-binds the same root.
+  function initFaq() {
+    document.querySelectorAll<HTMLElement>('[data-faq]').forEach((root) => {
+      if (root.dataset.faqBound) return;
+      root.dataset.faqBound = '1';
+      root.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement | null;
+        const btn = target?.closest<HTMLButtonElement>('button[aria-controls]');
+        if (!btn || !root.contains(btn)) return;
+        const willOpen = btn.getAttribute('aria-expanded') !== 'true';
+        root.querySelectorAll<HTMLButtonElement>('button[aria-controls]').forEach((b) => {
+          const open = willOpen && b === btn;
+          b.setAttribute('aria-expanded', String(open));
+          const panel = document.getElementById(b.getAttribute('aria-controls') ?? '');
+          if (panel) panel.hidden = !open;
+        });
       });
     });
-  });
+  }
+  document.addEventListener('astro:page-load', initFaq);
 </script>

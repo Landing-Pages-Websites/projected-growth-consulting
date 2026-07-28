@@ -100,6 +100,7 @@ const cols =
       }
 
       <div
+        data-reveal-group
         class:list={[
           'grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 md:gap-y-12',
           cols,
@@ -111,9 +112,11 @@ const cols =
           stats.map((stat) => {
             const [num, suffix] = split(stat.value);
             return (
-              <div class={stat.class}>
-                {/* one line on purpose — a newline here prints a space before the +/% */}
-                <p class="font-display text-[48px] leading-[56px] font-medium tracking-[-0.01em] text-[#111827]">{num}{suffix && <span class="text-lime">{suffix}</span>}</p>
+              <div class={stat.class} data-reveal>
+                {/* one line on purpose — a newline here prints a space before the +/%.
+                    data-countup wraps ONLY the number so the count animation can't
+                    clobber the lime suffix span. */}
+                <p class="font-display text-[48px] leading-[56px] font-medium tracking-[-0.01em] text-[#111827]"><span data-countup>{num}</span>{suffix && <span class="text-lime">{suffix}</span>}</p>
                 <p class="text-base leading-8 tracking-[-1px] text-[#6b7280]">
                   {stat.label}
                 </p>

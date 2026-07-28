@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../lib/site';
@@ -31,6 +32,17 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Set .js before first paint so entrance effects hide content only when JS
+        can reveal it again (no-JS renders everything visible, no FOUC). The
+        after-swap re-apply keeps it set through client-side view transitions,
+        which otherwise reset <html> and would leave content un-animated. */}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      document.addEventListener('astro:after-swap', () =>
+        document.documentElement.classList.add('js')
+      );
+    </script>
+    <ClientRouter />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -67,5 +79,123 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
       <slot />
     </main>
     <Footer cta={cta} />
+
+    <script>
+      // Site-wide motion: scroll-reveal + stat count-up. Declarative — sections
+      // opt in with data-reveal / data-countup; all observer logic lives here so
+      // the 14 pages never hand-roll their own. Re-runs after every view-transition
+      // navigation via astro:page-load (fires on the initial load too).
+      function initMotion() {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // ---- Scroll reveal ---------------------------------------------------
+        const all = Array.from(
+          document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-revealed)')
+        );
+        if (reduce) {
+          all.forEach((el) => el.classList.add('is-revealed'));
+        } else {
+          // De-nest: a [data-reveal] inside another [data-reveal] would stay
+          // invisible while its ancestor is still at opacity 0 (opacity hides the
+          // whole subtree), and fast scroll can leave the ancestor unrevealed.
+          // Reveal nested ones up front — the ancestor animates the block as one.
+          const nested = new Set(
+            all.filter((el) => el.parentElement?.closest('[data-reveal]'))
+          );
+          nested.forEach((el) => el.classList.add('is-revealed'));
+          const reveals = all.filter((el) => !nested.has(el));
+
+          // Auto-stagger direct reveals inside a [data-reveal-group] (top-level only).
+          document.querySelectorAll<HTMLElement>('[data-reveal-group]').forEach((group) => {
+            group.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el, i) => {
+              if (reveals.includes(el) && !el.style.getPropertyValue('--reveal-delay')) {
+                el.style.setProperty('--reveal-delay', `${Math.min(i, 8) * 70}ms`);
+              }
+            });
+          });
+
+          // A rAF-throttled scroll sweep, not IntersectionObserver: IO reports the
+          // final settled scroll position, so a fast fling from top to bottom can
+          // leave mid-page reveals un-fired (they'd sit blank until scrolled back).
+          // Checking real geometry each frame reveals reliably at any scroll speed.
+          let pending = reveals;
+          let ticking = false;
+          const sweep = () => {
+            ticking = false;
+            const line = window.innerHeight * 0.92;
+            pending = pending.filter((el) => {
+              if (el.getBoundingClientRect().top < line) {
+                el.classList.add('is-revealed');
+                return false;
+              }
+              return true;
+            });
+            if (!pending.length) {
+              window.removeEventListener('scroll', onScroll);
+              window.removeEventListener('resize', onScroll);
+            }
+          };
+          const onScroll = () => {
+            if (!ticking) {
+              ticking = true;
+              requestAnimationFrame(sweep);
+            }
+          };
+          sweep(); // reveal whatever is in view on load
+          if (pending.length) {
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onScroll, { passive: true });
+          }
+        }
+
+        // ---- Stat count-up ---------------------------------------------------
+        // data-countup wraps ONLY the numeric text (never the coloured suffix
+        // span), so animating textContent can't destroy sibling markup.
+        const nums = document.querySelectorAll<HTMLElement>('[data-countup]:not([data-countup-done])');
+        if (nums.length && !reduce) {
+          const io2 = new IntersectionObserver(
+            (entries, obs) => {
+              entries.forEach((e) => {
+                if (!e.isIntersecting) return;
+                obs.unobserve(e.target);
+                runCountUp(e.target as HTMLElement);
+              });
+            },
+            { threshold: 0.6 }
+          );
+          nums.forEach((el) => io2.observe(el));
+        }
+      }
+
+      function runCountUp(el: HTMLElement) {
+        el.setAttribute('data-countup-done', '');
+        const raw = (el.textContent ?? '').trim();
+        const m = raw.match(/^(\D*)([\d,]+(?:\.\d+)?)(.*)$/s);
+        if (!m) return;
+        const [, pre, numStr, suf] = m;
+        const hasComma = numStr.includes(',');
+        const decimals = (numStr.split('.')[1] ?? '').length;
+        const target = parseFloat(numStr.replace(/,/g, ''));
+        if (!isFinite(target)) return;
+
+        const fmt = (v: number) => {
+          let s = decimals ? v.toFixed(decimals) : String(Math.round(v));
+          if (hasComma) s = Number(s).toLocaleString('en-US');
+          return pre + s + suf;
+        };
+        const duration = 1100;
+        const start = performance.now();
+        const tick = (now: number) => {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = fmt(target * eased);
+          if (p < 1) requestAnimationFrame(tick);
+          else el.textContent = pre + numStr + suf; // exact original, incl. commas
+        };
+        requestAnimationFrame(tick);
+      }
+
+      document.addEventListener('astro:page-load', initMotion);
+    </script>
   </body>
 </html>

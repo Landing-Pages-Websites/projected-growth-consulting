@@ -39,7 +39,7 @@ const reasons = [
       cta={{ label: 'Schedule A Call', href: '/book-a-call' }}
     />
 
-    <ul class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <ul data-reveal-group class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       {
         reasons.map((r) => <IconCard icon={r.icon} title={r.title} body={r.body} />)
       }

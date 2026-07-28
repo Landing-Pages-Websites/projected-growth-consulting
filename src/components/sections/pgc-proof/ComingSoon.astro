@@ -37,10 +37,10 @@ const upcoming = [
       cta={{ label: 'Schedule A Call', href: '/book-a-call' }}
     />
 
-    <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <ul data-reveal-group class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {
         upcoming.map((item) => (
-          <li class="md:last:col-span-2 lg:last:col-span-1">
+          <li data-reveal class="md:last:col-span-2 lg:last:col-span-1">
             <DarkCard
               image={item.image}
               alt={item.imageAlt}

@@ -147,6 +147,7 @@ const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math
 <section id={id} data-node-id={node} class:list={['bg-[#f6f3ec] py-20', className]}>
   <div class="rail flex flex-col gap-16">
     <div
+      data-reveal
       class:list={[
         'flex flex-col items-center gap-3 text-center',
         variant === 'grid'
@@ -189,6 +190,7 @@ const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math
         <div data-testimonial-carousel class="relative flex flex-col gap-16 md:gap-8">
           <ul
             data-scroller
+            data-reveal-group
             tabindex="0"
             aria-label={`${title} — swipe or use the previous and next buttons`}
             class="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth [scrollbar-width:none] md:snap-none md:flex-col md:overflow-visible [&::-webkit-scrollbar]:hidden"
@@ -196,7 +198,7 @@ const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math
             {items.map((t) => {
               const Media = t.video ? 'a' : 'div';
               return (
-                <li class="flex w-full shrink-0 snap-start flex-col gap-5 lg:flex-row lg:items-stretch">
+                <li data-reveal class="flex w-full shrink-0 snap-start flex-col gap-5 lg:flex-row lg:items-stretch">
                   <Media
                     href={t.video}
                     rel={t.video ? 'noreferrer noopener' : undefined}
@@ -305,11 +307,11 @@ const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math
           )}
         </div>
       ) : (
-        <ul class="grid gap-6 md:grid-cols-2">
+        <ul data-reveal-group class="grid gap-6 md:grid-cols-2">
           {items.map((t) => {
             const Media = t.video ? 'a' : 'div';
             return (
-              <li class="flex h-full flex-col gap-2">
+              <li data-reveal class="flex h-full flex-col gap-2">
                 <Media
                   href={t.video}
                   rel={t.video ? 'noreferrer noopener' : undefined}
@@ -390,7 +392,10 @@ const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math
 </section>
 
 <script>
+  function initTestimonials() {
   document.querySelectorAll<HTMLElement>('[data-testimonial-carousel]').forEach((root) => {
+    if (root.dataset.carouselBound) return;
+    root.dataset.carouselBound = '1';
     const scroller = root.querySelector<HTMLElement>('[data-scroller]');
     const prev = root.querySelector<HTMLButtonElement>('.js-prev');
     const next = root.querySelector<HTMLButtonElement>('.js-next');
@@ -433,4 +438,6 @@ const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math
 
     sync();
   });
+  }
+  document.addEventListener('astro:page-load', initTestimonials);
 </script>

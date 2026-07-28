@@ -41,16 +41,18 @@ const cards: Card[] = [
   <div class="rail flex flex-col gap-12 lg:gap-16">
     {/* Mobile 159:23001 centres the whole block — the CTA sits at x=94.5 of 345,
         i.e. dead centre. Desktop is unaffected (always title-left / body-right). */}
-    <SectionHead
-      align="center"
-      eyebrow={eyebrow}
-      title={title}
-      body={body}
-      cta={{ label: 'Schedule A Call', href: '#schedule' }}
-    />
+    <div data-reveal>
+      <SectionHead
+        align="center"
+        eyebrow={eyebrow}
+        title={title}
+        body={body}
+        cta={{ label: 'Schedule A Call', href: '#schedule' }}
+      />
+    </div>
 
     {/* 3-up: 1 col base, 2-up at 768 (last card spans full), 3-up at 1024+ (BREAKPOINTS.md). */}
-    <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 md:[&>li:last-child]:col-span-2 lg:[&>li:last-child]:col-span-1">
+    <ul data-reveal-group class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 md:[&>li:last-child]:col-span-2 lg:[&>li:last-child]:col-span-1">
       {
         cards.map((card) => <IconCard icon={card.icon} title={card.title} body={card.body} />)
       }

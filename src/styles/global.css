@@ -100,6 +100,78 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Motion system — "refined & subtle". Figma specifies no motion; this is the
+   house style applied site-wide. Two safety gates on every entrance effect:
+     .js   — set synchronously in <head>, so a no-JS render shows everything.
+     no-preference — so prefers-reduced-motion users never sit at opacity:0.
+   The reveal/count-up observers live in Base.astro and re-run on astro:page-load.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* Scroll-reveal: fade + 16px rise as a section enters the viewport. */
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .js [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Gentle page-enter on every load / client-side navigation. */
+  .js main {
+    animation: page-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Card lift — reads on both light and dark (#111827) cards. Apply `.card-hover`
+   to a card root. Transform/shadow only; layout never shifts. */
+.card-hover {
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px -16px rgba(17, 24, 39, 0.28);
+  }
+}
+
+/* Astro view-transition: cross-page fade instead of a white flash. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: vt-fade-out 0.22s ease both;
+  }
+  ::view-transition-new(root) {
+    animation: vt-fade-in 0.3s ease both;
+  }
+  @keyframes vt-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes vt-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -107,5 +179,11 @@
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  /* Never let a view transition animate for these users. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

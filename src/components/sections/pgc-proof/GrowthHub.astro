@@ -19,6 +19,7 @@ const benefits = [
       photo's top edge lines up with the eyebrow, not with the column's centre. */}
   <div class="rail flex flex-col gap-10 lg:flex-row lg:items-start">
     <img
+      data-reveal
       src="/images/pgc-proof/growth-hub.jpg"
       alt="A practice owner working late at her desk, reviewing paperwork by lamplight"
       width="933"
@@ -29,7 +30,7 @@ const benefits = [
     />
 
     <div class="flex flex-col gap-6 lg:order-1 lg:min-w-0 lg:flex-1">
-      <div class="flex flex-col gap-3 lg:max-w-[584px]">
+      <div data-reveal class="flex flex-col gap-3 lg:max-w-[584px]">
         {/* Figma 184:2743 — the eyebrow line box is 20px, not Inter's default 24. */}
         <p class="eyebrow text-base leading-5 tracking-[-1px] text-[#111827]">
           READY TO GO FURTHER?
@@ -51,10 +52,10 @@ const benefits = [
 
       {/* Figma 184:2752 — 80px rows: a 16px inset over a 48px line box. The 1px
           stroke is inside in Figma, so the padding absorbs it here. */}
-      <ul class="flex flex-col gap-4">
+      <ul data-reveal-group class="flex flex-col gap-4">
         {
           benefits.map((benefit) => (
-            <li class="flex min-h-20 items-center gap-2 rounded-sm border border-black/10 bg-white p-[15px]">
+            <li data-reveal class="flex min-h-20 items-center gap-2 rounded-sm border border-black/10 bg-white p-[15px]">
               <img
                 src="/icons/check-circle-24-lime.svg"
                 alt=""

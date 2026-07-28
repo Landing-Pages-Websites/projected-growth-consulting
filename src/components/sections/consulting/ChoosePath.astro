@@ -38,10 +38,10 @@ const { eyebrow, title, body, cta, cards } = Astro.props;
       bodyClass="text-sm lg:text-base"
     />
 
-    <ul class="grid gap-6 md:grid-cols-2">
+    <ul data-reveal-group class="grid gap-6 md:grid-cols-2">
       {
         cards.map((card) => (
-          <li class="flex">
+          <li data-reveal class="flex">
             <DarkCard
               image={card.image}
               alt={card.imageAlt}
@@ -53,7 +53,7 @@ const { eyebrow, title, body, cta, cards } = Astro.props;
               body={card.body}
               href={card.href}
               arrow
-              class="w-full justify-center overflow-hidden"
+              class="card-hover w-full justify-center overflow-hidden"
             />
           </li>
         ))

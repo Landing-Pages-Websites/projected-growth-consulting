@@ -34,16 +34,18 @@ const cards = [
 
 <section data-node-id="159:9601" class="bg-[#f6f3ec] py-20">
   <div class="rail flex flex-col items-center gap-16">
-    <SectionHead
-      eyebrow="THE IMPLEMENTATION LIBRARY"
-      title="24+ One-Hour Solutions For Your Biggest Business Challenges"
-      body="No long-winded courses or theory. Every lesson helps you solve one specific problem in about an hour, so you or your team can implement it immediately and get back to running the business."
-    />
+    <div data-reveal class="w-full">
+      <SectionHead
+        eyebrow="THE IMPLEMENTATION LIBRARY"
+        title="24+ One-Hour Solutions For Your Biggest Business Challenges"
+        body="No long-winded courses or theory. Every lesson helps you solve one specific problem in about an hour, so you or your team can implement it immediately and get back to running the business."
+      />
+    </div>
 
-    <ul class="grid w-full gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+    <ul data-reveal-group class="grid w-full gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
       {
         cards.map((card) => (
-          <li>
+          <li data-reveal>
             <DarkCard {...card} width="900" height="600" class="justify-center" />
           </li>
         ))

@@ -16,7 +16,7 @@ const filterBase =
 ---
 
 <section id="latest-articles" data-node-id="184:3116" class="bg-[#f6f3ec] py-20">
-  <div class="rail flex flex-col gap-12 lg:gap-16">
+  <div data-reveal class="rail flex flex-col gap-12 lg:gap-16">
     <div class="flex flex-col gap-10">
       <SectionHead
         eyebrow="LATEST ARTICLES"
@@ -106,8 +106,10 @@ const filterBase =
 </section>
 
 <script>
-  const section = document.getElementById('latest-articles');
-  if (section) {
+  function initFilters() {
+    const section = document.getElementById('latest-articles');
+    if (!section || section.dataset.filtersBound) return;
+    section.dataset.filtersBound = '1';
     const buttons = section.querySelectorAll<HTMLButtonElement>('[data-filter]');
     const items = section.querySelectorAll<HTMLLIElement>('[data-card]');
     const empty = section.querySelector<HTMLElement>('[data-empty]');
@@ -129,4 +131,5 @@ const filterBase =
       });
     });
   }
+  document.addEventListener('astro:page-load', initFilters);
 </script>

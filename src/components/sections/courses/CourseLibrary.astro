@@ -123,7 +123,7 @@ const chipText = 'text-sm leading-5 tracking-[-0.005em] text-[#6b7280]';
 
 <section id="course-library" data-node-id="159:12772" class="bg-[#f6f3ec] py-20 scroll-mt-24">
   <div class="rail flex flex-col gap-16">
-    <header class="flex flex-col items-center gap-8 text-center">
+    <header data-reveal class="flex flex-col items-center gap-8 text-center">
       <div class="flex max-w-[659px] flex-col gap-3">
         {/* Figma 159:12775 — Inter Regular 16/20, not the 12px medium default. */}
         <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">
@@ -137,12 +137,13 @@ const chipText = 'text-sm leading-5 tracking-[-0.005em] text-[#6b7280]';
       </div>
     </header>
 
-    <ul class="grid gap-6 md:grid-cols-2">
+    <ul data-reveal-group class="grid gap-6 md:grid-cols-2">
       {
         courses.map((course) => (
           <li
+            data-reveal
             class:list={[
-              'flex flex-col rounded-lg bg-white p-4 transition-shadow duration-200 hover:shadow-[0_8px_24px_rgba(17,24,39,0.08)]',
+              'card-hover flex flex-col rounded-lg bg-white p-4',
               /* banner→copy: 32px on the featured card (159:23321), 24 elsewhere. */
               course.featured ? 'gap-8 md:col-span-2 md:flex-row' : 'gap-6',
             ]}

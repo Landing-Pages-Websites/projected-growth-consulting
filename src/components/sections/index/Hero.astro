@@ -8,11 +8,12 @@
 import Button from '../../Button.astro';
 import SocialProof from '../../SocialProof.astro';
 
+/* pre/suf stay outside the data-countup span so the count-up can't wipe them. */
 const stats = [
-  { value: '6,000+', label: 'Practices Served' },
-  { value: '$250M+', label: 'Client Revenue Generated' },
-  { value: '30%', label: 'Revenue Increase in 90 days' },
-  { value: '20+ Years', label: 'Helping Practice Owners Scale' },
+  { pre: '', num: '6,000', suf: '+', label: 'Practices Served' },
+  { pre: '$', num: '250', suf: 'M+', label: 'Client Revenue Generated' },
+  { pre: '', num: '30', suf: '%', label: 'Revenue Increase in 90 days' },
+  { pre: '', num: '20', suf: '+ Years', label: 'Helping Practice Owners Scale' },
 ];
 ---
 
@@ -29,7 +30,7 @@ const stats = [
       height="900"
       decoding="async"
       fetchpriority="high"
-      class="size-full object-cover"
+      class="size-full object-cover object-[center_20%]"
     />
     <div class="absolute inset-0 bg-black/55"></div>
   </div>
@@ -51,12 +52,18 @@ const stats = [
     </div>
 
     <div class="flex flex-1 flex-col justify-between gap-10">
-      <ul class="order-2 flex w-full flex-col gap-4 lg:order-1 lg:w-[414px] lg:self-end">
+      <ul
+        data-reveal-group
+        class="order-2 flex w-full flex-col gap-4 lg:order-1 lg:w-[414px] lg:self-end"
+      >
         {
           stats.map((stat) => (
-            <li class="flex flex-col gap-3 border-b border-white/20 pb-4 text-center lg:text-left">
+            <li
+              data-reveal
+              class="flex flex-col gap-3 border-b border-white/20 pb-4 text-center lg:text-left"
+            >
               <p class="font-display text-5xl leading-[1.1] tracking-[-0.04em] text-[var(--color-cream)]">
-                {stat.value}
+                {stat.pre}<span data-countup>{stat.num}</span>{stat.suf}
               </p>
               <p class="text-base leading-[normal] tracking-[-1px] text-[var(--color-cream)]">
                 {stat.label}

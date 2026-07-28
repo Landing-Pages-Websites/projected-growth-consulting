@@ -48,6 +48,7 @@ const steps: Step[] = [
     class="rail flex flex-col gap-5 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-x-10 lg:gap-y-6"
   >
     <div
+      data-reveal
       class="order-1 flex flex-col gap-3 text-center lg:order-none lg:col-start-1 lg:row-start-1 lg:max-w-[865px] lg:text-left"
     >
       <p class="eyebrow text-base leading-5 font-normal tracking-[-1px] text-[#111827]">
@@ -172,7 +173,10 @@ const steps: Step[] = [
 
 <script>
   // ponytail: one expanded panel at a time — same contract as the FAQ accordion.
+  function initSteps() {
   document.querySelectorAll<HTMLElement>('[data-steps]').forEach((root) => {
+    if (root.dataset.stepsBound) return;
+    root.dataset.stepsBound = '1';
     const panels = Array.from(root.querySelectorAll<HTMLButtonElement>('button[aria-expanded]'));
     const section = root.closest('section');
     const prev = section?.querySelector<HTMLButtonElement>('.js-prev');
@@ -195,4 +199,6 @@ const steps: Step[] = [
 
     if (prev) prev.disabled = true;
   });
+  }
+  document.addEventListener('astro:page-load', initSteps);
 </script>
